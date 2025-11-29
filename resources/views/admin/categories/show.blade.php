@@ -1,6 +1,6 @@
 <x-admin-layout>
     <x-slot name="header">
-        <h2 class="font-semibold text-xl text-gray-800 leading-tight">
+        <h2 class="font-semibold text-xl text-primary-dark leading-tight">
             {{ __('View Template Category') }}
         </h2>
     </x-slot>
@@ -8,7 +8,7 @@
     <div class="py-12">
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
             <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
-                <div class="p-6 text-gray-900">
+                <div class="p-6 text-primary-dark">
                     <h3 class="text-lg font-medium mb-4">Template Category Details</h3>
 
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -48,50 +48,50 @@
                         </div>
                     </div>
 
-                    <div class="mt-6 border rounded-lg p-4">
+                    <div class="mt-6 border border-accent rounded-lg p-4">
                         <h4 class="text-md font-semibold mb-3">Child Categories ({{ $category->children->count() }})</h4>
                         @if($category->children->count() > 0)
                             <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
                                 @foreach($category->children as $child)
-                                    <div class="border rounded p-3">
+                                    <div class="border border-accent rounded p-3">
                                         <div class="font-medium">{{ $child->name }}</div>
-                                        <div class="text-sm text-gray-600">{{ $child->templates_count }} templates</div>
+                                        <div class="text-sm text-secondary-dark">{{ $child->templates_count }} templates</div>
                                     </div>
                                 @endforeach
                             </div>
                         @else
-                            <p class="text-gray-500">No child categories.</p>
+                            <p class="text-secondary-dark">No child categories.</p>
                         @endif
                     </div>
 
-                    <div class="mt-6 border rounded-lg p-4">
+                    <div class="mt-6 border border-accent rounded-lg p-4">
                         <h4 class="text-md font-semibold mb-3">Templates ({{ $category->templates->count() }})</h4>
                         @if($category->templates->count() > 0)
                             <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
                                 @foreach($category->templates as $template)
-                                    <div class="border rounded p-3">
+                                    <div class="border border-accent rounded p-3">
                                         <div class="font-medium">{{ $template->name }}</div>
-                                        <div class="text-sm text-gray-600">${{ $template->price }}</div>
+                                        <div class="text-sm text-secondary-dark">${{ $template->price }}</div>
                                     </div>
                                 @endforeach
                             </div>
                         @else
-                            <p class="text-gray-500">No templates in this category.</p>
+                            <p class="text-secondary-dark">No templates in this category.</p>
                         @endif
                     </div>
 
                     <div class="mt-6 flex items-center justify-between">
-                        <a href="{{ route('admin.categories.index') }}" class="bg-gray-500 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded">
+                        <a href="{{ route('admin.categories.index') }}" class="bg-secondary hover:bg-secondary-dark text-primary-dark font-bold py-2 px-4 rounded">
                             Back to Categories
                         </a>
                         <div class="space-x-2">
-                            <a href="{{ route('admin.categories.edit', $category->id) }}" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
+                            <a href="{{ route('admin.categories.edit', $category->id) }}" class="bg-primary hover:bg-primary-dark text-primary-dark font-bold py-2 px-4 rounded">
                                 Edit
                             </a>
                             <form action="{{ route('admin.categories.destroy', $category->id) }}" method="POST" class="inline">
                                 @csrf
                                 @method('DELETE')
-                                <button type="submit" class="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded" onclick="return confirm('Are you sure you want to delete this category?')">
+                                <button type="submit" class="bg-error hover:bg-error-dark text-primary-dark font-bold py-2 px-4 rounded" onclick="return confirm('Are you sure you want to delete this category?')">
                                     Delete
                                 </button>
                             </form>

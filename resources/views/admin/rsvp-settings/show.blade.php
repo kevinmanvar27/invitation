@@ -1,6 +1,6 @@
 <x-admin-layout>
     <x-slot name="header">
-        <h2 class="font-semibold text-xl text-gray-800 leading-tight">
+        <h2 class="font-semibold text-xl text-primary-dark leading-tight">
             {{ __('RSVP Setting Details') }}
         </h2>
     </x-slot>
@@ -8,17 +8,17 @@
     <div class="py-12">
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
             <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
-                <div class="p-6 text-gray-900">
+                <div class="p-6 text-primary-dark">
                     <div class="flex justify-between items-center mb-6">
-                        <h3 class="text-lg font-medium">RSVP Setting #{{ $rsvpSetting->id }}</h3>
+                        <h3 class="text-lg font-medium text-primary-dark">RSVP Setting #{{ $rsvpSetting->id }}</h3>
                         <div>
-                            <a href="{{ route('admin.rsvp-settings.edit', $rsvpSetting->id) }}" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
+                            <a href="{{ route('admin.rsvp-settings.edit', $rsvpSetting->id) }}" class="bg-primary hover:bg-primary-dark text-primary-dark font-bold py-2 px-4 rounded">
                                 Edit
                             </a>
                             <form action="{{ route('admin.rsvp-settings.destroy', $rsvpSetting->id) }}" method="POST" class="inline">
                                 @csrf
                                 @method('DELETE')
-                                <button type="submit" class="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded ml-2" onclick="return confirm('Are you sure?')">
+                                <button type="submit" class="bg-error hover:bg-error-dark text-primary-dark font-bold py-2 px-4 rounded ml-2" onclick="return confirm('Are you sure?')">
                                     Delete
                                 </button>
                             </form>
@@ -27,7 +27,7 @@
 
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                         <div class="border rounded p-4">
-                            <h4 class="text-md font-medium mb-4">RSVP Setting Information</h4>
+                            <h4 class="text-md font-medium text-primary-dark mb-4">RSVP Setting Information</h4>
                             
                             <div class="space-y-3">
                                 <div>
@@ -64,9 +64,9 @@
                                     <label class="font-medium">RSVP Enabled:</label>
                                     <span class="ml-2">
                                         @if($rsvpSetting->rsvp_enabled)
-                                            <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">Enabled</span>
+                                            <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-secondary-light text-secondary-dark">Enabled</span>
                                         @else
-                                            <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-red-100 text-red-800">Disabled</span>
+                                            <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-error-light text-error-dark">Disabled</span>
                                         @endif
                                     </span>
                                 </div>
@@ -85,9 +85,9 @@
                                     <label class="font-medium">Collect Meal Preferences:</label>
                                     <span class="ml-2">
                                         @if($rsvpSetting->collect_meal_preferences)
-                                            <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">Yes</span>
+                                            <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-secondary-light text-secondary-dark">Yes</span>
                                         @else
-                                            <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-red-100 text-red-800">No</span>
+                                            <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-error-light text-error-dark">No</span>
                                         @endif
                                     </span>
                                 </div>
@@ -95,14 +95,14 @@
                         </div>
                         
                         <div class="border rounded p-4">
-                            <h4 class="text-md font-medium mb-4">Custom Questions</h4>
+                            <h4 class="text-md font-medium text-primary-dark mb-4">Custom Questions</h4>
                             
                             <div class="space-y-3">
                                 <div>
                                     <label class="font-medium">Custom Questions:</label>
                                     <div class="ml-2">
                                         @if($rsvpSetting->custom_questions)
-                                            <pre class="bg-gray-100 p-2 rounded">{{ json_encode($rsvpSetting->custom_questions, JSON_PRETTY_PRINT) }}</pre>
+                                            <pre class="bg-secondary-light p-2 rounded">{{ json_encode($rsvpSetting->custom_questions, JSON_PRETTY_PRINT) }}</pre>
                                         @else
                                             <span>N/A</span>
                                         @endif
@@ -123,7 +123,7 @@
                     </div>
                     
                     <div class="mt-6">
-                        <a href="{{ route('admin.rsvp-settings.index') }}" class="text-blue-600 hover:text-blue-900">
+                        <a href="{{ route('admin.rsvp-settings.index') }}" class="text-primary hover:text-primary-dark">
                             ← Back to RSVP Settings
                         </a>
                     </div>

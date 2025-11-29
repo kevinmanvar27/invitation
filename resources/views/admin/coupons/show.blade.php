@@ -1,6 +1,6 @@
 <x-admin-layout>
     <x-slot name="header">
-        <h2 class="font-semibold text-xl text-gray-800 leading-tight">
+        <h2 class="font-semibold text-xl text-primary-dark leading-tight">
             {{ __('Coupon Details') }}
         </h2>
     </x-slot>
@@ -8,17 +8,17 @@
     <div class="py-12">
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
             <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
-                <div class="p-6 text-gray-900">
+                <div class="p-6 text-primary-dark">
                     <div class="flex justify-between items-center mb-6">
                         <h3 class="text-lg font-medium">Coupon #{{ $coupon->id }}</h3>
                         <div>
-                            <a href="{{ route('admin.coupons.edit', $coupon->id) }}" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
+                            <a href="{{ route('admin.coupons.edit', $coupon->id) }}" class="bg-primary hover:bg-primary-dark text-primary-dark font-bold py-2 px-4 rounded">
                                 Edit
                             </a>
                             <form action="{{ route('admin.coupons.destroy', $coupon->id) }}" method="POST" class="inline">
                                 @csrf
                                 @method('DELETE')
-                                <button type="submit" class="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded ml-2" onclick="return confirm('Are you sure?')">
+                                <button type="submit" class="bg-error hover:bg-error-dark text-primary-dark font-bold py-2 px-4 rounded ml-2" onclick="return confirm('Are you sure?')">
                                     Delete
                                 </button>
                             </form>
@@ -96,7 +96,7 @@
                     </div>
                     
                     <div class="mt-6">
-                        <a href="{{ route('admin.coupons.index') }}" class="text-blue-600 hover:text-blue-900">
+                        <a href="{{ route('admin.coupons.index') }}" class="text-primary-dark hover:text-primary">
                             ← Back to Coupons
                         </a>
                     </div>

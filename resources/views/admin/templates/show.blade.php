@@ -1,6 +1,6 @@
 <x-admin-layout>
     <x-slot name="header">
-        <h2 class="font-semibold text-xl text-gray-800 leading-tight">
+        <h2 class="font-semibold text-xl text-primary-dark leading-tight">
             {{ __('Template Details') }}
         </h2>
     </x-slot>
@@ -12,10 +12,10 @@
                     <div class="flex justify-between items-center mb-6">
                         <h3 class="text-lg font-medium">Template Details</h3>
                         <div>
-                            <a href="{{ route('admin.templates.edit', $template->id) }}" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mr-2">
+                            <a href="{{ route('admin.templates.edit', $template->id) }}" class="bg-primary hover:bg-primary-dark text-white font-bold py-2 px-4 rounded mr-2">
                                 Edit
                             </a>
-                            <a href="{{ route('admin.templates.index') }}" class="bg-gray-500 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded">
+                            <a href="{{ route('admin.templates.index') }}" class="bg-secondary hover:bg-secondary-dark text-white font-bold py-2 px-4 rounded">
                                 Back to Templates
                             </a>
                         </div>

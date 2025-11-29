@@ -1,6 +1,6 @@
 <x-admin-layout>
     <x-slot name="header">
-        <h2 class="font-semibold text-xl text-gray-800 leading-tight">
+        <h2 class="font-semibold text-xl text-primary-dark leading-tight">
             {{ __('Shared Invitation Details') }}
         </h2>
     </x-slot>
@@ -8,17 +8,17 @@
     <div class="py-12">
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
             <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
-                <div class="p-6 text-gray-900">
+                <div class="p-6 text-primary-dark">
                     <div class="flex justify-between items-center mb-6">
-                        <h3 class="text-lg font-medium">Shared Invitation #{{ $sharedInvitation->id }}</h3>
+                        <h3 class="text-lg font-medium text-primary-dark">Shared Invitation #{{ $sharedInvitation->id }}</h3>
                         <div>
-                            <a href="{{ route('admin.shared-invitations.edit', $sharedInvitation->id) }}" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
+                            <a href="{{ route('admin.shared-invitations.edit', $sharedInvitation->id) }}" class="bg-primary hover:bg-primary-dark text-primary-dark font-bold py-2 px-4 rounded">
                                 Edit
                             </a>
                             <form action="{{ route('admin.shared-invitations.destroy', $sharedInvitation->id) }}" method="POST" class="inline">
                                 @csrf
                                 @method('DELETE')
-                                <button type="submit" class="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded ml-2" onclick="return confirm('Are you sure?')">
+                                <button type="submit" class="bg-error hover:bg-error-dark text-primary-dark font-bold py-2 px-4 rounded ml-2" onclick="return confirm('Are you sure?')">
                                     Delete
                                 </button>
                             </form>
@@ -27,7 +27,7 @@
 
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                         <div class="border rounded p-4">
-                            <h4 class="text-md font-medium mb-4">Shared Invitation Information</h4>
+                            <h4 class="text-md font-medium text-primary-dark mb-4">Shared Invitation Information</h4>
                             
                             <div class="space-y-3">
                                 <div>
@@ -73,7 +73,7 @@
                         </div>
                         
                         <div class="border rounded p-4">
-                            <h4 class="text-md font-medium mb-4">Timestamps</h4>
+                            <h4 class="text-md font-medium text-primary-dark mb-4">Timestamps</h4>
                             
                             <div class="space-y-3">
                                 <div>
@@ -100,7 +100,7 @@
                     </div>
                     
                     <div class="mt-6">
-                        <a href="{{ route('admin.shared-invitations.index') }}" class="text-blue-600 hover:text-blue-900">
+                        <a href="{{ route('admin.shared-invitations.index') }}" class="text-primary hover:text-primary-dark">
                             ← Back to Shared Invitations
                         </a>
                     </div>

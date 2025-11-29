@@ -1,6 +1,6 @@
 <x-admin-layout>
     <x-slot name="header">
-        <h2 class="font-semibold text-xl text-gray-800 leading-tight">
+        <h2 class="font-semibold text-xl text-primary-dark leading-tight">
             {{ __('Design Element Details') }}
         </h2>
     </x-slot>
@@ -8,14 +8,14 @@
     <div class="py-12">
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
             <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
-                <div class="p-6 text-gray-900">
+                <div class="p-6 text-primary-dark">
                     <div class="flex justify-between items-center mb-6">
                         <h3 class="text-lg font-medium">Design Element Details</h3>
                         <div>
-                            <a href="{{ route('admin.design-elements.edit', $designElement->id) }}" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mr-2">
+                            <a href="{{ route('admin.design-elements.edit', $designElement->id) }}" class="bg-primary hover:bg-primary-dark text-primary-dark font-bold py-2 px-4 rounded mr-2">
                                 Edit
                             </a>
-                            <a href="{{ route('admin.design-elements.index') }}" class="bg-gray-500 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded">
+                            <a href="{{ route('admin.design-elements.index') }}" class="bg-secondary hover:bg-secondary-dark text-primary-dark font-bold py-2 px-4 rounded">
                                 Back to Design Elements
                             </a>
                         </div>

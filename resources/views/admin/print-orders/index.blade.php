@@ -1,22 +1,22 @@
 <x-admin-layout>
     <x-slot name="header">
         <div class="page-header">
-            <h1 class="text-3xl font-bold text-gray-900">Manage Print Orders</h1>
-            <p class="text-gray-500 text-sm mt-1">View and manage all print orders</p>
+            <h1 class="text-3xl font-bold text-primary-dark">Manage Print Orders</h1>
+            <p class="text-secondary-dark text-sm mt-1">View and manage all print orders</p>
         </div>
     </x-slot>
 
     <div class="py-12">
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
             <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
-                <div class="p-6 text-gray-900">
+                <div class="p-6 text-primary-dark">
                     <!-- Header with Search -->
                     <div class="flex flex-col md:flex-row justify-between items-start md:items-center mb-6 gap-4">
                         <div class="flex-1">
                             <div class="relative">
                                 <input type="text" id="searchInput" class="search-input" placeholder="Search print orders...">
                                 <div class="absolute inset-y-0 right-0 flex items-center pr-3">
-                                    <svg class="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                    <svg class="w-5 h-5 text-secondary" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
                                     </svg>
                                 </div>
@@ -28,7 +28,7 @@
                     <div class="flex flex-col md:flex-row justify-between items-start md:items-center mb-6 gap-4">
                         <div class="flex gap-4">
                             <div>
-                                <label class="block text-sm font-medium text-gray-700 mb-1">Status</label>
+                                <label class="block text-sm font-medium text-primary-dark mb-1">Status</label>
                                 <select id="statusFilter" class="search-input">
                                     <option value="">All Statuses</option>
                                     <option value="pending">Pending</option>
@@ -39,7 +39,7 @@
                                 </select>
                             </div>
                             <div>
-                                <label class="block text-sm font-medium text-gray-700 mb-1">Date Range</label>
+                                <label class="block text-sm font-medium text-primary-dark mb-1">Date Range</label>
                                 <div class="flex gap-2">
                                     <input type="date" id="startDate" class="search-input" placeholder="Start Date">
                                     <input type="date" id="endDate" class="search-input" placeholder="End Date">
@@ -63,36 +63,36 @@
                     <div class="grid grid-cols-1 md:grid-cols-5 gap-4 mb-8">
                         <div class="stat-card">
                             <div class="text-center">
-                                <div class="text-sm font-medium text-gray-500 mb-1">Pending</div>
-                                <div class="text-2xl font-bold text-yellow-600">24</div>
+                                <div class="text-sm font-medium text-secondary-dark mb-1">Pending</div>
+                                <div class="text-2xl font-bold text-accent">24</div>
                             </div>
                         </div>
                         
                         <div class="stat-card">
                             <div class="text-center">
-                                <div class="text-sm font-medium text-gray-500 mb-1">Processing</div>
-                                <div class="text-2xl font-bold text-blue-600">18</div>
+                                <div class="text-sm font-medium text-secondary-dark mb-1">Processing</div>
+                                <div class="text-2xl font-bold text-primary">18</div>
                             </div>
                         </div>
                         
                         <div class="stat-card">
                             <div class="text-center">
-                                <div class="text-sm font-medium text-gray-500 mb-1">Printed</div>
-                                <div class="text-2xl font-bold text-indigo-600">12</div>
+                                <div class="text-sm font-medium text-secondary-dark mb-1">Printed</div>
+                                <div class="text-2xl font-bold text-primary">12</div>
                             </div>
                         </div>
                         
                         <div class="stat-card">
                             <div class="text-center">
-                                <div class="text-sm font-medium text-gray-500 mb-1">Shipped</div>
-                                <div class="text-2xl font-bold text-purple-600">8</div>
+                                <div class="text-sm font-medium text-secondary-dark mb-1">Shipped</div>
+                                <div class="text-2xl font-bold text-primary">8</div>
                             </div>
                         </div>
                         
                         <div class="stat-card">
                             <div class="text-center">
-                                <div class="text-sm font-medium text-gray-500 mb-1">Delivered</div>
-                                <div class="text-2xl font-bold text-green-600">42</div>
+                                <div class="text-sm font-medium text-secondary-dark mb-1">Delivered</div>
+                                <div class="text-2xl font-bold text-secondary">42</div>
                             </div>
                         </div>
                     </div>
@@ -195,12 +195,12 @@
     </div>
 
     <!-- Update Status Modal -->
-    <div id="updateStatusModal" class="fixed inset-0 bg-gray-600 bg-opacity-50 hidden overflow-y-auto h-full w-full">
-        <div class="relative top-20 mx-auto p-5 border w-96 shadow-lg rounded-md bg-white">
+    <div id="updateStatusModal" class="fixed inset-0 bg-secondary bg-opacity-50 hidden overflow-y-auto h-full w-full">
+        <div class="relative top-20 mx-auto p-5 border border-accent w-96 shadow-lg rounded-md bg-white">
             <div class="mt-3">
                 <div class="flex items-center justify-between mb-4">
-                    <h3 class="text-lg font-medium text-gray-900">Update Order Status</h3>
-                    <button id="closeStatusModal" class="text-gray-400 hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm p-1.5">
+                    <h3 class="text-lg font-medium text-primary-dark">Update Order Status</h3>
+                    <button id="closeStatusModal" class="text-secondary hover:bg-secondary-light hover:text-primary rounded-lg text-sm p-1.5">
                         <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
                             <path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd"></path>
                         </svg>
@@ -209,7 +209,7 @@
                 <form id="updateStatusForm">
                     <input type="hidden" id="orderId" value="">
                     <div class="mb-4">
-                        <label class="block text-gray-700 text-sm font-bold mb-2" for="status">
+                        <label class="block text-primary-dark text-sm font-bold mb-2" for="status">
                             Status
                         </label>
                         <select id="status" class="search-input">
@@ -221,7 +221,7 @@
                         </select>
                     </div>
                     <div class="flex items-center justify-between">
-                        <button type="button" id="cancelStatusUpdate" class="bg-gray-500 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">
+                        <button type="button" id="cancelStatusUpdate" class="bg-secondary hover:bg-secondary-dark text-primary-dark font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">
                             Cancel
                         </button>
                         <button type="submit" class="btn-primary">

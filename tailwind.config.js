@@ -8,64 +8,70 @@ export default {
   theme: {
     extend: {
       colors: {
-        // Primary color palette
+        // Primary color palette - using specified colors
         primary: {
-          light: '#3b82f6', // blue-500
-          DEFAULT: '#2563eb', // blue-600
-          dark: '#1d4ed8', // blue-700
+          light: '#7fb7f2', // light blue
+          DEFAULT: '#7fb7f2', // light blue
+          dark: '#7fb7f2', // light blue
         },
-        // Secondary color palette
+        // Secondary color palette - using specified colors
         secondary: {
-          light: '#8b5cf6', // violet-500
-          DEFAULT: '#7c3aed', // violet-600
-          dark: '#6d28d9', // violet-700
+          light: '#9bd698', // light green
+          DEFAULT: '#9bd698', // light green
+          dark: '#9bd698', // light green
         },
-        // Surface colors
+        // Accent color - using specified colors
+        accent: {
+          light: '#fbe17e', // light yellow
+          DEFAULT: '#fbe17e', // light yellow
+          dark: '#fbe17e', // light yellow
+        },
+        // Surface colors - using specified colors
         surface: {
-          light: '#f9fafb', // gray-50
-          DEFAULT: '#f3f4f6', // gray-100
-          dark: '#1f2937', // gray-800
+          light: '#ffffff', // white
+          DEFAULT: '#ffffff', // white
+          dark: '#7fb7f2', // light blue
         },
-        // Background colors
+        // Background colors - using specified colors
         background: {
           light: '#ffffff', // white
-          DEFAULT: '#f9fafb', // gray-50
-          dark: '#111827', // gray-900
+          DEFAULT: '#ffffff', // white
+          dark: '#7fb7f2', // light blue
         },
-        // Text colors
+        // Text colors - using specified colors
         text: {
-          light: '#1f2937', // gray-800
-          DEFAULT: '#374151', // gray-700
-          dark: '#f9fafb', // gray-50
+          light: '#7fb7f2', // light blue
+          DEFAULT: '#7fb7f2', // light blue
+          dark: '#ffffff', // white
           secondary: {
-            light: '#6b7280', // gray-500
-            DEFAULT: '#4b5563', // gray-600
-            dark: '#9ca3af', // gray-400
+            light: '#9bd698', // light green
+            DEFAULT: '#9bd698', // light green
+            dark: '#fbe17e', // light yellow
           }
         },
-        // Border colors
+        // Border colors - using specified colors
         border: {
-          light: '#e5e7eb', // gray-200
-          DEFAULT: '#d1d5db', // gray-300
-          dark: '#374151', // gray-700
+          light: '#fbe17e', // light yellow
+          DEFAULT: '#fbe17e', // light yellow
+          dark: '#9bd698', // light green
         },
-        // Warning/Alert colors
+        // Warning/Alert colors - using specified colors
         warning: {
-          light: '#fbbf24', // amber-400
-          DEFAULT: '#f59e0b', // amber-500
-          dark: '#d97706', // amber-600
+          light: '#fbe17e', // light yellow
+          DEFAULT: '#fbe17e', // light yellow
+          dark: '#fbe17e', // light yellow
         },
-        // Success colors
+        // Success colors - using specified colors
         success: {
-          light: '#34d399', // emerald-400
-          DEFAULT: '#10b981', // emerald-500
-          dark: '#059669', // emerald-600
+          light: '#9bd698', // light green
+          DEFAULT: '#9bd698', // light green
+          dark: '#9bd698', // light green
         },
-        // Error colors
+        // Error colors - using specified colors
         error: {
-          light: '#f87171', // red-400
-          DEFAULT: '#ef4444', // red-500
-          dark: '#dc2626', // red-600
+          light: '#7fb7f2', // light blue
+          DEFAULT: '#7fb7f2', // light blue
+          dark: '#7fb7f2', // light blue
         }
       },
     },

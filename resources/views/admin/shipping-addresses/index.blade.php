@@ -1,22 +1,22 @@
 <x-admin-layout>
     <x-slot name="header">
         <div class="page-header">
-            <h1 class="text-3xl font-bold text-gray-900">Manage Shipping Addresses</h1>
-            <p class="text-gray-500 text-sm mt-1">View and manage all shipping addresses</p>
+            <h1 class="text-3xl font-bold text-primary-dark">Manage Shipping Addresses</h1>
+            <p class="text-accent-dark text-sm mt-1">View and manage all shipping addresses</p>
         </div>
     </x-slot>
 
     <div class="py-12">
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
             <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
-                <div class="p-6 text-gray-900">
+                <div class="p-6 text-primary-dark">
                     <!-- Header with Search and Add Button -->
                     <div class="flex flex-col md:flex-row justify-between items-start md:items-center mb-6 gap-4">
                         <div class="flex-1">
                             <div class="relative">
                                 <input type="text" id="searchInput" class="search-input" placeholder="Search addresses...">
                                 <div class="absolute inset-y-0 right-0 flex items-center pr-3">
-                                    <svg class="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                    <svg class="w-5 h-5 text-accent-dark" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
                                     </svg>
                                 </div>
@@ -33,7 +33,7 @@
                     <!-- Filters -->
                     <div class="flex flex-col md:flex-row justify-between items-start md:items-center mb-6 gap-4">
                         <div class="w-full md:w-1/3">
-                            <label class="block text-sm font-medium text-gray-700 mb-1">Filter by User</label>
+                            <label class="block text-sm font-medium text-primary-dark mb-1">Filter by User</label>
                             <select class="search-input">
                                 <option>All Users</option>
                                 <!-- Add user options here -->

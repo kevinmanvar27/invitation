@@ -1,6 +1,6 @@
 <x-admin-layout>
     <x-slot name="header">
-        <h2 class="font-semibold text-xl text-gray-800 leading-tight">
+        <h2 class="font-semibold text-xl text-primary-dark leading-tight">
             {{ __('Manage Shared Invitations') }}
         </h2>
     </x-slot>
@@ -8,9 +8,9 @@
     <div class="py-12">
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
             <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
-                <div class="p-6 text-gray-900">
+                <div class="p-6 text-primary-dark">
                     <div class="flex justify-between items-center mb-6">
-                        <h3 class="text-lg font-medium">Shared Invitations</h3>
+                        <h3 class="text-lg font-medium text-primary-dark">Shared Invitations</h3>
                         <div class="flex space-x-2">
                             <select id="methodFilter" class="border rounded px-4 py-2">
                                 <option value="">All Methods</option>
@@ -25,8 +25,8 @@
                                 <option value="inactive">Inactive</option>
                                 <option value="expired">Expired</option>
                             </select>
-                            <input type="text" id="searchInput" placeholder="Search invitations..." class="border rounded px-4 py-2">
-                            <button id="searchButton" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
+                            <input type="text" id="searchInput" placeholder="Search invitations..." class="border border-accent rounded px-4 py-2">
+                            <button id="searchButton" class="bg-primary hover:bg-primary-dark text-primary-dark font-bold py-2 px-4 rounded">
                                 Search
                             </button>
                         </div>
@@ -34,59 +34,59 @@
 
                     <!-- Share Analytics -->
                     <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
-                        <div class="bg-blue-50 p-4 rounded-lg">
-                            <h4 class="text-lg font-semibold text-blue-800">Total Shares</h4>
+                        <div class="bg-primary-light p-4 rounded-lg">
+                            <h4 class="text-lg font-semibold text-primary-dark">Total Shares</h4>
                             <p class="text-2xl font-bold mt-2">12,456</p>
-                            <p class="text-sm text-gray-600">+15% from last month</p>
+                            <p class="text-sm text-accent-dark">+15% from last month</p>
                         </div>
                         
-                        <div class="bg-green-50 p-4 rounded-lg">
-                            <h4 class="text-lg font-semibold text-green-800">Views</h4>
+                        <div class="bg-secondary-light p-4 rounded-lg">
+                            <h4 class="text-lg font-semibold text-secondary-dark">Views</h4>
                             <p class="text-2xl font-bold mt-2">45,789</p>
-                            <p class="text-sm text-gray-600">+18% from last month</p>
+                            <p class="text-sm text-accent-dark">+18% from last month</p>
                         </div>
                         
-                        <div class="bg-yellow-50 p-4 rounded-lg">
-                            <h4 class="text-lg font-semibold text-yellow-800">Click-Through Rate</h4>
+                        <div class="bg-accent-light p-4 rounded-lg">
+                            <h4 class="text-lg font-semibold text-accent-dark">Click-Through Rate</h4>
                             <p class="text-2xl font-bold mt-2">36.7%</p>
-                            <p class="text-sm text-gray-600">+2.3% from last month</p>
+                            <p class="text-sm text-accent-dark">+2.3% from last month</p>
                         </div>
                         
-                        <div class="bg-purple-50 p-4 rounded-lg">
-                            <h4 class="text-lg font-semibold text-purple-800">Responses</h4>
+                        <div class="bg-secondary-light p-4 rounded-lg">
+                            <h4 class="text-lg font-semibold text-secondary-dark">Responses</h4>
                             <p class="text-2xl font-bold mt-2">8,923</p>
-                            <p class="text-sm text-gray-600">+12% from last month</p>
+                            <p class="text-sm text-accent-dark">+12% from last month</p>
                         </div>
                     </div>
 
                     <div class="overflow-x-auto">
-                        <table class="min-w-full divide-y divide-gray-200 data-table">
+                        <table class="min-w-full divide-y divide-accent data-table">
                             <thead>
                                 <tr>
-                                    <th class="px-6 py-3 bg-gray-50 text-left text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider">ID</th>
-                                    <th class="px-6 py-3 bg-gray-50 text-left text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider">Invitation Title</th>
-                                    <th class="px-6 py-3 bg-gray-50 text-left text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider">Shared By</th>
-                                    <th class="px-6 py-3 bg-gray-50 text-left text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider">Share Method</th>
-                                    <th class="px-6 py-3 bg-gray-50 text-left text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider">Share Link</th>
-                                    <th class="px-6 py-3 bg-gray-50 text-left text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider">Views Count</th>
-                                    <th class="px-6 py-3 bg-gray-50 text-left text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider">Sent Date</th>
-                                    <th class="px-6 py-3 bg-gray-50 text-left text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider">Status</th>
-                                    <th class="px-6 py-3 bg-gray-50 text-left text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider">Actions</th>
+                                    <th class="px-6 py-3 bg-secondary-light text-left text-xs leading-4 font-medium text-secondary-dark uppercase tracking-wider">ID</th>
+                                    <th class="px-6 py-3 bg-secondary-light text-left text-xs leading-4 font-medium text-secondary-dark uppercase tracking-wider">Invitation Title</th>
+                                    <th class="px-6 py-3 bg-secondary-light text-left text-xs leading-4 font-medium text-secondary-dark uppercase tracking-wider">Shared By</th>
+                                    <th class="px-6 py-3 bg-secondary-light text-left text-xs leading-4 font-medium text-secondary-dark uppercase tracking-wider">Share Method</th>
+                                    <th class="px-6 py-3 bg-secondary-light text-left text-xs leading-4 font-medium text-secondary-dark uppercase tracking-wider">Share Link</th>
+                                    <th class="px-6 py-3 bg-secondary-light text-left text-xs leading-4 font-medium text-secondary-dark uppercase tracking-wider">Views Count</th>
+                                    <th class="px-6 py-3 bg-secondary-light text-left text-xs leading-4 font-medium text-secondary-dark uppercase tracking-wider">Sent Date</th>
+                                    <th class="px-6 py-3 bg-secondary-light text-left text-xs leading-4 font-medium text-secondary-dark uppercase tracking-wider">Status</th>
+                                    <th class="px-6 py-3 bg-secondary-light text-left text-xs leading-4 font-medium text-secondary-dark uppercase tracking-wider">Actions</th>
                                 </tr>
                             </thead>
-                            <tbody class="bg-white divide-y divide-gray-200">
+                            <tbody class="bg-white divide-y divide-accent">
                                 @foreach($sharedInvitations as $sharedInvitation)
                                 <tr>
                                     <td class="px-6 py-4 whitespace-no-wrap">{{ $sharedInvitation->id }}</td>
                                     <td class="px-6 py-4 whitespace-no-wrap">{{ $sharedInvitation->design->design_name ?? 'N/A' }}</td>
                                     <td class="px-6 py-4 whitespace-no-wrap">{{ $sharedInvitation->user->name ?? 'N/A' }}</td>
                                     <td class="px-6 py-4 whitespace-no-wrap">
-                                        <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-blue-100 text-blue-800">
+                                        <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-primary-light text-primary-dark">
                                             {{ ucfirst($sharedInvitation->share_method) }}
                                         </span>
                                     </td>
                                     <td class="px-6 py-4 whitespace-no-wrap">
-                                        <a href="{{ $sharedInvitation->share_link }}" target="_blank" class="text-blue-600 hover:text-blue-900">
+                                        <a href="{{ $sharedInvitation->share_link }}" target="_blank" class="text-primary hover:text-primary-dark">
                                             {{ Str::limit($sharedInvitation->share_link, 30) }}
                                         </a>
                                     </td>
@@ -94,19 +94,19 @@
                                     <td class="px-6 py-4 whitespace-no-wrap">{{ $sharedInvitation->created_at->format('M d, Y H:i') }}</td>
                                     <td class="px-6 py-4 whitespace-no-wrap">
                                         <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full 
-                                            {{ $sharedInvitation->status === 'active' ? 'bg-green-100 text-green-800' : 
-                                               ($sharedInvitation->status === 'expired' ? 'bg-red-100 text-red-800' : 
-                                               'bg-yellow-100 text-yellow-800') }}">
+                                            {{ $sharedInvitation->status === 'active' ? 'bg-secondary-light text-secondary-dark' : 
+                                               ($sharedInvitation->status === 'expired' ? 'bg-error-light text-error-dark' : 
+                                               'bg-accent-light text-accent-dark') }}">
                                             {{ ucfirst($sharedInvitation->status) }}
                                         </span>
                                     </td>
                                     <td class="px-6 py-4 whitespace-no-wrap">
-                                        <button data-invitation-id="{{ $sharedInvitation->id }}" class="resend-invitation-btn text-blue-600 hover:text-blue-900 mr-3">Resend</button>
-                                        <a href="{{ route('admin.shared-invitations.show', $sharedInvitation->id) }}" class="text-indigo-600 hover:text-indigo-900 mr-3">View</a>
+                                        <button data-invitation-id="{{ $sharedInvitation->id }}" class="resend-invitation-btn text-primary hover:text-primary-dark mr-3">Resend</button>
+                                        <a href="{{ route('admin.shared-invitations.show', $sharedInvitation->id) }}" class="text-primary hover:text-primary-dark mr-3">View</a>
                                         <form action="{{ route('admin.shared-invitations.destroy', $sharedInvitation->id) }}" method="POST" class="inline">
                                             @csrf
                                             @method('DELETE')
-                                            <button type="submit" class="text-red-600 hover:text-red-900" onclick="return confirm('Are you sure?')">Delete</button>
+                                            <button type="submit" class="text-error hover:text-error-dark" onclick="return confirm('Are you sure?')">Delete</button>
                                         </form>
                                     </td>
                                 </tr>
@@ -117,10 +117,10 @@
 
                     <div class="mt-4 flex justify-between items-center">
                         <div>
-                            <button id="exportCsv" class="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded mr-2">
+                            <button id="exportCsv" class="bg-secondary hover:bg-secondary-dark text-primary-dark font-bold py-2 px-4 rounded mr-2">
                                 Export CSV
                             </button>
-                            <button id="exportExcel" class="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded">
+                            <button id="exportExcel" class="bg-secondary hover:bg-secondary-dark text-primary-dark font-bold py-2 px-4 rounded">
                                 Export Excel
                             </button>
                         </div>

@@ -1,22 +1,22 @@
 <x-admin-layout>
     <x-slot name="header">
         <div class="page-header">
-            <h1 class="text-3xl font-bold text-gray-900">Manage RSVP Responses</h1>
-            <p class="text-gray-500 text-sm mt-1">View and manage all RSVP responses</p>
+            <h1 class="text-3xl font-bold text-primary-dark">Manage RSVP Responses</h1>
+            <p class="text-accent-dark text-sm mt-1">View and manage all RSVP responses</p>
         </div>
     </x-slot>
 
     <div class="py-12">
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
             <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
-                <div class="p-6 text-gray-900">
+                <div class="p-6 text-primary-dark">
                     <!-- Header with Search -->
                     <div class="flex flex-col md:flex-row justify-between items-start md:items-center mb-6 gap-4">
                         <div class="flex-1">
                             <div class="relative">
                                 <input type="text" id="searchInput" class="search-input" placeholder="Search RSVP responses...">
                                 <div class="absolute inset-y-0 right-0 flex items-center pr-3">
-                                    <svg class="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                    <svg class="w-5 h-5 text-accent-dark" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
                                     </svg>
                                 </div>
@@ -28,7 +28,7 @@
                     <div class="flex flex-col md:flex-row justify-between items-start md:items-center mb-6 gap-4">
                         <div class="flex gap-4">
                             <div>
-                                <label class="block text-sm font-medium text-gray-700 mb-1">Response</label>
+                                <label class="block text-sm font-medium text-primary-dark mb-1">Response</label>
                                 <select id="responseFilter" class="search-input">
                                     <option value="">All Responses</option>
                                     <option value="attending">Attending</option>
@@ -37,7 +37,7 @@
                                 </select>
                             </div>
                             <div>
-                                <label class="block text-sm font-medium text-gray-700 mb-1">Date Range</label>
+                                <label class="block text-sm font-medium text-primary-dark mb-1">Date Range</label>
                                 <div class="flex gap-2">
                                     <input type="date" id="startDate" class="search-input" placeholder="Start Date">
                                     <input type="date" id="endDate" class="search-input" placeholder="End Date">
@@ -61,56 +61,56 @@
                     <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
                         <div class="stat-card">
                             <div class="flex items-center">
-                                <div class="p-3 rounded-lg bg-blue-100 mr-4">
-                                    <svg class="w-6 h-6 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                <div class="p-3 rounded-lg bg-primary-light mr-4">
+                                    <svg class="w-6 h-6 text-primary-dark" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
                                     </svg>
                                 </div>
                                 <div>
-                                    <p class="text-sm font-medium text-gray-500">Acceptance Rate</p>
-                                    <p class="text-2xl font-semibold text-gray-900">72.5%</p>
+                                    <p class="text-sm font-medium text-accent-dark">Acceptance Rate</p>
+                                    <p class="text-2xl font-semibold text-primary-dark">72.5%</p>
                                 </div>
                             </div>
                         </div>
 
                         <div class="stat-card">
                             <div class="flex items-center">
-                                <div class="p-3 rounded-lg bg-green-100 mr-4">
-                                    <svg class="w-6 h-6 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                <div class="p-3 rounded-lg bg-secondary-light mr-4">
+                                    <svg class="w-6 h-6 text-secondary-dark" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"></path>
                                     </svg>
                                 </div>
                                 <div>
-                                    <p class="text-sm font-medium text-gray-500">Total Guests</p>
-                                    <p class="text-2xl font-semibold text-gray-900">1,245</p>
+                                    <p class="text-sm font-medium text-accent-dark">Total Guests</p>
+                                    <p class="text-2xl font-semibold text-primary-dark">1,245</p>
                                 </div>
                             </div>
                         </div>
 
                         <div class="stat-card">
                             <div class="flex items-center">
-                                <div class="p-3 rounded-lg bg-yellow-100 mr-4">
-                                    <svg class="w-6 h-6 text-yellow-600" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                <div class="p-3 rounded-lg bg-accent-light mr-4">
+                                    <svg class="w-6 h-6 text-accent-dark" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
                                     </svg>
                                 </div>
                                 <div>
-                                    <p class="text-sm font-medium text-gray-500">Pending Responses</p>
-                                    <p class="text-2xl font-semibold text-gray-900">87</p>
+                                    <p class="text-sm font-medium text-accent-dark">Pending Responses</p>
+                                    <p class="text-2xl font-semibold text-primary-dark">87</p>
                                 </div>
                             </div>
                         </div>
 
                         <div class="stat-card">
                             <div class="flex items-center">
-                                <div class="p-3 rounded-lg bg-purple-100 mr-4">
-                                    <svg class="w-6 h-6 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                <div class="p-3 rounded-lg bg-secondary-light mr-4">
+                                    <svg class="w-6 h-6 text-secondary-dark" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 15.546c-.523 0-1.046.151-1.5.454a2.704 2.704 0 01-3 0 2.704 2.704 0 00-3 0 2.704 2.704 0 01-3 0 2.704 2.704 0 00-3 0 2.704 2.704 0 01-3 0 2.701 2.701 0 00-1.5-.454M9 6v2m3-2v2m3-2v2M9 3h.01M12 3h.01M15 3h.01M21 21v-7a2 2 0 00-2-2H5a2 2 0 00-2 2v7h18zm-3-9v-2a2 2 0 00-2-2H8a2 2 0 00-2 2v2h12z"></path>
                                     </svg>
                                 </div>
                                 <div>
-                                    <p class="text-sm font-medium text-gray-500">Dietary Requests</p>
-                                    <p class="text-2xl font-semibold text-gray-900">34</p>
+                                    <p class="text-sm font-medium text-accent-dark">Dietary Requests</p>
+                                    <p class="text-2xl font-semibold text-primary-dark">34</p>
                                 </div>
                             </div>
                         </div>

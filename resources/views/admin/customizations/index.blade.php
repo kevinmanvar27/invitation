@@ -1,8 +1,8 @@
 <x-admin-layout>
     <x-slot name="header">
         <div class="page-header">
-            <h1 class="page-header-title">Customizations</h1>
-            <p class="page-header-subtitle">Track and manage user design customizations</p>
+            <h1 class="page-header-title text-primary-dark">Customizations</h1>
+            <p class="page-header-subtitle text-accent-dark">Track and manage user design customizations</p>
         </div>
     </x-slot>
 
@@ -18,7 +18,7 @@
                 <option value="image">Image</option>
             </select>
             <input type="text" id="searchInput" placeholder="Search customizations..." class="border rounded px-4 py-2">
-            <button id="searchButton" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
+            <button id="searchButton" class="bg-primary hover:bg-primary-dark text-primary-dark font-bold py-2 px-4 rounded">
                 Search
             </button>
         </div>
@@ -26,8 +26,8 @@
 
     <!-- Analytics Section -->
     <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
-        <div class="bg-blue-50 p-4 rounded-lg">
-            <h4 class="text-lg font-semibold text-blue-800">Most Used Elements</h4>
+        <div class="bg-secondary-light p-4 rounded-lg">
+            <h4 class="text-lg font-semibold text-secondary-dark">Most Used Elements</h4>
             <ul class="mt-2">
                 <li class="flex justify-between py-1">
                     <span>Heart Icon</span>
@@ -44,8 +44,8 @@
             </ul>
         </div>
         
-        <div class="bg-green-50 p-4 rounded-lg">
-            <h4 class="text-lg font-semibold text-green-800">Most Used Colors</h4>
+        <div class="bg-primary-light p-4 rounded-lg">
+            <h4 class="text-lg font-semibold text-primary-dark">Most Used Colors</h4>
             <ul class="mt-2">
                 <li class="flex justify-between py-1">
                     <span>#E8C4B8 (Rose Gold)</span>
@@ -62,8 +62,8 @@
             </ul>
         </div>
         
-        <div class="bg-purple-50 p-4 rounded-lg">
-            <h4 class="text-lg font-semibold text-purple-800">Most Used Fonts</h4>
+        <div class="bg-accent-light p-4 rounded-lg">
+            <h4 class="text-lg font-semibold text-accent-dark">Most Used Fonts</h4>
             <ul class="mt-2">
                 <li class="flex justify-between py-1">
                     <span>Great Vibes</span>
@@ -82,21 +82,21 @@
     </div>
 
     <div class="overflow-x-auto">
-        <table class="min-w-full divide-y divide-gray-200 data-table">
+        <table class="min-w-full divide-y divide-secondary-light data-table">
             <thead>
                 <tr>
-                    <th class="px-6 py-3 bg-gray-50 text-left text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider">ID</th>
-                    <th class="px-6 py-3 bg-gray-50 text-left text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider">User Name</th>
-                    <th class="px-6 py-3 bg-gray-50 text-left text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider">Design ID</th>
-                    <th class="px-6 py-3 bg-gray-50 text-left text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider">Customization Type</th>
-                    <th class="px-6 py-3 bg-gray-50 text-left text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider">Elements Used</th>
-                    <th class="px-6 py-3 bg-gray-50 text-left text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider">Colors Used</th>
-                    <th class="px-6 py-3 bg-gray-50 text-left text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider">Fonts Used</th>
-                    <th class="px-6 py-3 bg-gray-50 text-left text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider">Date</th>
-                    <th class="px-6 py-3 bg-gray-50 text-left text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider">Actions</th>
+                    <th class="px-6 py-3 bg-secondary-light text-left text-xs leading-4 font-medium text-secondary-dark uppercase tracking-wider">ID</th>
+                    <th class="px-6 py-3 bg-secondary-light text-left text-xs leading-4 font-medium text-secondary-dark uppercase tracking-wider">User Name</th>
+                    <th class="px-6 py-3 bg-secondary-light text-left text-xs leading-4 font-medium text-secondary-dark uppercase tracking-wider">Design ID</th>
+                    <th class="px-6 py-3 bg-secondary-light text-left text-xs leading-4 font-medium text-secondary-dark uppercase tracking-wider">Customization Type</th>
+                    <th class="px-6 py-3 bg-secondary-light text-left text-xs leading-4 font-medium text-secondary-dark uppercase tracking-wider">Elements Used</th>
+                    <th class="px-6 py-3 bg-secondary-light text-left text-xs leading-4 font-medium text-secondary-dark uppercase tracking-wider">Colors Used</th>
+                    <th class="px-6 py-3 bg-secondary-light text-left text-xs leading-4 font-medium text-secondary-dark uppercase tracking-wider">Fonts Used</th>
+                    <th class="px-6 py-3 bg-secondary-light text-left text-xs leading-4 font-medium text-secondary-dark uppercase tracking-wider">Date</th>
+                    <th class="px-6 py-3 bg-secondary-light text-left text-xs leading-4 font-medium text-secondary-dark uppercase tracking-wider">Actions</th>
                 </tr>
             </thead>
-            <tbody class="bg-white divide-y divide-gray-200">
+            <tbody class="bg-white divide-y divide-secondary-light">
                 <!-- Data will be populated by JavaScript -->
             </tbody>
         </table>
@@ -104,10 +104,10 @@
 
     <div class="mt-4 flex justify-between items-center">
         <div>
-            <button id="exportCsv" class="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded mr-2">
+            <button id="exportCsv" class="bg-primary hover:bg-primary-dark text-primary-dark font-bold py-2 px-4 rounded mr-2">
                 Export CSV
             </button>
-            <button id="exportExcel" class="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded">
+            <button id="exportExcel" class="bg-primary hover:bg-primary-dark text-primary-dark font-bold py-2 px-4 rounded">
                 Export Excel
             </button>
         </div>
@@ -197,7 +197,7 @@
                         <td class="px-6 py-4 whitespace-no-wrap">${customization.user_name}</td>
                         <td class="px-6 py-4 whitespace-no-wrap">${customization.design_id}</td>
                         <td class="px-6 py-4 whitespace-no-wrap">
-                            <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-blue-100 text-blue-800">
+                            <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-primary-light text-primary-dark">
                                 ${customization.customization_type}
                             </span>
                         </td>
@@ -206,8 +206,8 @@
                         <td class="px-6 py-4 whitespace-no-wrap">${customization.fonts_used}</td>
                         <td class="px-6 py-4 whitespace-no-wrap">${customization.date}</td>
                         <td class="px-6 py-4 whitespace-no-wrap">
-                            <button onclick="viewCustomization(${customization.id})" class="text-blue-600 hover:text-blue-900 mr-3">View</button>
-                            <button onclick="downloadCustomization(${customization.id})" class="text-green-600 hover:text-green-900">Download</button>
+                            <button onclick="viewCustomization(${customization.id})" class="text-primary hover:text-primary-dark mr-3">View</button>
+                            <button onclick="downloadCustomization(${customization.id})" class="text-secondary hover:text-secondary-dark">Download</button>
                         </td>
                     </tr>
                 `;

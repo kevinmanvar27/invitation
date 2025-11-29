@@ -11,27 +11,27 @@
         <h3 class="text-lg font-medium">User Designs</h3>
         <div class="flex space-x-2">
             <input type="text" id="searchInput" placeholder="Search designs..." class="border rounded px-4 py-2">
-            <button id="searchButton" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
+            <button id="searchButton" class="bg-primary hover:bg-primary-dark text-primary-dark font-bold py-2 px-4 rounded">
                 Search
             </button>
         </div>
     </div>
 
     <div class="overflow-x-auto">
-        <table class="min-w-full divide-y divide-gray-200 data-table">
+        <table class="min-w-full divide-y divide-secondary-light data-table">
             <thead>
                 <tr>
-                    <th class="px-6 py-3 bg-gray-50 text-left text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider">ID</th>
-                    <th class="px-6 py-3 bg-gray-50 text-left text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider">Thumbnail</th>
-                    <th class="px-6 py-3 bg-gray-50 text-left text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider">User Name</th>
-                    <th class="px-6 py-3 bg-gray-50 text-left text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider">Template Used</th>
-                    <th class="px-6 py-3 bg-gray-50 text-left text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider">Design Name</th>
-                    <th class="px-6 py-3 bg-gray-50 text-left text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider">Creation Date</th>
-                    <th class="px-6 py-3 bg-gray-50 text-left text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider">Status</th>
-                    <th class="px-6 py-3 bg-gray-50 text-left text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider">Actions</th>
+                    <th class="px-6 py-3 bg-secondary-light text-left text-xs leading-4 font-medium text-secondary-dark uppercase tracking-wider">ID</th>
+                    <th class="px-6 py-3 bg-secondary-light text-left text-xs leading-4 font-medium text-secondary-dark uppercase tracking-wider">Thumbnail</th>
+                    <th class="px-6 py-3 bg-secondary-light text-left text-xs leading-4 font-medium text-secondary-dark uppercase tracking-wider">User Name</th>
+                    <th class="px-6 py-3 bg-secondary-light text-left text-xs leading-4 font-medium text-secondary-dark uppercase tracking-wider">Template Used</th>
+                    <th class="px-6 py-3 bg-secondary-light text-left text-xs leading-4 font-medium text-secondary-dark uppercase tracking-wider">Design Name</th>
+                    <th class="px-6 py-3 bg-secondary-light text-left text-xs leading-4 font-medium text-secondary-dark uppercase tracking-wider">Creation Date</th>
+                    <th class="px-6 py-3 bg-secondary-light text-left text-xs leading-4 font-medium text-secondary-dark uppercase tracking-wider">Status</th>
+                    <th class="px-6 py-3 bg-secondary-light text-left text-xs leading-4 font-medium text-secondary-dark uppercase tracking-wider">Actions</th>
                 </tr>
             </thead>
-            <tbody class="bg-white divide-y divide-gray-200">
+            <tbody class="bg-white divide-y divide-secondary-light">
                 <!-- Data will be populated by JavaScript -->
             </tbody>
         </table>
@@ -39,10 +39,10 @@
 
     <div class="mt-4 flex justify-between items-center">
         <div>
-            <button id="exportCsv" class="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded mr-2">
+            <button id="exportCsv" class="bg-primary hover:bg-primary-dark text-primary-dark font-bold py-2 px-4 rounded mr-2">
                 Export CSV
             </button>
-            <button id="exportExcel" class="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded">
+            <button id="exportExcel" class="bg-primary hover:bg-primary-dark text-primary-dark font-bold py-2 px-4 rounded">
                 Export Excel
             </button>
         </div>
@@ -52,12 +52,12 @@
     </div>
 
     <!-- Design Preview Modal -->
-    <div id="previewModal" class="fixed inset-0 bg-gray-600 bg-opacity-50 hidden overflow-y-auto h-full w-full">
+    <div id="previewModal" class="fixed inset-0 bg-secondary bg-opacity-50 hidden overflow-y-auto h-full w-full">
         <div class="relative top-20 mx-auto p-5 border w-3/4 shadow-lg rounded-md bg-white">
             <div class="mt-3 text-center">
                 <div class="mx-auto flex items-center justify-between">
-                    <h3 class="text-lg leading-6 font-medium text-gray-900">Design Preview</h3>
-                    <button id="closeModal" class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm p-1.5 ml-auto inline-flex items-center">
+                    <h3 class="text-lg leading-6 font-medium text-primary-dark">Design Preview</h3>
+                    <button id="closeModal" class="text-secondary-dark bg-transparent hover:bg-secondary-light hover:text-primary-dark rounded-lg text-sm p-1.5 ml-auto inline-flex items-center">
                         <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
                             <path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd"></path>
                         </svg>
@@ -69,7 +69,7 @@
                     </div>
                 </div>
                 <div class="items-center px-4 py-3">
-                    <button id="downloadDesign" class="px-4 py-2 bg-blue-500 text-white text-base font-medium rounded-md w-full shadow-sm hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-300">
+                    <button id="downloadDesign" class="px-4 py-2 bg-primary text-primary-dark text-base font-medium rounded-md w-full shadow-sm hover:bg-primary-dark focus:outline-none focus:ring-2 focus:ring-primary-light">
                         Download Design
                     </button>
                 </div>
@@ -157,13 +157,13 @@
                         <td class="px-6 py-4 whitespace-no-wrap">${design.creation_date}</td>
                         <td class="px-6 py-4 whitespace-no-wrap">
                             <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full 
-                                ${design.status === 'Published' ? 'bg-green-100 text-green-800' : 'bg-yellow-100 text-yellow-800'}">
+                                ${design.status === 'Published' ? 'bg-primary-light text-primary-dark' : 'bg-secondary-light text-secondary-dark'}">
                                 ${design.status}
                             </span>
                         </td>
                         <td class="px-6 py-4 whitespace-no-wrap">
-                            <button onclick="viewDesign(${design.id})" class="text-blue-600 hover:text-blue-900 mr-3">View</button>
-                            <button onclick="downloadDesign(${design.id})" class="text-green-600 hover:text-green-900">Download</button>
+                            <button onclick="viewDesign(${design.id})" class="text-primary hover:text-primary-dark mr-3">View</button>
+                            <button onclick="downloadDesign(${design.id})" class="text-secondary hover:text-secondary-dark">Download</button>
                         </td>
                     </tr>
                 `;
@@ -174,7 +174,7 @@
         function viewDesign(id) {
             // In a real application, this would fetch the design details
             $('#previewContent').html(`
-                <div class="bg-gray-100 p-4 rounded">
+                <div class="bg-secondary-light p-4 rounded">
                     <h4 class="text-lg font-semibold mb-2">Design Preview for ID: ${id}</h4>
                     <img src="https://placehold.co/600x400" alt="Design Preview" class="w-full h-auto rounded">
                     <div class="mt-4 text-left">

@@ -1,6 +1,6 @@
 <x-admin-layout>
     <x-slot name="header">
-        <h2 class="font-semibold text-xl text-gray-800 leading-tight">
+        <h2 class="font-semibold text-xl text-primary-dark leading-tight">
             {{ __('Font Details') }}
         </h2>
     </x-slot>
@@ -8,20 +8,20 @@
     <div class="py-12">
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
             <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
-                <div class="p-6 text-gray-900">
+                <div class="p-6 text-primary-dark">
                     <div class="flex justify-between items-center mb-6">
                         <h3 class="text-lg font-medium">Font Details</h3>
                         <div>
-                            <a href="{{ route('admin.fonts.edit', $font->id) }}" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mr-2">
+                            <a href="{{ route('admin.fonts.edit', $font->id) }}" class="bg-primary hover:bg-primary-dark text-primary-dark font-bold py-2 px-4 rounded mr-2">
                                 Edit
                             </a>
-                            <a href="{{ route('admin.fonts.index') }}" class="bg-gray-500 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded">
+                            <a href="{{ route('admin.fonts.index') }}" class="bg-secondary hover:bg-secondary-dark text-primary-dark font-bold py-2 px-4 rounded">
                                 Back to Fonts
                             </a>
                         </div>
                     </div>
 
-                    <div class="border rounded p-4">
+                    <div class="border border-accent rounded p-4">
                         <div class="mb-2">
                             <span class="font-medium">ID:</span>
                             <span class="ml-2">{{ $font->id }}</span>

@@ -67,7 +67,7 @@ $(document).ready(function() {
         });
         
         // Remove active class from all buttons and add inactive class
-        $('[data-carousel-target]').removeClass('bg-blue-600').addClass('bg-gray-300');
+        $('[data-carousel-target]').removeClass('bg-primary').addClass('bg-secondary-light');
         
         // Show target item with fade in animation
         const targetItem = $(`[data-carousel-item="${targetIndex}"]`);
@@ -79,7 +79,7 @@ $(document).ready(function() {
         }, 10);
         
         // Set active button
-        $(this).removeClass('bg-gray-300').addClass('bg-blue-600');
+        $(this).removeClass('bg-secondary-light').addClass('bg-primary');
     });
     
     // Contact form validation and submission - only apply to forms with contact fields
@@ -107,43 +107,43 @@ $(document).ready(function() {
                 const message = form.find('#message');
                 
                 // Reset validation classes
-                form.find('.border-red-500, .border-green-500').removeClass('border-red-500 border-green-500');
+                form.find('.border-error-dark, .border-success-dark').removeClass('border-error-dark border-success-dark');
                 
                 // Validation
                 let isValid = true;
                 
                 if (name.val().trim() === '') {
-                    name.addClass('border-red-500');
+                    name.addClass('border-error-dark');
                     isValid = false;
                 } else {
-                    name.addClass('border-green-500');
+                    name.addClass('border-success-dark');
                 }
                 
                 if (email.val().trim() === '' || !isValidEmail(email.val())) {
-                    email.addClass('border-red-500');
+                    email.addClass('border-error-dark');
                     isValid = false;
                 } else {
-                    email.addClass('border-green-500');
+                    email.addClass('border-success-dark');
                 }
                 
                 if (subject.val().trim() === '') {
-                    subject.addClass('border-red-500');
+                    subject.addClass('border-error-dark');
                     isValid = false;
                 } else {
-                    subject.addClass('border-green-500');
+                    subject.addClass('border-success-dark');
                 }
                 
                 if (message.val().trim() === '') {
-                    message.addClass('border-red-500');
+                    message.addClass('border-error-dark');
                     isValid = false;
                 } else {
-                    message.addClass('border-green-500');
+                    message.addClass('border-success-dark');
                 }
                 
                 // If valid, show success message
                 if (isValid) {
                     // Create success message
-                    const successMessage = $('<div class="mt-4 p-4 bg-green-100 text-green-700 rounded-md text-center animate-pop-in">Thank you for your message! We\'ll get back to you soon.</div>');
+                    const successMessage = $('<div class="mt-4 p-4 bg-success-light text-success-dark rounded-md text-center animate-pop-in">Thank you for your message! We\'ll get back to you soon.</div>');
                     
                     // Insert before the form
                     form.before(successMessage);
@@ -154,7 +154,7 @@ $(document).ready(function() {
                     // Remove success message after 5 seconds
                     setTimeout(function() {
                         successMessage.remove();
-                        form.find('.border-green-500').removeClass('border-green-500');
+                        form.find('.border-success-dark').removeClass('border-success-dark');
                     }, 5000);
                 }
             });
