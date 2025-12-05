@@ -14,6 +14,12 @@
                     <a href="{{ route('templates.index') }}" class="text-gray-900 hover:text-blue-600 font-medium transition-colors duration-300 inline-flex items-center px-1 pt-1 text-sm">
                         Templates
                     </a>
+                    <a href="{{ route('services') }}" class="text-gray-900 hover:text-blue-600 font-medium transition-colors duration-300 inline-flex items-center px-1 pt-1 text-sm">
+                        Services
+                    </a>
+                    <a href="{{ route('pricing') }}" class="text-gray-900 hover:text-blue-600 font-medium transition-colors duration-300 inline-flex items-center px-1 pt-1 text-sm">
+                        Pricing
+                    </a>
                 </div>
             </div>
             <div class="hidden sm:ml-6 sm:flex sm:items-center">
@@ -58,6 +64,12 @@
             </a>
             <a href="{{ route('templates.index') }}" class="block px-3 py-2 rounded-md text-base font-medium text-gray-900 hover:bg-blue-100">
                 Templates
+            </a>
+            <a href="{{ route('services') }}" class="block px-3 py-2 rounded-md text-base font-medium text-gray-900 hover:bg-blue-100">
+                Services
+            </a>
+            <a href="{{ route('pricing') }}" class="block px-3 py-2 rounded-md text-base font-medium text-gray-900 hover:bg-blue-100">
+                Pricing
             </a>
             @auth
                 <a href="{{ route('dashboard') }}" class="block px-3 py-2 rounded-md text-base font-medium text-gray-900 hover:bg-blue-100">

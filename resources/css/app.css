@@ -1,5 +1,9 @@
 /* Modern Admin Panel Styles - Updated Design System */
-
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
 /* Use CSS variables to maintain the new color scheme */
 :root {
   /* New Primary color palette */
@@ -264,11 +268,13 @@ h3 {
 
 .btn-primary:hover {
   background-color: var(--primary-dark);
+  color: white; /* Maintain text color consistency */
   box-shadow: var(--shadow-md);
 }
 
 .btn-primary:active {
   background-color: #1E40AF;
+  color: white; /* Maintain text color consistency */
 }
 
 .btn-secondary {
@@ -279,6 +285,7 @@ h3 {
 
 .btn-secondary:hover {
   background-color: #E2E8F0;
+  color: var(--text-primary); /* Maintain text color consistency */
 }
 
 .btn-danger {
@@ -288,6 +295,7 @@ h3 {
 
 .btn-danger:hover {
   background-color: #B91C1C;
+  color: white; /* Maintain text color consistency */
 }
 
 .btn-ghost {
@@ -298,6 +306,7 @@ h3 {
 
 .btn-ghost:hover {
   background-color: rgba(37, 99, 235, 0.05);
+  color: var(--primary); /* Maintain text color consistency */
 }
 
 .btn-sm {

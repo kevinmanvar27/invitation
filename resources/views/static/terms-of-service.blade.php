@@ -1,187 +1,203 @@
 @extends('layouts.home')
 
 @section('content')
-<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-    <div class="text-center mb-16 animate-fade-in">
-        <h1 class="text-4xl md:text-5xl font-bold text-gray-900 mb-6 animate-slide-down">Terms of Service</h1>
-        <div class="w-24 h-1 bg-gradient-to-r from-blue-500 to-purple-500 mx-auto rounded-full animate-scale-in"></div>
-        <p class="mt-6 text-xl text-gray-600 animate-slide-up delay-150">
+<!-- Hero Section -->
+<div class="hero">
+    <div class="hero-circle-1 hero-decoration"></div>
+    <div class="hero-circle-2 hero-decoration"></div>
+    <div class="hero-circle-3 hero-decoration"></div>
+    
+    <div class="hero-container">
+        <div class="hero-badge">
+            <span>📜</span> Terms of Service
+        </div>
+        
+        <h1 class="hero-title">
+            Terms &
+            <span class="hero-title-highlight">Conditions</span>
+        </h1>
+        
+        <p class="hero-subtitle">
             Last updated: {{ date('F d, Y') }}
         </p>
     </div>
-    
-    <div class="bg-white rounded-2xl shadow-xl p-8 border border-gray-100 animate-fade-in delay-300">
-        <div class="prose prose-blue max-w-none">
-            <p class="text-gray-600 text-lg mb-8">
-                Welcome to Uvinvite ("uvinvite.com"). These terms and conditions outline the rules and regulations 
-                for the use of Uvinvite's Website, located at uvinvite.com.
-            </p>
-            
-            <div class="border-l-4 border-blue-500 pl-6 py-2 mb-10 bg-blue-50 rounded-r-lg animate-fade-in delay-500">
-                <p class="text-gray-700 italic">
-                    "By accessing this website we assume you accept these terms and conditions. Do not continue to use 
-                    Uvinvite if you do not agree to take all of the terms and conditions stated on this page."
-                </p>
+</div>
+
+<!-- Stats Section -->
+<div class="stats-section">
+    <div class="stats-container">
+        <div class="stats-grid">
+            <div class="stat-card">
+                <div class="stat-number">100%</div>
+                <div class="stat-label">Compliance</div>
             </div>
             
-            <h2 class="text-2xl font-bold text-gray-900 mt-12 mb-6 pb-2 border-b border-gray-200 animate-slide-up">1. Intellectual Property Rights</h2>
-            <p class="text-gray-600 mb-6 animate-fade-in delay-150">
-                Unless otherwise stated, Uvinvite and/or its licensors own the intellectual property rights for 
-                all material on Uvinvite. All intellectual property rights are reserved. You may access this from 
-                Uvinvite for your own personal use subjected to restrictions set in these terms and conditions.
-            </p>
-            
-            <div class="bg-yellow-50 border-l-4 border-yellow-500 p-6 rounded-r-lg mb-8 animate-fade-in delay-300">
-                <h3 class="font-bold text-gray-900 mb-2 flex items-center">
-                    <svg class="w-5 h-5 text-yellow-500 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path>
-                    </svg>
-                    Important Notice
-                </h3>
-                <p class="text-gray-600">
-                    You must not republish material from Uvinvite, sell, rent or sub-license material from Uvinvite, 
-                    reproduce, duplicate or copy material from Uvinvite, or redistribute content from Uvinvite.
-                </p>
+            <div class="stat-card">
+                <div class="stat-number">9</div>
+                <div class="stat-label">Key Sections</div>
             </div>
             
-            <h2 class="text-2xl font-bold text-gray-900 mt-12 mb-6 pb-2 border-b border-gray-200 animate-slide-up delay-450">2. User Responsibilities</h2>
-            <p class="text-gray-600 mb-6 animate-fade-in delay-600">
-                As a user of Uvinvite, you agree to the following responsibilities:
-            </p>
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
-                <div class="flex items-start p-5 bg-gray-50 rounded-xl transform transition-all duration-300 hover:shadow-md hover:-translate-y-1 animate-fade-in delay-750">
-                    <div class="flex-shrink-0 w-8 h-8 bg-blue-100 text-blue-600 rounded-full flex items-center justify-center mr-4 mt-1">
-                        <span class="font-bold text-sm">1</span>
-                    </div>
-                    <div>
-                        <h3 class="font-bold text-gray-900 mb-2">Accurate Information</h3>
-                        <p class="text-gray-600">
-                            You must provide accurate and complete registration information
-                        </p>
-                    </div>
-                </div>
-                <div class="flex items-start p-5 bg-gray-50 rounded-xl transform transition-all duration-300 hover:shadow-md hover:-translate-y-1 animate-fade-in delay-900">
-                    <div class="flex-shrink-0 w-8 h-8 bg-blue-100 text-blue-600 rounded-full flex items-center justify-center mr-4 mt-1">
-                        <span class="font-bold text-sm">2</span>
-                    </div>
-                    <div>
-                        <h3 class="font-bold text-gray-900 mb-2">Account Security</h3>
-                        <p class="text-gray-600">
-                            You are responsible for maintaining the confidentiality of your account and password
-                        </p>
-                    </div>
-                </div>
-                <div class="flex items-start p-5 bg-gray-50 rounded-xl transform transition-all duration-300 hover:shadow-md hover:-translate-y-1 animate-fade-in delay-1050">
-                    <div class="flex-shrink-0 w-8 h-8 bg-blue-100 text-blue-600 rounded-full flex items-center justify-center mr-4 mt-1">
-                        <span class="font-bold text-sm">3</span>
-                    </div>
-                    <div>
-                        <h3 class="font-bold text-gray-900 mb-2">Authorized Use</h3>
-                        <p class="text-gray-600">
-                            You are responsible for all activities that occur under your account
-                        </p>
-                    </div>
-                </div>
-                <div class="flex items-start p-5 bg-gray-50 rounded-xl transform transition-all duration-300 hover:shadow-md hover:-translate-y-1 animate-fade-in delay-1200">
-                    <div class="flex-shrink-0 w-8 h-8 bg-blue-100 text-blue-600 rounded-full flex items-center justify-center mr-4 mt-1">
-                        <span class="font-bold text-sm">4</span>
-                    </div>
-                    <div>
-                        <h3 class="font-bold text-gray-900 mb-2">Legal Compliance</h3>
-                        <p class="text-gray-600">
-                            You must not use the service for any illegal or unauthorized purpose
-                        </p>
-                    </div>
-                </div>
+            <div class="stat-card">
+                <div class="stat-number">24/7</div>
+                <div class="stat-label">Support</div>
             </div>
             
-            <h2 class="text-2xl font-bold text-gray-900 mt-12 mb-6 pb-2 border-b border-gray-200 animate-slide-up delay-1350">3. Content</h2>
-            <p class="text-gray-600 mb-6 animate-fade-in delay-1500">
-                You retain all rights to any content you submit, post or display on or through Uvinvite. By 
-                submitting, posting or displaying content on or through Uvinvite, you grant us a worldwide, 
-                non-exclusive, royalty-free license to use, copy, reproduce, process, adapt, modify, publish, 
-                transmit, display and distribute such content in any and all media or distribution methods.
-            </p>
-            
-            <h2 class="text-2xl font-bold text-gray-900 mt-12 mb-6 pb-2 border-b border-gray-200 animate-slide-up delay-1650">4. Subscription and Payments</h2>
-            <p class="text-gray-600 mb-6 animate-fade-in delay-1800">
-                Some features of Uvinvite require payment of fees. You agree to pay all fees associated with your 
-                account as they become due. All fees are exclusive of all taxes, levies, or duties imposed by taxing 
-                authorities, and you shall be responsible for payment of all such taxes, levies, or duties.
-            </p>
-            
-            <div class="bg-green-50 border-l-4 border-green-500 p-6 rounded-r-lg mb-8 animate-fade-in delay-1950">
-                <h3 class="font-bold text-gray-900 mb-2 flex items-center">
-                    <svg class="w-5 h-5 text-green-500 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-                    </svg>
-                    Payment Terms
-                </h3>
-                <p class="text-gray-600">
-                    All payments are processed securely through our payment partners. We offer a 30-day money-back 
-                    guarantee on all subscription plans. Cancellations must be made at least 24 hours before the 
-                    next billing cycle to avoid being charged.
-                </p>
-            </div>
-            
-            <h2 class="text-2xl font-bold text-gray-900 mt-12 mb-6 pb-2 border-b border-gray-200 animate-slide-up delay-2100">5. Termination</h2>
-            <p class="text-gray-600 mb-6 animate-fade-in delay-2250">
-                We may terminate or suspend your account immediately, without prior notice or liability, for any 
-                reason whatsoever, including without limitation if you breach the Terms.
-            </p>
-            
-            <h2 class="text-2xl font-bold text-gray-900 mt-12 mb-6 pb-2 border-b border-gray-200 animate-slide-up delay-2400">6. Limitation of Liability</h2>
-            <p class="text-gray-600 mb-6 animate-fade-in delay-2550">
-                In no event shall Uvinvite, nor its directors, employees, partners, agents, suppliers, or affiliates, 
-                be liable for any indirect, incidental, special, consequential or punitive damages, including without 
-                limitation, loss of profits, data, use, goodwill, or other intangible losses, resulting from your 
-                access to or use of or inability to access or use the service.
-            </p>
-            
-            <h2 class="text-2xl font-bold text-gray-900 mt-12 mb-6 pb-2 border-b border-gray-200 animate-slide-up delay-2700">7. Changes to Terms</h2>
-            <p class="text-gray-600 mb-6 animate-fade-in delay-2850">
-                We reserve the right, at our sole discretion, to modify or replace these Terms at any time. If a 
-                revision is material we will try to provide at least 30 days' notice prior to any new terms taking 
-                effect. What constitutes a material change will be determined at our sole discretion.
-            </p>
-            
-            <h2 class="text-2xl font-bold text-gray-900 mt-12 mb-6 pb-2 border-b border-gray-200 animate-slide-up delay-3000">8. Governing Law</h2>
-            <p class="text-gray-600 mb-6 animate-fade-in delay-3150">
-                These Terms shall be governed and construed in accordance with the laws of India, without regard to 
-                its conflict of law provisions.
-            </p>
-            
-            <h2 class="text-2xl font-bold text-gray-900 mt-12 mb-6 pb-2 border-b border-gray-200 animate-slide-up delay-3300">9. Contact Information</h2>
-            <p class="text-gray-600 mb-6 animate-fade-in delay-3450">
-                If you have any questions about these Terms, please contact us at:
-            </p>
-            <div class="bg-gradient-to-br from-blue-50 to-purple-50 rounded-2xl p-6 animate-fade-in delay-3600">
-                <ul class="space-y-3 text-gray-600">
-                    <li class="flex items-center transform transition-all duration-300 hover:text-blue-600">
-                        <svg class="w-5 h-5 text-blue-500 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path>
-                        </svg>
-                        <span>Email: <a href="mailto:info@uvinvite.com" class="text-blue-600 hover:underline">info@uvinvite.com</a></span>
-                    </li>
-                    <li class="flex items-center transform transition-all duration-300 hover:text-blue-600">
-                        <svg class="w-5 h-5 text-blue-500 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path>
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path>
-                        </svg>
-                        <span>Address: Mavdi chowk, Rajkot, Gujarat, India</span>
-                    </li>
-                </ul>
+            <div class="stat-card">
+                <div class="stat-number">30</div>
+                <div class="stat-label">Day Guarantee</div>
             </div>
         </div>
     </div>
-    
-    <div class="mt-12 text-center animate-fade-in delay-3750">
-        <a href="{{ route('contact') }}" class="inline-flex items-center text-blue-600 hover:text-blue-800 font-medium transform transition-all duration-300 hover:scale-105">
-            <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 10h10a8 8 0 018 8v2M3 10l6 6m-6-6l6-6"></path>
-            </svg>
-            Contact us for more information
-        </a>
+</div>
+
+<!-- Content Section -->
+<div class="features-section">
+    <div class="features-container">
+        <div class="features-header">
+            <div class="features-header-badge">TERMS OF SERVICE</div>
+            <h2>Welcome to Uvinvite</h2>
+            <p class="text-neutral">
+                These terms and conditions outline the rules and regulations for the use of Uvinvite's Website.
+            </p>
+        </div>
+
+        <div class="features-grid">
+            <div class="feature-card">
+                <div class="feature-icon">
+                    <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"></path>
+                    </svg>
+                </div>
+                <h3 class="feature-title">1. Intellectual Property</h3>
+                <p class="feature-description">
+                    Unless otherwise stated, Uvinvite and/or its licensors own the intellectual property rights for 
+                    all material on Uvinvite. All intellectual property rights are reserved.
+                </p>
+            </div>
+
+            <div class="feature-card">
+                <div class="feature-icon">
+                    <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4"></path>
+                    </svg>
+                </div>
+                <h3 class="feature-title">2. User Responsibilities</h3>
+                <p class="feature-description">
+                    As a user of Uvinvite, you agree to provide accurate information, maintain account security, 
+                    authorize all activities under your account, and comply with legal requirements.
+                </p>
+            </div>
+
+            <div class="feature-card">
+                <div class="feature-icon">
+                    <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 21a4 4 0 01-4-4V5a2 2 0 012-2h4a2 2 0 012 2v12a4 4 0 01-4 4zm0 0h12a2 2 0 002-2v-4a2 2 0 00-2-2h-2.343M11 7.343l1.657-1.657a2 2 0 012.828 0l2.829 2.829a2 2 0 010 2.828l-8.486 8.485M7 17h.01"></path>
+                    </svg>
+                </div>
+                <h3 class="feature-title">3. Content Ownership</h3>
+                <p class="feature-description">
+                    You retain all rights to any content you submit, post or display on or through Uvinvite. By 
+                    submitting content, you grant us a worldwide, non-exclusive, royalty-free license to use it.
+                </p>
+            </div>
+
+            <div class="feature-card">
+                <div class="feature-icon">
+                    <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                    </svg>
+                </div>
+                <h3 class="feature-title">4. Payments & Subscriptions</h3>
+                <p class="feature-description">
+                    Some features require payment of fees. You agree to pay all fees as they become due. All fees 
+                    are exclusive of taxes, and we offer a 30-day money-back guarantee.
+                </p>
+            </div>
+
+            <div class="feature-card">
+                <div class="feature-icon">
+                    <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 12H4"></path>
+                    </svg>
+                </div>
+                <h3 class="feature-title">5. Termination</h3>
+                <p class="feature-description">
+                    We may terminate or suspend your account immediately, without prior notice or liability, for any 
+                    reason whatsoever, including without limitation if you breach the Terms.
+                </p>
+            </div>
+
+            <div class="feature-card">
+                <div class="feature-icon">
+                    <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                    </svg>
+                </div>
+                <h3 class="feature-title">6. Limitation of Liability</h3>
+                <p class="feature-description">
+                    In no event shall Uvinvite be liable for any indirect, incidental, special, consequential or 
+                    punitive damages, including without limitation, loss of profits, data, or other intangible losses.
+                </p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Additional Terms Section -->
+<div class="testimonials-section">
+    <div class="testimonials-container">
+        <div class="testimonials-header">
+            <div class="features-header-badge">ADDITIONAL TERMS</div>
+            <h2>Additional Information</h2>
+        </div>
+
+        <div class="testimonials-grid">
+            <div class="testimonial-card">
+                <div class="feature-icon">
+                    <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path>
+                    </svg>
+                </div>
+                <h3 class="feature-title">7. Changes to Terms</h3>
+                <p class="feature-description">
+                    We reserve the right to modify or replace these Terms at any time. If a revision is material, 
+                    we will provide at least 30 days' notice prior to any new terms taking effect.
+                </p>
+            </div>
+            
+            <div class="testimonial-card">
+                <div class="feature-icon">
+                    <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path>
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path>
+                    </svg>
+                </div>
+                <h3 class="feature-title">8. Governing Law</h3>
+                <p class="feature-description">
+                    These Terms shall be governed and construed in accordance with the laws of India, without regard 
+                    to its conflict of law provisions.
+                </p>
+            </div>
+            
+            <div class="testimonial-card">
+                <div class="feature-icon">
+                    <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path>
+                    </svg>
+                </div>
+                <h3 class="feature-title">9. Contact Information</h3>
+                <p class="feature-description">
+                    If you have any questions about these Terms, please contact us at info@uvinvite.com or 
+                    Mavdi chowk, Rajkot, Gujarat, India.
+                </p>
+            </div>
+        </div>
+        
+        <div class="text-center mt-12">
+            <a href="{{ route('contact') }}" class="btn btn-primary">
+                Contact Us for More Information
+            </a>
+        </div>
     </div>
 </div>
 @endsection
