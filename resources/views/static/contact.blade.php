@@ -81,7 +81,7 @@
                     </svg>
                 </div>
                 <h3 class="feature-title">Send us a Message</h3>
-                <form class="space-y-6">
+                <form class="space-y-6 contact-form">
                     <div>
                         <label for="name" class="block text-sm font-medium text-neutral-800 mb-0 mt-4">Name</label>
                         <input type="text" id="name" name="name" class="form-control">

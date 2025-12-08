@@ -58,7 +58,8 @@ $(document).ready(function() {
     });
     
     // Contact form validation and submission
-    $('form').on('submit', function(e) {
+    // Only target contact forms specifically, not all forms
+    $('form.contact-form').on('submit', function(e) {
         e.preventDefault();
         
         // Get form elements
