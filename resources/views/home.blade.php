@@ -39,7 +39,7 @@
 </div>
 
 <!-- Stats Section -->
-<div class="stats-section">
+<div class="stats-section pt-12">
     <div class="stats-container">
         <div class="stats-grid">
             <div class="stat-card">
@@ -66,7 +66,7 @@
 </div>
 
 <!-- Features Section -->
-<div class="features-section">
+<div class="features-section mt-12 pt-12">
     <div class="features-container">
         <div class="features-header">
             <div class="features-header-badge">FEATURES</div>
@@ -76,7 +76,7 @@
             </p>
         </div>
 
-        <div class="features-grid">
+        <div class="features-grid mt-10">
             <!-- Feature 1 -->
             <div class="feature-card">
                 <div class="feature-icon">
@@ -118,7 +118,7 @@
         </div>
         
         <!-- Template Preview Carousel -->
-        <div class="carousel-container">
+        <div class="carousel-container mt-12 pt-12">
             <div class="text-center mb-12">
                 <h3>Popular Templates</h3>
                 <p class="text-neutral">Get inspired by our most popular wedding invitation designs</p>
@@ -189,7 +189,7 @@
                 </div>
             </div>
             
-            <div class="carousel-indicators">
+            <div class="carousel-indicators mt-8">
                 <button class="carousel-indicator active" data-carousel-target="0"></button>
                 <button class="carousel-indicator" data-carousel-target="1"></button>
                 <button class="carousel-indicator" data-carousel-target="2"></button>
@@ -199,14 +199,14 @@
 </div>
 
 <!-- Testimonials Section -->
-<div class="testimonials-section">
+<div class="testimonials-section mt-12 pt-12">
     <div class="testimonials-container">
         <div class="testimonials-header">
             <div class="features-header-badge">TESTIMONIALS</div>
             <h2>What our couples say</h2>
         </div>
 
-        <div class="testimonials-grid">
+        <div class="testimonials-grid mt-10">
             <!-- Testimonial 1 -->
             <div class="testimonial-card">
                 <div class="testimonial-rating">
@@ -304,7 +304,7 @@
 </div>
 
 <!-- Contact Section -->
-<div class="contact-section">
+<div class="contact-section mt-12 pt-12">
     <div class="contact-container">
         <div class="contact-header">
             <div class="features-header-badge">CONTACT US</div>
@@ -314,7 +314,7 @@
             </p>
         </div>
         
-        <div class="contact-form">
+        <div class="contact-form mt-10">
             <form>
                 <div class="form-group">
                     <label for="name" class="form-label">Name</label>
@@ -336,7 +336,7 @@
                     <textarea name="message" id="message" rows="5" class="form-control"></textarea>
                 </div>
                 
-                <div class="form-actions">
+                <div class="form-actions mt-8">
                     <button type="submit" class="btn btn-primary btn-lg">
                         Send Message
                     </button>

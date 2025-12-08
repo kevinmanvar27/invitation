@@ -24,7 +24,7 @@
 </div>
 
 <!-- Features Section -->
-<div class="features-section">
+<div class="features-section stats-section">
     <div class="features-container">
         <div class="features-header">
             <div class="features-header-badge">SERVICES</div>

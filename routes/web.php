@@ -114,5 +114,7 @@ Route::prefix('admin')->name('admin.')->middleware(['auth', 'admin'])->group(fun
     Route::resource('referrals', ReferralController::class);
 });
 
-Route::resource('templates', TemplateController::class);
+Route::resource('templates', TemplateController::class)->except(['show']);
 Route::get('/editor/{template}', [EditorController::class, 'show'])->name('editor.show');
+Route::post('/editor/{template}/save', [EditorController::class, 'saveDesign'])->name('editor.save');
+Route::post('/editor/upload-image', [EditorController::class, 'uploadImage'])->name('editor.upload-image');

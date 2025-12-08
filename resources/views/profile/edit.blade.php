@@ -91,7 +91,7 @@
                     </div>
                     
                     <!-- Address Information Section -->
-                    <div class="bg-gray-50 rounded-lg p-6">
+                    <div class="bg-gray-50 rounded-lg p-6 mt-8">
                         <h3 class="text-lg font-medium text-gray-900 mb-4">Address Information</h3>
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                             <!-- Address -->
@@ -142,7 +142,7 @@
                     </div>
                     
                     <!-- Wedding Information Section -->
-                    <div class="bg-gray-50 rounded-lg p-6">
+                    <div class="bg-gray-50 rounded-lg p-6 mt-8">
                         <h3 class="text-lg font-medium text-gray-900 mb-4">Wedding Information</h3>
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                             <!-- Bio -->
@@ -176,7 +176,7 @@
                     </div>
                     
                     <!-- Enhanced Profile Picture Section -->
-                    <div class="bg-gradient-to-br from-white to-gray-50 rounded-xl p-6 border border-gray-200 shadow-sm">
+                    <div class="bg-gradient-to-br from-white to-gray-50 rounded-xl p-6 border border-gray-200 shadow-sm mt-8">
                         <div class="flex items-center justify-between mb-6">
                             <h3 class="text-xl font-semibold text-gray-900">Profile Picture</h3>
                             <div class="text-sm text-gray-500 flex items-center">
@@ -192,7 +192,7 @@
                             <div class="flex-shrink-0 group relative">
                                 @if($userProfile->profile_picture)
                                     <div class="relative">
-                                        <img src="{{ asset('storage/' . $userProfile->profile_picture) }}" alt="Current Profile Picture" class="w-32 h-32 rounded-full object-cover border-4 border-white shadow-lg profile-picture-preview">
+                                        <img src="{{ asset('storage/' . $userProfile->profile_picture) }}" alt="Current Profile Picture" class="rounded-full object-cover border-4 border-white shadow-lg profile-picture-preview">
                                         <div class="absolute inset-0 rounded-full bg-black bg-opacity-0 group-hover:bg-opacity-20 transition-all duration-300 flex items-center justify-center">
                                             <svg class="w-8 h-8 text-white opacity-0 group-hover:opacity-100 transition-opacity duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z"></path>
@@ -201,7 +201,7 @@
                                         </div>
                                     </div>
                                 @else
-                                    <div class="relative bg-gradient-to-br from-primary-100 to-secondary-100 border-4 border-white rounded-full w-32 h-32 flex items-center justify-center profile-picture-placeholder shadow-lg">
+                                    <div class="relative bg-gradient-to-br from-primary-100 to-secondary-100 border-4 border-white rounded-full flex items-center justify-center profile-picture-placeholder shadow-lg">
                                         <div class="absolute inset-0 rounded-full bg-black bg-opacity-0 group-hover:bg-opacity-20 transition-all duration-300 flex items-center justify-center">
                                             <svg class="w-8 h-8 text-primary-600 opacity-0 group-hover:opacity-100 transition-opacity duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path>
@@ -249,7 +249,7 @@
                     </div>
                     
                     <!-- Action Buttons -->
-                    <div class="flex items-center justify-end space-x-4 pt-4 profile-actions">
+                    <div class="flex items-center justify-end space-x-4 pt-8 profile-actions mt-8">
                         <a href="{{ route('dashboard') }}" class="btn btn-outline">
                             Cancel
                         </a>
@@ -288,7 +288,7 @@ document.addEventListener('DOMContentLoaded', function() {
                         const img = document.createElement('img');
                         img.src = e.target.result;
                         img.alt = 'Profile Picture Preview';
-                        img.className = 'w-24 h-24 rounded-full object-cover border-2 border-gray-300 profile-picture-preview';
+                        img.className = 'rounded-full object-cover border-2 border-gray-300 profile-picture-preview'; // Removed fixed width/height to use CSS classes
                         previewContainer.innerHTML = '';
                         previewContainer.appendChild(img);
                     } else {

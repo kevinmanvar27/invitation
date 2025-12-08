@@ -13,17 +13,10 @@ class TemplateController extends Controller
     public function index()
     {
         $templates = Template::where('is_active', true)
+            ->with('category') // Eager load category
             ->orderBy('downloads_count', 'desc')
             ->paginate(12);
 
         return view('templates.index', compact('templates'));
-    }
-
-    /**
-     * Display the specified resource.
-     */
-    public function show(Template $template)
-    {
-        return view('templates.show', compact('template'));
     }
 }

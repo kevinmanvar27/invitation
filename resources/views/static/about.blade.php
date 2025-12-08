@@ -24,7 +24,7 @@
 </div>
 
 <!-- Stats Section -->
-<div class="stats-section">
+<div class="stats-section mt-12 pt-12">
     <div class="stats-container">
         <div class="stats-grid">
             <div class="stat-card">
@@ -51,7 +51,7 @@
 </div>
 
 <!-- Content Section -->
-<div class="features-section">
+<div class="features-section mt-12 pt-12">
     <div class="features-container">
         <div class="features-header">
             <div class="features-header-badge">OUR STORY</div>
@@ -61,7 +61,7 @@
             </p>
         </div>
 
-        <div class="features-grid">
+        <div class="features-grid mt-10">
             <div class="feature-card">
                 <div class="feature-icon">
                     <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">

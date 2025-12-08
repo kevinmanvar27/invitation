@@ -23,11 +23,10 @@
     </div>
 </div>
 
-<!-- Stats Section -->
-<div class="stats-section">
-    <div class="stats-container">
-        <div class="stats-grid">
-            
+<!-- Our Location Map Section -->
+<div class="contact-section">
+    <div class="contact-container">
+       <div class="stats-grid">
             <!-- Phone Card-->
             <a href="tel:+917878959565" class="stat-card">
                 <div class="feature-icon">
@@ -38,7 +37,6 @@
                 <div class="stat-label">+91 7878 959565</div>
             </a>
             
-
             <!-- Email card -->
             <a href="mailto:info@uvinvite.com" class="stat-card">
                 <div class="feature-icon">
@@ -57,18 +55,12 @@
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path>
                     </svg>
                 </div>
-                <div class="stat-label">Mavdi chowk, Rajkot, Gujarat, India</div>
+                <div class="stat-label">Shivalay Complex, Mavdi chowk, <br/>150ft Ring Road, Rajkot</div>
             </a>
 
         </div>
-    </div>
-</div>
 
-<!-- Our Location Map Section -->
-<div class="contact-section">
-    <div class="contact-container">
-        
-        <div class="features-grid">
+        <div class="features-grid mt-10">
             <div class="feature-card">
                 <!-- Add Map here -->
                 <iframe 
@@ -119,8 +111,8 @@
             </div>
         </div>
 
-       
-
+    
+    
     </div>
 
 

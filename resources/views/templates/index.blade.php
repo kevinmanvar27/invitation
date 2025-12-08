@@ -23,6 +23,10 @@
     </div>
 </div>
 
+<!-- Content Section -->
+<div class="features-section pb-12">
+
+
 <!-- Stats Section -->
 <div class="stats-section">
     <div class="stats-container">
@@ -50,8 +54,7 @@
     </div>
 </div>
 
-<!-- Content Section -->
-<div class="features-section">
+
     <div class="features-container">
         <div class="features-header">
             <div class="features-header-badge">TEMPLATES</div>
@@ -61,7 +64,7 @@
             </p>
         </div>
 
-        <div class="features-grid">
+        <div class="features-grid mt-10">
             @forelse ($templates as $template)
                 <div class="feature-card">
                     <div class="mb-4 rounded-lg overflow-hidden">
@@ -79,7 +82,7 @@
                             <span class="bg-success-100 text-success-700 text-xs font-medium px-2.5 py-0.5 rounded">Free</span>
                         @endif
                     </div>
-                    <a href="{{ route('templates.show', $template->id) }}" class="btn btn-primary w-full">
+                    <a href="{{ route('editor.show', $template) }}" class="btn btn-primary w-full">
                         Use This Template
                     </a>
                 </div>
