@@ -5,7 +5,7 @@
                 <h1>{{ __('Manage Users') }}</h1>
             </div>
             <div class="col-sm-6">
-                <ol class="breadcrumb float-sm-right">
+                <ol class="breadcrumb float-sm-end">
                     <li class="breadcrumb-item"><a href="{{ route('admin.dashboard') }}">Dashboard</a></li>
                     <li class="breadcrumb-item active">Users</li>
                 </ol>
@@ -38,14 +38,14 @@
                         Filter
                     </button>
                     
-                    <a href="{{ route('admin.users.index') }}" class="btn btn-ghost">
+                    <a href="{{ route('admin.users.index') }}" class="btn btn-outline-secondary">
                         Clear
                     </a>
                 </div>
             </form>
             
             <div class="d-flex gap-2 ms-auto">
-                <a href="{{ route('admin.users.export') }}" class="btn btn-ghost">
+                <a href="{{ route('admin.users.export') }}" class="btn btn-outline-secondary">
                     <i class="fas fa-download"></i>
                     Export
                 </a>
@@ -59,8 +59,8 @@
         <div class="card">
             <div class="card-body">
                 <!-- Data Table -->
-                <div class="table-container">
-                    <table class="data-table">
+                <div class="table-responsive">
+                    <table class="table data-table">
                         <thead>
                             <tr>
                                 <th>ID</th>
@@ -80,12 +80,12 @@
                                     <td>{{ $user->email }}</td>
                                     <td>
                                         @if($user->is_admin)
-                                            <span class="badge badge-info">
+                                            <span class="badge bg-info">
                                                 <i class="fas fa-shield-alt"></i>
                                                 Admin
                                             </span>
                                         @else
-                                            <span class="badge badge-secondary">
+                                            <span class="badge bg-secondary">
                                                 <i class="fas fa-user"></i>
                                                 User
                                             </span>
@@ -93,12 +93,12 @@
                                     </td>
                                     <td>
                                         @if($user->is_active)
-                                            <span class="badge badge-success">
+                                            <span class="badge bg-success">
                                                 <i class="fas fa-check-circle"></i>
                                                 Active
                                             </span>
                                         @else
-                                            <span class="badge badge-danger">
+                                            <span class="badge bg-danger">
                                                 <i class="fas fa-times-circle"></i>
                                                 Inactive
                                             </span>
@@ -107,15 +107,15 @@
                                     <td>{{ $user->created_at->format('M d, Y') }}</td>
                                     <td class="text-end">
                                         <div class="btn-group" role="group">
-                                            <a href="{{ route('admin.users.show', $user->id) }}" class="btn btn-ghost btn-sm">
+                                            <a href="{{ route('admin.users.show', $user->id) }}" class="btn btn-outline-secondary btn-sm">
                                                 <i class="fas fa-eye"></i>
                                                 View
                                             </a>
-                                            <a href="{{ route('admin.users.edit', $user->id) }}" class="btn btn-secondary btn-sm">
+                                            <a href="{{ route('admin.users.edit', $user->id) }}" class="btn btn-outline-primary btn-sm">
                                                 <i class="fas fa-pencil-alt"></i>
                                                 Edit
                                             </a>
-                                            <button class="btn btn-danger btn-sm" onclick="confirmDelete('{{ $user->id }}')">
+                                            <button class="btn btn-outline-danger btn-sm" onclick="confirmDelete('{{ $user->id }}')">
                                                 <i class="fas fa-trash"></i>
                                                 Delete
                                             </button>
@@ -172,11 +172,21 @@
         
         $(document).ready(function() {
             // Initialize DataTables
-            $("#usersTable").DataTable({
+            $(".data-table").DataTable({
+                "pageLength": 25,
+                "order": [],
                 "responsive": true,
-                "lengthChange": false,
-                "autoWidth": false,
-                "buttons": ["copy", "csv", "excel", "pdf", "print", "colvis"]
+                "language": {
+                    "search": "Search:",
+                    "lengthMenu": "Show _MENU_ entries",
+                    "info": "Showing _START_ to _END_ of _TOTAL_ entries",
+                    "paginate": {
+                        "first": "First",
+                        "last": "Last",
+                        "next": "Next",
+                        "previous": "Previous"
+                    }
+                }
             });
         });
     </script>

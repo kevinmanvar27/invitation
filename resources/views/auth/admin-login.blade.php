@@ -1,9 +1,6 @@
-@extends('layouts.app')
+@extends('layouts.admin-login')
 
 @section('content')
-<!-- Include admin login-specific CSS -->
-<link rel="stylesheet" href="{{ asset('css/admin-login.css') }}">
-
 <div class="admin-login-container">
     <div class="admin-login-left">
         <!-- Login Form -->
@@ -34,7 +31,7 @@
                 </div>
             @endif
 
-            <form method="POST" action="{{ route('admin.login') }}" class="space-y-6 mt-6">
+            <form method="POST" action="{{ route('admin.login') }}" class="mt-6">
                 @csrf
 
                 <!-- Email -->
@@ -130,4 +127,5 @@
         </svg>
     </div>
 </div>
+
 @endsection

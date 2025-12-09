@@ -5,7 +5,7 @@
                 <h1>Dashboard</h1>
             </div>
             <div class="col-sm-6">
-                <ol class="breadcrumb float-sm-right">
+                <ol class="breadcrumb float-sm-end">
                     <li class="breadcrumb-item"><a href="{{ route('admin.dashboard') }}">Home</a></li>
                     <li class="breadcrumb-item active">Dashboard</li>
                 </ol>
@@ -74,25 +74,25 @@
                         <ul class="list-group list-group-flush">
                             <li class="list-group-item">
                                 <a href="{{ route('admin.users.index') }}" class="text-decoration-none d-flex justify-content-between align-items-center">
-                                    <span><i class="fas fa-users mr-2"></i>Manage Users</span>
+                                    <span><i class="fas fa-users me-2"></i>Manage Users</span>
                                     <i class="fas fa-chevron-right"></i>
                                 </a>
                             </li>
                             <li class="list-group-item">
                                 <a href="{{ route('admin.templates.index') }}" class="text-decoration-none d-flex justify-content-between align-items-center">
-                                    <span><i class="fas fa-file-image mr-2"></i>Manage Templates</span>
+                                    <span><i class="fas fa-file-image me-2"></i>Manage Templates</span>
                                     <i class="fas fa-chevron-right"></i>
                                 </a>
                             </li>
                             <li class="list-group-item">
                                 <a href="{{ route('admin.categories.index') }}" class="text-decoration-none d-flex justify-content-between align-items-center">
-                                    <span><i class="fas fa-folder mr-2"></i>Template Categories</span>
+                                    <span><i class="fas fa-folder me-2"></i>Template Categories</span>
                                     <i class="fas fa-chevron-right"></i>
                                 </a>
                             </li>
                             <li class="list-group-item">
                                 <a href="{{ route('admin.tags.index') }}" class="text-decoration-none d-flex justify-content-between align-items-center">
-                                    <span><i class="fas fa-tags mr-2"></i>Template Tags</span>
+                                    <span><i class="fas fa-tags me-2"></i>Template Tags</span>
                                     <i class="fas fa-chevron-right"></i>
                                 </a>
                             </li>
@@ -110,25 +110,25 @@
                         <ul class="list-group list-group-flush">
                             <li class="list-group-item">
                                 <a href="{{ route('admin.designs.index') }}" class="text-decoration-none d-flex justify-content-between align-items-center">
-                                    <span><i class="fas fa-paint-brush mr-2"></i>User Designs</span>
+                                    <span><i class="fas fa-paint-brush me-2"></i>User Designs</span>
                                     <i class="fas fa-chevron-right"></i>
                                 </a>
                             </li>
                             <li class="list-group-item">
                                 <a href="{{ route('admin.elements.index') }}" class="text-decoration-none d-flex justify-content-between align-items-center">
-                                    <span><i class="fas fa-cube mr-2"></i>Design Elements</span>
+                                    <span><i class="fas fa-cube me-2"></i>Design Elements</span>
                                     <i class="fas fa-chevron-right"></i>
                                 </a>
                             </li>
                             <li class="list-group-item">
                                 <a href="{{ route('admin.fonts.index') }}" class="text-decoration-none d-flex justify-content-between align-items-center">
-                                    <span><i class="fas fa-font mr-2"></i>Fonts</span>
+                                    <span><i class="fas fa-font me-2"></i>Fonts</span>
                                     <i class="fas fa-chevron-right"></i>
                                 </a>
                             </li>
                             <li class="list-group-item">
                                 <a href="{{ route('admin.customizations.index') }}" class="text-decoration-none d-flex justify-content-between align-items-center">
-                                    <span><i class="fas fa-sliders-h mr-2"></i>Customizations</span>
+                                    <span><i class="fas fa-sliders-h me-2"></i>Customizations</span>
                                     <i class="fas fa-chevron-right"></i>
                                 </a>
                             </li>
@@ -146,25 +146,25 @@
                         <ul class="list-group list-group-flush">
                             <li class="list-group-item">
                                 <a href="{{ route('admin.subscriptions.index') }}" class="text-decoration-none d-flex justify-content-between align-items-center">
-                                    <span><i class="fas fa-subscript mr-2"></i>Subscriptions</span>
+                                    <span><i class="fas fa-subscript me-2"></i>Subscriptions</span>
                                     <i class="fas fa-chevron-right"></i>
                                 </a>
                             </li>
                             <li class="list-group-item">
                                 <a href="{{ route('admin.payments.index') }}" class="text-decoration-none d-flex justify-content-between align-items-center">
-                                    <span><i class="fas fa-credit-card mr-2"></i>Payments</span>
+                                    <span><i class="fas fa-credit-card me-2"></i>Payments</span>
                                     <i class="fas fa-chevron-right"></i>
                                 </a>
                             </li>
                             <li class="list-group-item">
                                 <a href="{{ route('admin.print-orders.index') }}" class="text-decoration-none d-flex justify-content-between align-items-center">
-                                    <span><i class="fas fa-print mr-2"></i>Print Orders</span>
+                                    <span><i class="fas fa-print me-2"></i>Print Orders</span>
                                     <i class="fas fa-chevron-right"></i>
                                 </a>
                             </li>
                             <li class="list-group-item">
                                 <a href="{{ route('admin.rsvp-responses.index') }}" class="text-decoration-none d-flex justify-content-between align-items-center">
-                                    <span><i class="fas fa-envelope mr-2"></i>RSVP Responses</span>
+                                    <span><i class="fas fa-envelope me-2"></i>RSVP Responses</span>
                                     <i class="fas fa-chevron-right"></i>
                                 </a>
                             </li>

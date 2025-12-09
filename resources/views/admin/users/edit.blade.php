@@ -1,48 +1,67 @@
 <x-admin-layout>
     <x-slot name="header">
-        <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-            {{ __('Edit User') }}
-        </h2>
+        <div class="row mb-2">
+            <div class="col-sm-6">
+                <h1>{{ __('Edit User') }}</h1>
+            </div>
+            <div class="col-sm-6">
+                <ol class="breadcrumb float-sm-end">
+                    <li class="breadcrumb-item"><a href="{{ route('admin.dashboard') }}">Dashboard</a></li>
+                    <li class="breadcrumb-item"><a href="{{ route('admin.users.index') }}">Users</a></li>
+                    <li class="breadcrumb-item active">Edit</li>
+                </ol>
+            </div>
+        </div>
+        <p class="text-muted">Edit user details</p>
     </x-slot>
 
-    <div class="py-12">
-        <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
-            <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
-                <div class="p-6 text-gray-900">
-                    <h3 class="text-lg font-medium mb-4">Edit User</h3>
-
-                    <form method="POST" action="{{ route('admin.users.update', $user->id) }}">
-                        @csrf
-                        @method('PUT')
+    <div class="container-fluid">
+        <div class="card">
+            <div class="card-header">
+                <h3 class="card-title">Edit User</h3>
+            </div>
+            <div class="card-body">
+                <form method="POST" action="{{ route('admin.users.update', $user->id) }}">
+                    @csrf
+                    @method('PUT')
+                    
+                    <div class="row">
+                        <div class="col-md-6">
+                            <!-- Name -->
+                            <div class="mb-3">
+                                <label for="name" class="form-label">Name</label>
+                                <input type="text" name="name" id="name" class="form-control" value="{{ old('name', $user->name) }}" required>
+                                @error('name')
+                                    <div class="text-danger mt-1">
+                                        <small>{{ $message }}</small>
+                                    </div>
+                                @enderror
+                            </div>
+                        </div>
                         
-                        <!-- Name -->
-                        <div class="mb-4">
-                            <label for="name" class="block text-gray-700 text-sm font-bold mb-2">Name</label>
-                            <input type="text" name="name" id="name" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" value="{{ old('name', $user->name) }}" required>
-                            @error('name')
-                                <p class="text-red-500 text-xs italic mt-2">{{ $message }}</p>
-                            @enderror
+                        <div class="col-md-6">
+                            <!-- Email -->
+                            <div class="mb-3">
+                                <label for="email" class="form-label">Email</label>
+                                <input type="email" name="email" id="email" class="form-control" value="{{ old('email', $user->email) }}" required>
+                                @error('email')
+                                    <div class="text-danger mt-1">
+                                        <small>{{ $message }}</small>
+                                    </div>
+                                @enderror
+                            </div>
                         </div>
-
-                        <!-- Email -->
-                        <div class="mb-4">
-                            <label for="email" class="block text-gray-700 text-sm font-bold mb-2">Email</label>
-                            <input type="email" name="email" id="email" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" value="{{ old('email', $user->email) }}" required>
-                            @error('email')
-                                <p class="text-red-500 text-xs italic mt-2">{{ $message }}</p>
-                            @enderror
-                        </div>
-
-                        <div class="flex items-center justify-between">
-                            <a href="{{ route('admin.users.index') }}" class="bg-gray-500 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">
-                                Cancel
-                            </a>
-                            <button type="submit" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">
-                                Update User
-                            </button>
-                        </div>
-                    </form>
-                </div>
+                    </div>
+                    
+                    <div class="d-flex justify-content-between mt-4">
+                        <a href="{{ route('admin.users.index') }}" class="btn btn-secondary">
+                            <i class="fas fa-arrow-left"></i> Back to Users
+                        </a>
+                        <button type="submit" class="btn btn-primary">
+                            <i class="fas fa-save"></i> Update User
+                        </button>
+                    </div>
+                </form>
             </div>
         </div>
     </div>
