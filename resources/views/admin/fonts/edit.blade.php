@@ -1,86 +1,203 @@
 <x-admin-layout>
-    <x-slot name="header">
-        <h2 class="font-semibold text-xl text-primary-dark leading-tight">
-            {{ __('Edit Font') }}
-        </h2>
-    </x-slot>
+    <x-slot name="title">Edit Font</x-slot>
+    <x-slot name="page_title">Edit Font</x-slot>
 
-    <div class="py-12">
-        <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
-            <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
-                <div class="p-6 text-primary-dark">
-                    <h3 class="text-lg font-medium mb-4">Edit Font</h3>
+    <!-- Page Header -->
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <div>
 
-                    <form method="POST" action="{{ route('admin.fonts.update', $font->id) }}">
-                        @csrf
-                        @method('PUT')
+            <nav aria-label="breadcrumb">
+                <ol class="breadcrumb mb-0">
+                    <li class="breadcrumb-item"><a href="{{ route('admin.dashboard') }}">Dashboard</a></li>
+                    <li class="breadcrumb-item"><a href="{{ route('admin.fonts.index') }}">Fonts</a></li>
+                    <li class="breadcrumb-item active">Edit {{ $font->font_name }}</li>
+                </ol>
+            </nav>
+        </div>
+    </div>
+
+    <div class="row justify-content-center">
+        <div class="col-lg-8">
+            <div class="card">
+                <div class="card-header">
+                    <div class="d-flex align-items-center justify-content-between">
+                        <div class="d-flex align-items-center">
+                            <div class="avatar me-3" style="width: 48px; height: 48px; background: linear-gradient(135deg, #6f42c1, #5a32a3);">
+                                <i class="fas fa-font text-white"></i>
+                            </div>
+                            <div>
+                                <h5 class="mb-0">{{ $font->font_name }}</h5>
+                                <small class="text-muted">Font #{{ $font->id }}</small>
+                            </div>
+                        </div>
+                        <a href="{{ route('admin.fonts.show', $font->id) }}" class="btn btn-outline-primary btn-sm">
+                            <i class="fas fa-eye me-1"></i>View
+                        </a>
+                    </div>
+                </div>
+                
+                <!-- Meta Info Row -->
+                <div class="card-body bg-light border-bottom py-3">
+                    <div class="row text-center">
+                        <div class="col-md-3">
+                            <small class="text-muted d-block">Status</small>
+                            <strong>
+                                @if($font->is_premium)
+                                    <span class="badge bg-warning"><i class="fas fa-crown me-1"></i>Premium</span>
+                                @else
+                                    <span class="badge bg-success">Free</span>
+                                @endif
+                            </strong>
+                        </div>
+                        <div class="col-md-3">
+                            <small class="text-muted d-block">Weight</small>
+                            <strong>{{ $font->font_weight ?? 'N/A' }}</strong>
+                        </div>
+                        <div class="col-md-3">
+                            <small class="text-muted d-block">Languages</small>
+                            <strong>
+                                @php
+                                    $languages = is_array($font->language_support) ? $font->language_support : ($font->language_support ? explode(',', $font->language_support) : []);
+                                @endphp
+                                {{ count($languages) }}
+                            </strong>
+                        </div>
+                        <div class="col-md-3">
+                            <small class="text-muted d-block">Created</small>
+                            <strong>{{ $font->created_at->format('M d, Y') }}</strong>
+                        </div>
+                    </div>
+                </div>
+                
+                <form method="POST" action="{{ route('admin.fonts.update', $font->id) }}">
+                    @csrf
+                    @method('PUT')
+                    <div class="card-body">
+                        <!-- Basic Information Section -->
+                        <h6 class="text-muted mb-3"><i class="fas fa-info-circle me-2"></i>Basic Information</h6>
                         
-                        <!-- Font Name -->
-                        <div class="mb-4">
-                            <label for="font_name" class="block text-primary-dark text-sm font-bold mb-2">Font Name</label>
-                            <input type="text" name="font_name" id="font_name" class="shadow appearance-none border border-accent rounded w-full py-2 px-3 text-primary-dark leading-tight focus:outline-none focus:shadow-outline" value="{{ old('font_name', $font->font_name) }}" required>
-                            @error('font_name')
-                                <p class="text-error-dark text-xs italic mt-2">{{ $message }}</p>
-                            @enderror
+                        <div class="row g-3">
+                            <!-- Font Name -->
+                            <div class="col-md-6">
+                                <label for="font_name" class="form-label">Font Name <span class="text-danger">*</span></label>
+                                <div class="input-group">
+                                    <span class="input-group-text"><i class="fas fa-tag"></i></span>
+                                    <input type="text" name="font_name" id="font_name" 
+                                           class="form-control @error('font_name') is-invalid @enderror" 
+                                           value="{{ old('font_name', $font->font_name) }}" 
+                                           placeholder="Enter font name" required>
+                                    @error('font_name')
+                                        <div class="invalid-feedback">{{ $message }}</div>
+                                    @enderror
+                                </div>
+                            </div>
+
+                            <!-- Font Family -->
+                            <div class="col-md-6">
+                                <label for="font_family" class="form-label">Font Family <span class="text-danger">*</span></label>
+                                <div class="input-group">
+                                    <span class="input-group-text"><i class="fas fa-text-height"></i></span>
+                                    <input type="text" name="font_family" id="font_family" 
+                                           class="form-control @error('font_family') is-invalid @enderror" 
+                                           value="{{ old('font_family', $font->font_family) }}" 
+                                           placeholder="e.g., 'Roboto', sans-serif" required>
+                                    @error('font_family')
+                                        <div class="invalid-feedback">{{ $message }}</div>
+                                    @enderror
+                                </div>
+                            </div>
                         </div>
 
-                        <!-- Font Family -->
-                        <div class="mb-4">
-                            <label for="font_family" class="block text-primary-dark text-sm font-bold mb-2">Font Family</label>
-                            <input type="text" name="font_family" id="font_family" class="shadow appearance-none border border-accent rounded w-full py-2 px-3 text-primary-dark leading-tight focus:outline-none focus:shadow-outline" value="{{ old('font_family', $font->font_family) }}" required>
-                            @error('font_family')
-                                <p class="text-error-dark text-xs italic mt-2">{{ $message }}</p>
-                            @enderror
+                        <hr class="my-4">
+
+                        <!-- Font Details Section -->
+                        <h6 class="text-muted mb-3"><i class="fas fa-cog me-2"></i>Font Details</h6>
+                        
+                        <div class="row g-3">
+                            <!-- Font File Path -->
+                            <div class="col-md-6">
+                                <label for="font_file_path" class="form-label">Font File Path</label>
+                                <div class="input-group">
+                                    <span class="input-group-text"><i class="fas fa-file"></i></span>
+                                    <input type="text" name="font_file_path" id="font_file_path" 
+                                           class="form-control @error('font_file_path') is-invalid @enderror" 
+                                           value="{{ old('font_file_path', $font->font_file_path) }}" 
+                                           placeholder="/fonts/example.woff2">
+                                    @error('font_file_path')
+                                        <div class="invalid-feedback">{{ $message }}</div>
+                                    @enderror
+                                </div>
+                            </div>
+
+                            <!-- Font Weight -->
+                            <div class="col-md-6">
+                                <label for="font_weight" class="form-label">Font Weight</label>
+                                <div class="input-group">
+                                    <span class="input-group-text"><i class="fas fa-bold"></i></span>
+                                    <input type="text" name="font_weight" id="font_weight" 
+                                           class="form-control @error('font_weight') is-invalid @enderror" 
+                                           value="{{ old('font_weight', $font->font_weight) }}" 
+                                           placeholder="e.g., 400, 700, bold">
+                                    @error('font_weight')
+                                        <div class="invalid-feedback">{{ $message }}</div>
+                                    @enderror
+                                </div>
+                            </div>
+
+                            <!-- Language Support -->
+                            <div class="col-12">
+                                <label for="language_support" class="form-label">Language Support</label>
+                                <div class="input-group">
+                                    <span class="input-group-text"><i class="fas fa-globe"></i></span>
+                                    <input type="text" name="language_support" id="language_support" 
+                                           class="form-control @error('language_support') is-invalid @enderror" 
+                                           value="{{ old('language_support', is_array($font->language_support) ? implode(',', $font->language_support) : $font->language_support) }}" 
+                                           placeholder="e.g., latin, cyrillic, arabic (comma separated)">
+                                    @error('language_support')
+                                        <div class="invalid-feedback">{{ $message }}</div>
+                                    @enderror
+                                </div>
+                                <small class="text-muted">Enter supported languages separated by commas</small>
+                            </div>
                         </div>
 
-                        <!-- Font File Path -->
-                        <div class="mb-4">
-                            <label for="font_file_path" class="block text-primary-dark text-sm font-bold mb-2">Font File Path</label>
-                            <input type="text" name="font_file_path" id="font_file_path" class="shadow appearance-none border border-accent rounded w-full py-2 px-3 text-primary-dark leading-tight focus:outline-none focus:shadow-outline" value="{{ old('font_file_path', $font->font_file_path) }}">
-                            @error('font_file_path')
-                                <p class="text-error-dark text-xs italic mt-2">{{ $message }}</p>
-                            @enderror
-                        </div>
+                        <hr class="my-4">
 
-                        <!-- Font Weight -->
-                        <div class="mb-4">
-                            <label for="font_weight" class="block text-primary-dark text-sm font-bold mb-2">Font Weight</label>
-                            <input type="text" name="font_weight" id="font_weight" class="shadow appearance-none border border-accent rounded w-full py-2 px-3 text-primary-dark leading-tight focus:outline-none focus:shadow-outline" value="{{ old('font_weight', $font->font_weight) }}">
-                            @error('font_weight')
-                                <p class="text-error-dark text-xs italic mt-2">{{ $message }}</p>
-                            @enderror
+                        <!-- Settings Section -->
+                        <h6 class="text-muted mb-3"><i class="fas fa-sliders-h me-2"></i>Settings</h6>
+                        
+                        <div class="row g-3">
+                            <!-- Premium Toggle -->
+                            <div class="col-12">
+                                <div class="form-check form-switch">
+                                    <input type="checkbox" name="is_premium" id="is_premium" 
+                                           class="form-check-input" value="1"
+                                           {{ old('is_premium', $font->is_premium) ? 'checked' : '' }}>
+                                    <label class="form-check-label" for="is_premium">
+                                        <i class="fas fa-crown text-warning me-1"></i>Premium Font
+                                    </label>
+                                </div>
+                                <small class="text-muted">Premium fonts are only available to subscribed users</small>
+                                @error('is_premium')
+                                    <div class="text-danger small mt-1">{{ $message }}</div>
+                                @enderror
+                            </div>
                         </div>
-
-                        <!-- Premium -->
-                        <div class="mb-4">
-                            <label class="block text-primary-dark text-sm font-bold mb-2">
-                                <input type="checkbox" name="is_premium" id="is_premium" class="mr-2 leading-tight">
-                                Is Premium Font
-                            </label>
-                            @error('is_premium')
-                                <p class="text-error-dark text-xs italic mt-2">{{ $message }}</p>
-                            @enderror
-                        </div>
-
-                        <!-- Language Support -->
-                        <div class="mb-4">
-                            <label for="language_support" class="block text-primary-dark text-sm font-bold mb-2">Language Support (comma separated)</label>
-                            <input type="text" name="language_support" id="language_support" class="shadow appearance-none border border-accent rounded w-full py-2 px-3 text-primary-dark leading-tight focus:outline-none focus:shadow-outline" value="{{ old('language_support', is_array($font->language_support) ? implode(',', $font->language_support) : $font->language_support) }}">
-                            @error('language_support')
-                                <p class="text-error-dark text-xs italic mt-2">{{ $message }}</p>
-                            @enderror
-                        </div>
-
-                        <div class="flex items-center justify-between">
-                            <a href="{{ route('admin.fonts.index') }}" class="bg-secondary hover:bg-secondary-dark text-primary-dark font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">
-                                Cancel
+                    </div>
+                    <div class="card-footer d-flex justify-content-between">
+                        <a href="{{ route('admin.fonts.index') }}" class="btn btn-secondary">
+                            <i class="fas fa-arrow-left me-1"></i>Back
+                        </a>
+                        <div class="d-flex gap-2">
+                            <a href="{{ route('admin.fonts.show', $font->id) }}" class="btn btn-outline-primary">
+                                <i class="fas fa-eye me-1"></i>View
                             </a>
-                            <button type="submit" class="bg-primary hover:bg-primary-dark text-primary-dark font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">
-                                Update Font
+                            <button type="submit" class="btn btn-primary">
+                                <i class="fas fa-save me-1"></i>Update Font
                             </button>
                         </div>
-                    </form>
-                </div>
+                    </div>
+                </form>
             </div>
         </div>
     </div>

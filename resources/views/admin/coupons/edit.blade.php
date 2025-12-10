@@ -1,98 +1,188 @@
 <x-admin-layout>
-    <x-slot name="header">
-        <h2 class="font-semibold text-xl text-primary-dark leading-tight">
-            {{ __('Edit Coupon') }}
-        </h2>
-    </x-slot>
+    <!-- Page Header -->
+            <nav aria-label="breadcrumb">
+                <ol class="breadcrumb mb-0">
+                    <li class="breadcrumb-item"><a href="{{ route('admin.dashboard') }}">Dashboard</a></li>
+                    <li class="breadcrumb-item"><a href="{{ route('admin.coupons.index') }}">Coupons</a></li>
+                    <li class="breadcrumb-item active">Edit</li>
+                </ol>
+            </nav>
+        </div>
+    </div>
 
-    <div class="py-12">
-        <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
-            <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
-                <div class="p-6 text-primary-dark">
-                    <h3 class="text-lg font-medium mb-4">Edit Coupon</h3>
-
-                    <form method="POST" action="{{ route('admin.coupons.update', $coupon->id) }}">
-                        @csrf
-                        @method('PUT')
-                        
-                        <!-- Code -->
-                        <div class="mb-4">
-                            <label for="code" class="block text-primary-dark text-sm font-bold mb-2">Coupon Code</label>
-                            <input type="text" name="code" id="code" class="shadow appearance-none border border-accent rounded w-full py-2 px-3 text-primary-dark leading-tight focus:outline-none focus:shadow-outline" value="{{ old('code', $coupon->code) }}" required>
-                            @error('code')
-                                <p class="text-error-dark text-xs italic mt-2">{{ $message }}</p>
-                            @enderror
+    <div class="row justify-content-center">
+        <div class="col-lg-8">
+            <div class="card">
+                <div class="card-header">
+                    <div class="d-flex align-items-center justify-content-between">
+                        <div class="d-flex align-items-center gap-3">
+                            <div class="avatar bg-primary text-white d-flex align-items-center justify-content-center">
+                                <i class="fas fa-ticket-alt"></i>
+                            </div>
+                            <div>
+                                <h5 class="mb-0">{{ $coupon->code }}</h5>
+                                <small class="text-muted">
+                                    @if($coupon->discount_type === 'percentage')
+                                        {{ $coupon->discount_value }}% off
+                                    @else
+                                        ${{ number_format($coupon->discount_value, 2) }} off
+                                    @endif
+                                </small>
+                            </div>
                         </div>
+                        <a href="{{ route('admin.coupons.show', $coupon) }}" class="btn btn-outline-primary btn-sm">
+                            <i class="fas fa-eye me-1"></i> View
+                        </a>
+                    </div>
+                </div>
 
-                        <!-- Discount Type -->
-                        <div class="mb-4">
-                            <label for="discount_type" class="block text-primary-dark text-sm font-bold mb-2">Discount Type</label>
-                            <select name="discount_type" id="discount_type" class="shadow appearance-none border border-accent rounded w-full py-2 px-3 text-primary-dark leading-tight focus:outline-none focus:shadow-outline" required>
-                                <option value="">Select Discount Type</option>
-                                <option value="percentage" {{ (old('discount_type', $coupon->discount_type) == 'percentage') ? 'selected' : '' }}>Percentage</option>
-                                <option value="fixed" {{ (old('discount_type', $coupon->discount_type) == 'fixed') ? 'selected' : '' }}>Fixed Amount</option>
-                            </select>
-                            @error('discount_type')
-                                <p class="text-error-dark text-xs italic mt-2">{{ $message }}</p>
-                            @enderror
+                <!-- Meta Info -->
+                <div class="card-body border-bottom bg-light">
+                    <div class="row text-center">
+                        <div class="col-md-3">
+                            <small class="text-muted d-block">Discount</small>
+                            <span class="fw-medium">
+                                @if($coupon->discount_type === 'percentage')
+                                    {{ $coupon->discount_value }}%
+                                @else
+                                    ${{ number_format($coupon->discount_value, 2) }}
+                                @endif
+                            </span>
                         </div>
-
-                        <!-- Discount Value -->
-                        <div class="mb-4">
-                            <label for="discount_value" class="block text-primary-dark text-sm font-bold mb-2">Discount Value</label>
-                            <input type="number" step="0.01" name="discount_value" id="discount_value" class="shadow appearance-none border border-accent rounded w-full py-2 px-3 text-primary-dark leading-tight focus:outline-none focus:shadow-outline" value="{{ old('discount_value', $coupon->discount_value) }}" required>
-                            @error('discount_value')
-                                <p class="text-error-dark text-xs italic mt-2">{{ $message }}</p>
-                            @enderror
+                        <div class="col-md-3">
+                            <small class="text-muted d-block">Usage</small>
+                            <span class="fw-medium">{{ $coupon->times_used ?? 0 }} / {{ $coupon->usage_limit ?? '∞' }}</span>
                         </div>
-
-                        <!-- Min Purchase -->
-                        <div class="mb-4">
-                            <label for="min_purchase" class="block text-primary-dark text-sm font-bold mb-2">Minimum Purchase ($)</label>
-                            <input type="number" step="0.01" name="min_purchase" id="min_purchase" class="shadow appearance-none border border-accent rounded w-full py-2 px-3 text-primary-dark leading-tight focus:outline-none focus:shadow-outline" value="{{ old('min_purchase', $coupon->min_purchase) }}">
-                            @error('min_purchase')
-                                <p class="text-error-dark text-xs italic mt-2">{{ $message }}</p>
-                            @enderror
+                        <div class="col-md-3">
+                            <small class="text-muted d-block">Valid From</small>
+                            <span class="fw-medium">{{ $coupon->valid_from->format('M d, Y') }}</span>
                         </div>
-
-                        <!-- Valid From -->
-                        <div class="mb-4">
-                            <label for="valid_from" class="block text-primary-dark text-sm font-bold mb-2">Valid From</label>
-                            <input type="datetime-local" name="valid_from" id="valid_from" class="shadow appearance-none border border-accent rounded w-full py-2 px-3 text-primary-dark leading-tight focus:outline-none focus:shadow-outline" value="{{ old('valid_from', $coupon->valid_from->format('Y-m-d\TH:i')) }}" required>
-                            @error('valid_from')
-                                <p class="text-error-dark text-xs italic mt-2">{{ $message }}</p>
-                            @enderror
+                        <div class="col-md-3">
+                            <small class="text-muted d-block">Valid Until</small>
+                            <span class="fw-medium">{{ $coupon->valid_until ? $coupon->valid_until->format('M d, Y') : 'No expiry' }}</span>
                         </div>
+                    </div>
+                </div>
 
-                        <!-- Valid Until -->
-                        <div class="mb-4">
-                            <label for="valid_until" class="block text-primary-dark text-sm font-bold mb-2">Valid Until</label>
-                            <input type="datetime-local" name="valid_until" id="valid_until" class="shadow appearance-none border border-accent rounded w-full py-2 px-3 text-primary-dark leading-tight focus:outline-none focus:shadow-outline" value="{{ old('valid_until', $coupon->valid_until ? $coupon->valid_until->format('Y-m-d\TH:i') : '') }}">
-                            @error('valid_until')
-                                <p class="text-error-dark text-xs italic mt-2">{{ $message }}</p>
-                            @enderror
+                <form method="POST" action="{{ route('admin.coupons.update', $coupon) }}">
+                    @csrf
+                    @method('PUT')
+                    <div class="card-body">
+                        <div class="row g-3">
+                            <!-- Coupon Code -->
+                            <div class="col-md-6">
+                                <label for="code" class="form-label">Coupon Code <span class="text-danger">*</span></label>
+                                <input type="text" class="form-control @error('code') is-invalid @enderror" id="code" name="code" value="{{ old('code', $coupon->code) }}" placeholder="e.g., SUMMER2024" required>
+                                @error('code')
+                                    <div class="invalid-feedback">{{ $message }}</div>
+                                @enderror
+                            </div>
+
+                            <!-- Discount Type -->
+                            <div class="col-md-6">
+                                <label for="discount_type" class="form-label">Discount Type <span class="text-danger">*</span></label>
+                                <select class="form-select @error('discount_type') is-invalid @enderror" id="discount_type" name="discount_type" required>
+                                    <option value="">Select Discount Type</option>
+                                    <option value="percentage" {{ old('discount_type', $coupon->discount_type) == 'percentage' ? 'selected' : '' }}>Percentage (%)</option>
+                                    <option value="fixed" {{ old('discount_type', $coupon->discount_type) == 'fixed' ? 'selected' : '' }}>Fixed Amount ($)</option>
+                                </select>
+                                @error('discount_type')
+                                    <div class="invalid-feedback">{{ $message }}</div>
+                                @enderror
+                            </div>
+
+                            <!-- Discount Value -->
+                            <div class="col-md-6">
+                                <label for="discount_value" class="form-label">Discount Value <span class="text-danger">*</span></label>
+                                <div class="input-group">
+                                    <span class="input-group-text" id="discount-prefix">{{ $coupon->discount_type === 'percentage' ? '%' : '$' }}</span>
+                                    <input type="number" step="0.01" min="0" class="form-control @error('discount_value') is-invalid @enderror" id="discount_value" name="discount_value" value="{{ old('discount_value', $coupon->discount_value) }}" placeholder="0.00" required>
+                                    @error('discount_value')
+                                        <div class="invalid-feedback">{{ $message }}</div>
+                                    @enderror
+                                </div>
+                            </div>
+
+                            <!-- Minimum Purchase -->
+                            <div class="col-md-6">
+                                <label for="min_purchase" class="form-label">Minimum Purchase</label>
+                                <div class="input-group">
+                                    <span class="input-group-text">$</span>
+                                    <input type="number" step="0.01" min="0" class="form-control @error('min_purchase') is-invalid @enderror" id="min_purchase" name="min_purchase" value="{{ old('min_purchase', $coupon->min_purchase) }}" placeholder="0.00">
+                                    @error('min_purchase')
+                                        <div class="invalid-feedback">{{ $message }}</div>
+                                    @enderror
+                                </div>
+                                <small class="text-muted">Leave empty for no minimum</small>
+                            </div>
+
+                            <hr class="my-4">
+
+                            <h6 class="text-muted mb-3"><i class="fas fa-calendar-alt me-2"></i>Validity Period</h6>
+
+                            <!-- Valid From -->
+                            <div class="col-md-6">
+                                <label for="valid_from" class="form-label">Valid From <span class="text-danger">*</span></label>
+                                <input type="datetime-local" class="form-control @error('valid_from') is-invalid @enderror" id="valid_from" name="valid_from" value="{{ old('valid_from', $coupon->valid_from->format('Y-m-d\TH:i')) }}" required>
+                                @error('valid_from')
+                                    <div class="invalid-feedback">{{ $message }}</div>
+                                @enderror
+                            </div>
+
+                            <!-- Valid Until -->
+                            <div class="col-md-6">
+                                <label for="valid_until" class="form-label">Valid Until</label>
+                                <input type="datetime-local" class="form-control @error('valid_until') is-invalid @enderror" id="valid_until" name="valid_until" value="{{ old('valid_until', $coupon->valid_until ? $coupon->valid_until->format('Y-m-d\TH:i') : '') }}">
+                                @error('valid_until')
+                                    <div class="invalid-feedback">{{ $message }}</div>
+                                @enderror
+                                <small class="text-muted">Leave empty for no expiration</small>
+                            </div>
+
+                            <hr class="my-4">
+
+                            <h6 class="text-muted mb-3"><i class="fas fa-chart-bar me-2"></i>Usage Limits</h6>
+
+                            <!-- Usage Limit -->
+                            <div class="col-md-6">
+                                <label for="usage_limit" class="form-label">Usage Limit</label>
+                                <input type="number" min="0" class="form-control @error('usage_limit') is-invalid @enderror" id="usage_limit" name="usage_limit" value="{{ old('usage_limit', $coupon->usage_limit) }}" placeholder="Unlimited">
+                                @error('usage_limit')
+                                    <div class="invalid-feedback">{{ $message }}</div>
+                                @enderror
+                                <small class="text-muted">Leave empty for unlimited uses</small>
+                            </div>
                         </div>
-
-                        <!-- Usage Limit -->
-                        <div class="mb-4">
-                            <label for="usage_limit" class="block text-primary-dark text-sm font-bold mb-2">Usage Limit</label>
-                            <input type="number" name="usage_limit" id="usage_limit" class="shadow appearance-none border border-accent rounded w-full py-2 px-3 text-primary-dark leading-tight focus:outline-none focus:shadow-outline" value="{{ old('usage_limit', $coupon->usage_limit) }}">
-                            @error('usage_limit')
-                                <p class="text-error-dark text-xs italic mt-2">{{ $message }}</p>
-                            @enderror
-                        </div>
-
-                        <div class="flex items-center justify-between">
-                            <a href="{{ route('admin.coupons.index') }}" class="bg-secondary hover:bg-secondary-dark text-primary-dark font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">
-                                Cancel
+                    </div>
+                    <div class="card-footer d-flex justify-content-between">
+                        <a href="{{ route('admin.coupons.index') }}" class="btn btn-outline-secondary">
+                            <i class="fas fa-arrow-left me-1"></i> Back
+                        </a>
+                        <div class="d-flex gap-2">
+                            <a href="{{ route('admin.coupons.show', $coupon) }}" class="btn btn-outline-primary">
+                                <i class="fas fa-eye me-1"></i> View
                             </a>
-                            <button type="submit" class="bg-primary hover:bg-primary-dark text-primary-dark font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">
-                                Update Coupon
+                            <button type="submit" class="btn btn-primary">
+                                <i class="fas fa-check me-1"></i> Update Coupon
                             </button>
                         </div>
-                    </form>
-                </div>
+                    </div>
+                </form>
             </div>
         </div>
     </div>
+
+    @push('scripts')
+    <script>
+        // Update discount prefix based on type selection
+        document.getElementById('discount_type').addEventListener('change', function() {
+            const prefix = document.getElementById('discount-prefix');
+            if (this.value === 'percentage') {
+                prefix.textContent = '%';
+            } else {
+                prefix.textContent = '$';
+            }
+        });
+    </script>
+    @endpush
 </x-admin-layout>

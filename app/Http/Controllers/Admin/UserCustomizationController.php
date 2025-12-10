@@ -67,27 +67,30 @@ class UserCustomizationController extends Controller
 
     /**
      * Display the specified resource.
+     * Route parameter: {customization}
      */
-    public function show(UserCustomization $userCustomization)
+    public function show(UserCustomization $customization)
     {
-        $userCustomization->load('design', 'user');
-        return view('admin.customizations.show', compact('userCustomization'));
+        $customization->load('design', 'user');
+        return view('admin.customizations.show', compact('customization'));
     }
 
     /**
      * Show the form for editing the specified resource.
+     * Route parameter: {customization}
      */
-    public function edit(UserCustomization $userCustomization)
+    public function edit(UserCustomization $customization)
     {
         $designs = UserDesign::all();
         $users = User::all();
-        return view('admin.customizations.edit', compact('userCustomization', 'designs', 'users'));
+        return view('admin.customizations.edit', compact('customization', 'designs', 'users'));
     }
 
     /**
      * Update the specified resource in storage.
+     * Route parameter: {customization}
      */
-    public function update(Request $request, UserCustomization $userCustomization)
+    public function update(Request $request, UserCustomization $customization)
     {
         $request->validate([
             'design_id' => 'required|exists:user_designs,id',
@@ -103,7 +106,7 @@ class UserCustomizationController extends Controller
             'rsvp_deadline' => 'nullable|date',
         ]);
 
-        $userCustomization->update([
+        $customization->update([
             'design_id' => $request->design_id,
             'user_id' => $request->user_id,
             'bride_name' => $request->bride_name,
@@ -122,10 +125,11 @@ class UserCustomizationController extends Controller
 
     /**
      * Remove the specified resource from storage.
+     * Route parameter: {customization}
      */
-    public function destroy(UserCustomization $userCustomization)
+    public function destroy(UserCustomization $customization)
     {
-        $userCustomization->delete();
+        $customization->delete();
         return redirect()->route('admin.customizations.index')->with('success', 'Customization deleted successfully.');
     }
 }

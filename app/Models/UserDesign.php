@@ -55,7 +55,7 @@ class UserDesign extends Model
      */
     public function customization(): HasOne
     {
-        return $this->hasOne(UserCustomization::class);
+        return $this->hasOne(UserCustomization::class, 'design_id');
     }
 
     /**
@@ -63,7 +63,7 @@ class UserDesign extends Model
      */
     public function sharedInvitations(): HasMany
     {
-        return $this->hasMany(SharedInvitation::class);
+        return $this->hasMany(SharedInvitation::class, 'design_id');
     }
 
     /**
@@ -71,7 +71,7 @@ class UserDesign extends Model
      */
     public function downloads(): HasMany
     {
-        return $this->hasMany(Download::class);
+        return $this->hasMany(Download::class, 'design_id');
     }
 
     /**
@@ -79,7 +79,7 @@ class UserDesign extends Model
      */
     public function printOrders(): HasMany
     {
-        return $this->hasMany(PrintOrder::class);
+        return $this->hasMany(PrintOrder::class, 'design_id');
     }
 
     /**
@@ -87,6 +87,14 @@ class UserDesign extends Model
      */
     public function rsvpSettings(): HasOne
     {
-        return $this->hasOne(RsvpSetting::class);
+        return $this->hasOne(RsvpSetting::class, 'design_id');
+    }
+
+    /**
+     * Get the design elements for the design.
+     */
+    public function designElements(): HasMany
+    {
+        return $this->hasMany(UserDesignElement::class, 'user_design_id');
     }
 }

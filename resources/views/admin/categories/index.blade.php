@@ -1,167 +1,186 @@
 <x-admin-layout>
     <x-slot name="header">
-        <div class="page-header">
-            <h1 class="page-header-title text-primary-dark">Manage Template Categories</h1>
-            <p class="page-header-subtitle text-accent-dark">View and manage all template categories</p>
-        </div>
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="{{ route('admin.dashboard') }}">Dashboard</a></li>
+                <li class="breadcrumb-item active" aria-current="page">Categories</li>
+            </ol>
+        </nav>
     </x-slot>
 
-    <div class="py-6">
-        <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
-            <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
-                <div class="p-6 text-primary-dark">
-                    <!-- Header with Search and Add Button -->
-                    <div class="flex flex-col md:flex-row justify-between items-start md:items-center mb-6 gap-4">
-                        <div class="flex-1 flex flex-col sm:flex-row gap-3">
-                            <div class="relative flex-1">
-                                <input type="text" id="searchInput" class="modern-search-input" placeholder="Search categories by name...">
-                                <div class="absolute inset-y-0 left-0 flex items-center pl-3">
-                                    <svg class="w-5 h-5 text-accent-dark" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
-                                    </svg>
-                                </div>
-                            </div>
-                        </div>
-                        <a href="{{ route('admin.categories.create') }}" class="modern-btn modern-btn-primary">
-                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path>
-                            </svg>
-                            Add Category
-                        </a>
-                    </div>
-
-                    <div class="overflow-x-auto">
-                        <table class="modern-table datatable">
-                            <thead>
-                                <tr>
-                                    <th class="text-table-header">ID</th>
-                                    <th class="text-table-header">Name</th>
-                                    <th class="text-table-header">Slug</th>
-                                    <th class="text-table-header">Parent Category</th>
-                                    <th class="text-table-header">Order</th>
-                                    <th class="text-table-header">Templates Count</th>
-                                    <th class="text-table-header text-right">Actions</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                @foreach($categories as $category)
-                                <tr>
-                                    <td class="text-table-body">{{ $category->id }}</td>
-                                    <td class="text-table-body">{{ $category->name }}</td>
-                                    <td class="text-table-body">{{ $category->slug }}</td>
-                                    <td class="text-table-body">{{ $category->parent ? $category->parent->name : 'None' }}</td>
-                                    <td class="text-table-body">{{ $category->order }}</td>
-                                    <td class="text-table-body">{{ $category->templates_count }}</td>
-                                    <td class="text-right">
-                                        <div class="action-buttons flex gap-2 justify-end">
-                                            <a href="{{ route('admin.categories.show', $category->id) }}" class="modern-action-btn modern-action-btn-view">
-                                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
-                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 4.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path>
-                                                </svg>
-                                                View
-                                            </a>
-                                            <a href="{{ route('admin.categories.edit', $category->id) }}" class="modern-action-btn modern-action-btn-edit">
-                                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path>
-                                                </svg>
-                                                Edit
-                                            </a>
-                                            <button class="modern-action-btn modern-action-btn-delete" onclick="confirmDelete('{{ $category->id }}')">
-                                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path>
-                                                </svg>
-                                                Delete
-                                            </button>
+    <!-- Toolbar -->
+    <div class="toolbar mb-4">
+        <form method="GET" action="{{ route('admin.categories.index') }}" class="toolbar-search-form">
+            <div class="input-group">
+                <span class="input-group-text bg-white border-end-0">
+                    <i class="fas fa-search text-muted"></i>
+                </span>
+                <input type="text" name="search" value="{{ request('search') }}" 
+                       class="form-control border-start-0" 
+                       placeholder="Search categories by name...">
+            </div>
+            
+            <select name="parent" class="form-select">
+                <option value="">All Parents</option>
+                <option value="root" {{ request('parent') === 'root' ? 'selected' : '' }}>Root Categories</option>
+                @foreach($categories->where('parent_id', null) as $parent)
+                    <option value="{{ $parent->id }}" {{ request('parent') == $parent->id ? 'selected' : '' }}>
+                        {{ $parent->name }}
+                    </option>
+                @endforeach
+            </select>
+            
+            <button type="submit" class="btn btn-secondary">
+                <i class="fas fa-filter me-1"></i> Filter
+            </button>
+            
+            @if(request()->hasAny(['search', 'parent']))
+                <a href="{{ route('admin.categories.index') }}" class="btn btn-outline-secondary">
+                    <i class="fas fa-times me-1"></i> Clear
+                </a>
+            @endif
+        </form>
+        
+        <div class="toolbar-actions">
+            <a href="{{ route('admin.categories.create') }}" class="btn btn-primary">
+                <i class="fas fa-plus me-1"></i> Add Category
+            </a>
+        </div>
+    </div>
+    
+    <!-- Data Card -->
+    <div class="card">
+        <div class="card-body p-0">
+            <div class="table-responsive">
+                <table class="table table-hover data-table mb-0">
+                    <thead>
+                        <tr>
+                            <th width="60">ID</th>
+                            <th>Name</th>
+                            <th>Slug</th>
+                            <th width="150">Parent</th>
+                            <th width="80" class="text-center">Order</th>
+                            <th width="100" class="text-center">Templates</th>
+                            <th width="150" class="text-end">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @forelse($categories as $category)
+                            <tr>
+                                <td class="text-muted">#{{ $category->id }}</td>
+                                <td>
+                                    <div class="d-flex align-items-center">
+                                        <div class="me-3" style="width: 32px; height: 32px; background: var(--primary-100); border-radius: var(--radius-md); display: flex; align-items: center; justify-content: center;">
+                                            <i class="fas fa-folder text-primary" style="font-size: 14px;"></i>
                                         </div>
-                                    </td>
-                                </tr>
-                                @endforeach
-                            </tbody>
-                        </table>
-                    </div>
+                                        <span class="fw-medium">{{ $category->name }}</span>
+                                    </div>
+                                </td>
+                                <td>
+                                    <code class="text-muted">{{ $category->slug }}</code>
+                                </td>
+                                <td>
+                                    @if($category->parent)
+                                        <span class="badge badge-secondary">
+                                            {{ $category->parent->name }}
+                                        </span>
+                                    @else
+                                        <span class="text-muted">—</span>
+                                    @endif
+                                </td>
+                                <td class="text-center">
+                                    <span class="badge badge-info">{{ $category->order }}</span>
+                                </td>
+                                <td class="text-center">
+                                    <span class="fw-medium">{{ $category->templates_count ?? 0 }}</span>
+                                </td>
+                                <td>
+                                    <div class="table-actions">
+                                        <a href="{{ route('admin.categories.show', $category->id) }}" 
+                                           class="btn btn-icon btn-outline-secondary" 
+                                           data-bs-toggle="tooltip" 
+                                           title="View">
+                                            <i class="fas fa-eye"></i>
+                                        </a>
+                                        <a href="{{ route('admin.categories.edit', $category->id) }}" 
+                                           class="btn btn-icon btn-outline-primary" 
+                                           data-bs-toggle="tooltip" 
+                                           title="Edit">
+                                            <i class="fas fa-pencil-alt"></i>
+                                        </a>
+                                        <button type="button" 
+                                                class="btn btn-icon btn-outline-danger" 
+                                                data-bs-toggle="tooltip" 
+                                                title="Delete"
+                                                onclick="confirmDelete('{{ $category->id }}', '{{ $category->name }}')">
+                                            <i class="fas fa-trash"></i>
+                                        </button>
+                                    </div>
+                                </td>
+                            </tr>
+                        @empty
+                            <tr>
+                                <td colspan="7">
+                                    <div class="empty-state">
+                                        <div class="empty-state-icon">
+                                            <i class="fas fa-folder-open"></i>
+                                        </div>
+                                        <h5 class="empty-state-title">No categories found</h5>
+                                        <p class="empty-state-description">Get started by creating a new category.</p>
+                                        <a href="{{ route('admin.categories.create') }}" class="btn btn-primary">
+                                            <i class="fas fa-plus me-1"></i> Add Category
+                                        </a>
+                                    </div>
+                                </td>
+                            </tr>
+                        @endforelse
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        
+        @if($categories->hasPages())
+            <div class="card-footer bg-transparent">
+                {{ $categories->links() }}
+            </div>
+        @endif
+    </div>
 
-                    <!-- Modern Pagination -->
-                    <div class="modern-pagination mt-6">
-                        <div class="modern-pagination-info">
-                            Showing {{ $categories->firstItem() }} to {{ $categories->lastItem() }} of {{ $categories->total() }} entries
-                        </div>
-                        <div class="modern-pagination-controls">
-                            @if ($categories->onFirstPage())
-                                <button class="modern-pagination-btn disabled">
-                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path>
-                                    </svg>
-                                </button>
-                            @else
-                                <a href="{{ $categories->previousPageUrl() }}" class="modern-pagination-btn">
-                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path>
-                                    </svg>
-                                </a>
-                            @endif
-
-                            @for ($i = 1; $i <= $categories->lastPage(); $i++)
-                                @if ($i == $categories->currentPage())
-                                    <button class="modern-pagination-btn active">{{ $i }}</button>
-                                @else
-                                    <a href="{{ $categories->url($i) }}" class="modern-pagination-btn">{{ $i }}</a>
-                                @endif
-                            @endfor
-
-                            @if ($categories->hasMorePages())
-                                <a href="{{ $categories->nextPageUrl() }}" class="modern-pagination-btn">
-                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
-                                    </svg>
-                                </a>
-                            @else
-                                <button class="modern-pagination-btn disabled">
-                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
-                                    </svg>
-                                </button>
-                            @endif
-                        </div>
-                    </div>
+    <!-- Delete Confirmation Modal -->
+    <div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header border-0">
+                    <h5 class="modal-title" id="deleteModalLabel">
+                        <i class="fas fa-exclamation-triangle text-danger me-2"></i>Confirm Delete
+                    </h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <p>Are you sure you want to delete <strong id="deleteCategoryName"></strong>?</p>
+                    <p class="text-muted mb-0">This action cannot be undone. Templates in this category may be affected.</p>
+                </div>
+                <div class="modal-footer border-0">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                    <form id="deleteForm" method="POST" class="d-inline">
+                        @csrf
+                        @method('DELETE')
+                        <button type="submit" class="btn btn-danger">
+                            <i class="fas fa-trash me-1"></i> Delete
+                        </button>
+                    </form>
                 </div>
             </div>
         </div>
     </div>
-</x-admin-layout>
 
-<script>
-    function confirmDelete(categoryId) {
-        if (confirm('Are you sure you want to delete this category? This action cannot be undone.')) {
-            // Create a form dynamically and submit it
-            const form = document.createElement('form');
-            form.method = 'POST';
-            form.action = `{{ url('admin/categories') }}/${categoryId}`;
-            
-            const csrfToken = document.createElement('input');
-            csrfToken.type = 'hidden';
-            csrfToken.name = '_token';
-            csrfToken.value = '{{ csrf_token() }}';
-            form.appendChild(csrfToken);
-            
-            const method = document.createElement('input');
-            method.type = 'hidden';
-            method.name = '_method';
-            method.value = 'DELETE';
-            form.appendChild(method);
-            
-            document.body.appendChild(form);
-            form.submit();
+    @push('scripts')
+    <script>
+        function confirmDelete(categoryId, categoryName) {
+            document.getElementById('deleteCategoryName').textContent = categoryName;
+            document.getElementById('deleteForm').action = `{{ url('admin/categories') }}/${categoryId}`;
+            new bootstrap.Modal(document.getElementById('deleteModal')).show();
         }
-    }
-    
-    $(document).ready(function() {
-        // Search functionality
-        $('#searchInput').on('keyup', function() {
-            const value = $(this).val().toLowerCase();
-            $('tbody tr').filter(function() {
-                $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
-            });
-        });
-    });
-</script>
+    </script>
+    @endpush
+</x-admin-layout>

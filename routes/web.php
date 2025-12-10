@@ -89,18 +89,49 @@ Route::middleware('auth')->group(function () {
 
 // Admin routes
 Route::prefix('admin')->name('admin.')->middleware(['auth', 'admin'])->group(function () {
+    // Dashboard
     Route::get('/', [AdminController::class, 'index'])->name('dashboard');
-    // Added admin profile route
+    
+    // Admin Profile Routes
     Route::get('/profile', [AdminProfileController::class, 'index'])->name('profile');
+    Route::get('/profile/edit', [AdminProfileController::class, 'edit'])->name('profile.edit');
+    Route::put('/profile', [AdminProfileController::class, 'update'])->name('profile.update');
+    Route::get('/profile/password', [AdminProfileController::class, 'showPasswordForm'])->name('profile.password');
+    Route::put('/profile/password', [AdminProfileController::class, 'updatePassword'])->name('profile.password.update');
+    
+    // Settings Route (placeholder - redirects to profile for now)
+    Route::get('/settings', function () {
+        return redirect()->route('admin.profile');
+    })->name('settings');
+    
+    // User Management
     Route::resource('users', UserController::class);
-        Route::get('/users/export', [UserController::class, 'export'])->name('users.export');
+    Route::get('/users-export', [UserController::class, 'export'])->name('users.export');
+    
+    // Template Management
     Route::resource('templates', AdminTemplateController::class);
     Route::resource('categories', TemplateCategoryController::class);
     Route::resource('tags', TemplateTagController::class);
+    
+    // Design Management
     Route::resource('designs', UserDesignController::class);
+    Route::get('/designs-export', [UserDesignController::class, 'export'])->name('designs.export');
     Route::resource('customizations', UserCustomizationController::class);
+    
+    // Design Elements - support both 'elements' and 'design-elements' route names
     Route::resource('elements', DesignElementController::class);
+    Route::resource('design-elements', DesignElementController::class);
+    
     Route::resource('fonts', FontController::class);
+    
+    // User-specific views (read-only)
+    Route::resource('user-customizations', UserCustomizationController::class)->only(['index', 'show']);
+    Route::resource('user-designs', UserDesignController::class)->only(['index', 'show'])->names([
+        'index' => 'user-designs.index',
+        'show' => 'user-designs.show',
+    ]);
+    
+    // Business Operations
     Route::resource('subscriptions', SubscriptionController::class);
     Route::resource('payments', PaymentController::class);
     Route::resource('downloads', DownloadController::class);
@@ -109,6 +140,8 @@ Route::prefix('admin')->name('admin.')->middleware(['auth', 'admin'])->group(fun
     Route::resource('rsvp-settings', RsvpSettingController::class);
     Route::resource('print-orders', PrintOrderController::class);
     Route::resource('user-profiles', UserProfileController::class);
+    
+    // Marketing
     Route::resource('coupons', CouponController::class);
     Route::resource('shipping-addresses', ShippingAddressController::class);
     Route::resource('referrals', ReferralController::class);

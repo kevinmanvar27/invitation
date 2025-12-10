@@ -1,199 +1,203 @@
 <x-admin-layout>
     <x-slot name="header">
-        <div class="page-header">
-            <h1 class="page-header-title">Manage User Designs</h1>
-            <p class="page-header-subtitle">View and manage all user created designs</p>
-        </div>
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="{{ route('admin.dashboard') }}">Dashboard</a></li>
+                <li class="breadcrumb-item active" aria-current="page">User Designs</li>
+            </ol>
+        </nav>
     </x-slot>
 
-    <!-- Header with Search -->
-    <div class="flex justify-between items-center mb-6">
-        <h3 class="text-lg font-medium">User Designs</h3>
-        <div class="flex space-x-2">
-            <input type="text" id="searchInput" placeholder="Search designs..." class="border rounded px-4 py-2">
-            <button id="searchButton" class="bg-primary hover:bg-primary-dark text-primary-dark font-bold py-2 px-4 rounded">
-                Search
+    <!-- Toolbar -->
+    <div class="toolbar mb-4">
+        <form method="GET" action="{{ route('admin.designs.index') }}" class="toolbar-search-form">
+            <div class="input-group">
+                <span class="input-group-text bg-white border-end-0">
+                    <i class="fas fa-search text-muted"></i>
+                </span>
+                <input type="text" name="search" value="{{ request('search') }}" 
+                       class="form-control border-start-0" 
+                       placeholder="Search designs by name or user...">
+            </div>
+            
+            <select name="status" class="form-select">
+                <option value="">All Statuses</option>
+                <option value="published" {{ request('status') === 'published' ? 'selected' : '' }}>Published</option>
+                <option value="draft" {{ request('status') === 'draft' ? 'selected' : '' }}>Draft</option>
+            </select>
+            
+            <button type="submit" class="btn btn-secondary">
+                <i class="fas fa-filter me-1"></i> Filter
             </button>
+            
+            @if(request()->hasAny(['search', 'status']))
+                <a href="{{ route('admin.designs.index') }}" class="btn btn-outline-secondary">
+                    <i class="fas fa-times me-1"></i> Clear
+                </a>
+            @endif
+        </form>
+        
+        <div class="toolbar-actions">
+            <a href="{{ route('admin.designs.export', ['format' => 'csv']) }}" class="btn btn-outline-secondary">
+                <i class="fas fa-download me-1"></i> Export CSV
+            </a>
         </div>
     </div>
-
-    <div class="overflow-x-auto">
-        <table class="min-w-full divide-y divide-secondary-light data-table">
-            <thead>
-                <tr>
-                    <th class="px-6 py-3 bg-secondary-light text-left text-xs leading-4 font-medium text-secondary-dark uppercase tracking-wider">ID</th>
-                    <th class="px-6 py-3 bg-secondary-light text-left text-xs leading-4 font-medium text-secondary-dark uppercase tracking-wider">Thumbnail</th>
-                    <th class="px-6 py-3 bg-secondary-light text-left text-xs leading-4 font-medium text-secondary-dark uppercase tracking-wider">User Name</th>
-                    <th class="px-6 py-3 bg-secondary-light text-left text-xs leading-4 font-medium text-secondary-dark uppercase tracking-wider">Template Used</th>
-                    <th class="px-6 py-3 bg-secondary-light text-left text-xs leading-4 font-medium text-secondary-dark uppercase tracking-wider">Design Name</th>
-                    <th class="px-6 py-3 bg-secondary-light text-left text-xs leading-4 font-medium text-secondary-dark uppercase tracking-wider">Creation Date</th>
-                    <th class="px-6 py-3 bg-secondary-light text-left text-xs leading-4 font-medium text-secondary-dark uppercase tracking-wider">Status</th>
-                    <th class="px-6 py-3 bg-secondary-light text-left text-xs leading-4 font-medium text-secondary-dark uppercase tracking-wider">Actions</th>
-                </tr>
-            </thead>
-            <tbody class="bg-white divide-y divide-secondary-light">
-                <!-- Data will be populated by JavaScript -->
-            </tbody>
-        </table>
+    
+    <!-- Data Card -->
+    <div class="card">
+        <div class="card-body p-0">
+            <div class="table-responsive">
+                <table class="table table-hover data-table mb-0">
+                    <thead>
+                        <tr>
+                            <th width="60">ID</th>
+                            <th width="80">Preview</th>
+                            <th>Design Name</th>
+                            <th>User</th>
+                            <th>Template</th>
+                            <th width="100">Status</th>
+                            <th width="120">Created</th>
+                            <th width="150" class="text-end">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @forelse($designs ?? [] as $design)
+                            <tr>
+                                <td class="text-muted">#{{ $design->id }}</td>
+                                <td>
+                                    @if($design->thumbnail_path)
+                                        <img src="{{ asset('storage/' . $design->thumbnail_path) }}" 
+                                             class="thumbnail" 
+                                             alt="{{ $design->name }}">
+                                    @else
+                                        <div class="img-placeholder">
+                                            <i class="fas fa-image"></i>
+                                        </div>
+                                    @endif
+                                </td>
+                                <td>
+                                    <span class="fw-medium">{{ $design->name ?? 'Untitled Design' }}</span>
+                                </td>
+                                <td>
+                                    @if($design->user)
+                                        <div class="d-flex align-items-center">
+                                            <img src="https://ui-avatars.com/api/?name={{ urlencode($design->user->name) }}&color=ffffff&background=ff6b6b&size=28" 
+                                                 class="rounded-circle me-2" 
+                                                 width="28" 
+                                                 height="28" 
+                                                 alt="{{ $design->user->name }}">
+                                            <span>{{ $design->user->name }}</span>
+                                        </div>
+                                    @else
+                                        <span class="text-muted">—</span>
+                                    @endif
+                                </td>
+                                <td>
+                                    @if($design->template)
+                                        <a href="{{ route('admin.templates.show', $design->template->id) }}" class="text-decoration-none">
+                                            {{ $design->template->name }}
+                                        </a>
+                                    @else
+                                        <span class="text-muted">—</span>
+                                    @endif
+                                </td>
+                                <td>
+                                    @if($design->is_published ?? false)
+                                        <span class="badge badge-success">
+                                            <i class="fas fa-check-circle me-1"></i>Published
+                                        </span>
+                                    @else
+                                        <span class="badge badge-secondary">
+                                            <i class="fas fa-file me-1"></i>Draft
+                                        </span>
+                                    @endif
+                                </td>
+                                <td class="text-muted">{{ $design->created_at->format('M d, Y') }}</td>
+                                <td>
+                                    <div class="table-actions">
+                                        <a href="{{ route('admin.designs.show', $design->id) }}" 
+                                           class="btn btn-icon btn-outline-secondary" 
+                                           data-bs-toggle="tooltip" 
+                                           title="View">
+                                            <i class="fas fa-eye"></i>
+                                        </a>
+                                        <a href="{{ route('admin.designs.edit', $design->id) }}" 
+                                           class="btn btn-icon btn-outline-primary" 
+                                           data-bs-toggle="tooltip" 
+                                           title="Edit">
+                                            <i class="fas fa-pencil-alt"></i>
+                                        </a>
+                                        <button type="button" 
+                                                class="btn btn-icon btn-outline-danger" 
+                                                data-bs-toggle="tooltip" 
+                                                title="Delete"
+                                                onclick="confirmDelete('{{ $design->id }}', '{{ $design->name ?? 'this design' }}')">
+                                            <i class="fas fa-trash"></i>
+                                        </button>
+                                    </div>
+                                </td>
+                            </tr>
+                        @empty
+                            <tr>
+                                <td colspan="8">
+                                    <div class="empty-state">
+                                        <div class="empty-state-icon">
+                                            <i class="fas fa-paint-brush"></i>
+                                        </div>
+                                        <h5 class="empty-state-title">No designs found</h5>
+                                        <p class="empty-state-description">User designs will appear here once created.</p>
+                                    </div>
+                                </td>
+                            </tr>
+                        @endforelse
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        
+        @if(isset($designs) && $designs->hasPages())
+            <div class="card-footer bg-transparent">
+                {{ $designs->links() }}
+            </div>
+        @endif
     </div>
 
-    <div class="mt-4 flex justify-between items-center">
-        <div>
-            <button id="exportCsv" class="bg-primary hover:bg-primary-dark text-primary-dark font-bold py-2 px-4 rounded mr-2">
-                Export CSV
-            </button>
-            <button id="exportExcel" class="bg-primary hover:bg-primary-dark text-primary-dark font-bold py-2 px-4 rounded">
-                Export Excel
-            </button>
-        </div>
-        <div id="pagination">
-            <!-- Pagination will be populated by JavaScript -->
-        </div>
-    </div>
-
-    <!-- Design Preview Modal -->
-    <div id="previewModal" class="fixed inset-0 bg-secondary bg-opacity-50 hidden overflow-y-auto h-full w-full">
-        <div class="relative top-20 mx-auto p-5 border w-3/4 shadow-lg rounded-md bg-white">
-            <div class="mt-3 text-center">
-                <div class="mx-auto flex items-center justify-between">
-                    <h3 class="text-lg leading-6 font-medium text-primary-dark">Design Preview</h3>
-                    <button id="closeModal" class="text-secondary-dark bg-transparent hover:bg-secondary-light hover:text-primary-dark rounded-lg text-sm p-1.5 ml-auto inline-flex items-center">
-                        <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
-                            <path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd"></path>
-                        </svg>
-                    </button>
+    <!-- Delete Confirmation Modal -->
+    <div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header border-0">
+                    <h5 class="modal-title" id="deleteModalLabel">
+                        <i class="fas fa-exclamation-triangle text-danger me-2"></i>Confirm Delete
+                    </h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
-                <div class="mt-2 px-7 py-3">
-                    <div id="previewContent" class="h-96 overflow-auto">
-                        <!-- Preview content will be loaded here -->
-                    </div>
+                <div class="modal-body">
+                    <p>Are you sure you want to delete <strong id="deleteDesignName"></strong>?</p>
+                    <p class="text-muted mb-0">This action cannot be undone.</p>
                 </div>
-                <div class="items-center px-4 py-3">
-                    <button id="downloadDesign" class="px-4 py-2 bg-primary text-primary-dark text-base font-medium rounded-md w-full shadow-sm hover:bg-primary-dark focus:outline-none focus:ring-2 focus:ring-primary-light">
-                        Download Design
-                    </button>
+                <div class="modal-footer border-0">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                    <form id="deleteForm" method="POST" class="d-inline">
+                        @csrf
+                        @method('DELETE')
+                        <button type="submit" class="btn btn-danger">
+                            <i class="fas fa-trash me-1"></i> Delete
+                        </button>
+                    </form>
                 </div>
             </div>
         </div>
     </div>
 
+    @push('scripts')
     <script>
-        $(document).ready(function() {
-            // Load initial data
-            loadDesigns();
-            
-            // Search functionality
-            $('#searchButton').on('click', function() {
-                loadDesigns();
-            });
-            
-            $('#searchInput').on('keypress', function(e) {
-                if (e.which === 13) {
-                    loadDesigns();
-                }
-            });
-            
-            // Export functionality
-            $('#exportCsv').on('click', function() {
-                exportData('csv');
-            });
-            
-            $('#exportExcel').on('click', function() {
-                exportData('excel');
-            });
-            
-            // Modal functionality
-            $('#closeModal').on('click', function() {
-                $('#previewModal').addClass('hidden');
-            });
-            
-            $('#downloadDesign').on('click', function() {
-                alert('Design downloaded successfully!');
-                $('#previewModal').addClass('hidden');
-            });
-        });
-        
-        function loadDesigns() {
-            // In a real application, this would make an AJAX request to fetch data
-            // For now, we'll simulate with sample data
-            const sampleData = [
-                {
-                    id: 1,
-                    thumbnail: 'https://placehold.co/100x100',
-                    user_name: 'John Doe',
-                    template: 'Wedding Invitation Classic',
-                    design_name: 'John & Jane\'s Wedding',
-                    creation_date: '2023-05-15',
-                    status: 'Published'
-                },
-                {
-                    id: 2,
-                    thumbnail: 'https://placehold.co/100x100',
-                    user_name: 'Jane Smith',
-                    template: 'Modern Elegance',
-                    design_name: 'Jane & John\'s Wedding',
-                    creation_date: '2023-06-20',
-                    status: 'Draft'
-                }
-            ];
-            
-            renderDesigns(sampleData);
-        }
-        
-        function renderDesigns(data) {
-            const tbody = $('.data-table tbody');
-            tbody.empty();
-            
-            data.forEach(design => {
-                const row = `
-                    <tr>
-                        <td class="px-6 py-4 whitespace-no-wrap">${design.id}</td>
-                        <td class="px-6 py-4 whitespace-no-wrap">
-                            <img src="${design.thumbnail}" alt="Thumbnail" class="w-16 h-16 object-cover rounded">
-                        </td>
-                        <td class="px-6 py-4 whitespace-no-wrap">${design.user_name}</td>
-                        <td class="px-6 py-4 whitespace-no-wrap">${design.template}</td>
-                        <td class="px-6 py-4 whitespace-no-wrap">${design.design_name}</td>
-                        <td class="px-6 py-4 whitespace-no-wrap">${design.creation_date}</td>
-                        <td class="px-6 py-4 whitespace-no-wrap">
-                            <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full 
-                                ${design.status === 'Published' ? 'bg-primary-light text-primary-dark' : 'bg-secondary-light text-secondary-dark'}">
-                                ${design.status}
-                            </span>
-                        </td>
-                        <td class="px-6 py-4 whitespace-no-wrap">
-                            <button onclick="viewDesign(${design.id})" class="text-primary hover:text-primary-dark mr-3">View</button>
-                            <button onclick="downloadDesign(${design.id})" class="text-secondary hover:text-secondary-dark">Download</button>
-                        </td>
-                    </tr>
-                `;
-                tbody.append(row);
-            });
-        }
-        
-        function viewDesign(id) {
-            // In a real application, this would fetch the design details
-            $('#previewContent').html(`
-                <div class="bg-secondary-light p-4 rounded">
-                    <h4 class="text-lg font-semibold mb-2">Design Preview for ID: ${id}</h4>
-                    <img src="https://placehold.co/600x400" alt="Design Preview" class="w-full h-auto rounded">
-                    <div class="mt-4 text-left">
-                        <p><strong>User:</strong> John Doe</p>
-                        <p><strong>Template:</strong> Wedding Invitation Classic</p>
-                        <p><strong>Created:</strong> 2023-05-15</p>
-                        <p><strong>Status:</strong> Published</p>
-                    </div>
-                </div>
-            `);
-            $('#previewModal').removeClass('hidden');
-        }
-        
-        function downloadDesign(id) {
-            alert(`Downloading design with ID: ${id}`);
-        }
-        
-        function exportData(format) {
-            alert(`Exporting data as ${format.toUpperCase()}`);
+        function confirmDelete(designId, designName) {
+            document.getElementById('deleteDesignName').textContent = designName;
+            document.getElementById('deleteForm').action = `{{ url('admin/designs') }}/${designId}`;
+            new bootstrap.Modal(document.getElementById('deleteModal')).show();
         }
     </script>
+    @endpush
 </x-admin-layout>

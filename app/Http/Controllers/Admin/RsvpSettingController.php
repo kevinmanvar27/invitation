@@ -4,6 +4,8 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\RsvpSetting;
+use App\Models\UserDesign;
+use App\Models\User;
 use Illuminate\Http\Request;
 
 class RsvpSettingController extends Controller
@@ -22,7 +24,9 @@ class RsvpSettingController extends Controller
      */
     public function create()
     {
-        return view('admin.rsvp-settings.create');
+        $designs = UserDesign::all();
+        $users = User::all();
+        return view('admin.rsvp-settings.create', compact('designs', 'users'));
     }
 
     /**
@@ -31,15 +35,23 @@ class RsvpSettingController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'setting_name' => 'required|string|max:255',
-            'setting_value' => 'required|string',
-            'description' => 'nullable|string',
+            'design_id' => 'required|exists:user_designs,id',
+            'user_id' => 'required|exists:users,id',
+            'rsvp_enabled' => 'boolean',
+            'deadline' => 'nullable|date',
+            'max_guests_per_invite' => 'nullable|integer|min:1',
+            'collect_meal_preferences' => 'boolean',
+            'custom_questions' => 'nullable|json',
         ]);
 
         RsvpSetting::create([
-            'setting_name' => $request->setting_name,
-            'setting_value' => $request->setting_value,
-            'description' => $request->description,
+            'design_id' => $request->design_id,
+            'user_id' => $request->user_id,
+            'rsvp_enabled' => $request->boolean('rsvp_enabled'),
+            'deadline' => $request->deadline,
+            'max_guests_per_invite' => $request->max_guests_per_invite,
+            'collect_meal_preferences' => $request->boolean('collect_meal_preferences'),
+            'custom_questions' => $request->custom_questions ? json_decode($request->custom_questions, true) : null,
         ]);
 
         return redirect()->route('admin.rsvp-settings.index')
@@ -61,7 +73,9 @@ class RsvpSettingController extends Controller
     public function edit(RsvpSetting $rsvpSetting)
     {
         $rsvpSetting->load(['design', 'user']);
-        return view('admin.rsvp-settings.edit', compact('rsvpSetting'));
+        $designs = UserDesign::all();
+        $users = User::all();
+        return view('admin.rsvp-settings.edit', compact('rsvpSetting', 'designs', 'users'));
     }
 
     /**
@@ -70,15 +84,23 @@ class RsvpSettingController extends Controller
     public function update(Request $request, RsvpSetting $rsvpSetting)
     {
         $request->validate([
-            'setting_name' => 'required|string|max:255',
-            'setting_value' => 'required|string',
-            'description' => 'nullable|string',
+            'design_id' => 'required|exists:user_designs,id',
+            'user_id' => 'required|exists:users,id',
+            'rsvp_enabled' => 'boolean',
+            'deadline' => 'nullable|date',
+            'max_guests_per_invite' => 'nullable|integer|min:1',
+            'collect_meal_preferences' => 'boolean',
+            'custom_questions' => 'nullable|json',
         ]);
 
         $rsvpSetting->update([
-            'setting_name' => $request->setting_name,
-            'setting_value' => $request->setting_value,
-            'description' => $request->description,
+            'design_id' => $request->design_id,
+            'user_id' => $request->user_id,
+            'rsvp_enabled' => $request->boolean('rsvp_enabled'),
+            'deadline' => $request->deadline,
+            'max_guests_per_invite' => $request->max_guests_per_invite,
+            'collect_meal_preferences' => $request->boolean('collect_meal_preferences'),
+            'custom_questions' => $request->custom_questions ? json_decode($request->custom_questions, true) : null,
         ]);
 
         return redirect()->route('admin.rsvp-settings.index')

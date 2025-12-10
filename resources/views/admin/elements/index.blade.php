@@ -1,135 +1,269 @@
+{{-- Elements Index - Admin Panel --}}
+{{-- Updated to Bootstrap 5 + custom admin theme --}}
+
+@php
+    $totalElements = $elements->total() ?? count($elements);
+    $activeCount = $elements->where('is_active', true)->count();
+    $inactiveCount = $elements->where('is_active', false)->count();
+@endphp
+
 <x-admin-layout>
     <x-slot name="header">
         <div class="page-header">
-            <h1 class="page-header-title">Design Elements</h1>
-            <p class="page-header-subtitle">Manage design elements used in invitations</p>
+
+            <nav aria-label="breadcrumb">
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><a href="{{ route('admin.dashboard') }}">Dashboard</a></li>
+                    <li class="breadcrumb-item active" aria-current="page">Elements</li>
+                </ol>
+            </nav>
         </div>
     </x-slot>
 
-    <!-- Header with Filters and Upload Button -->
-    <div class="flex justify-between items-center mb-6">
-        <h3 class="text-lg font-medium">Design Elements</h3>
-        <div class="flex space-x-2">
-            <select id="categoryFilter" class="border rounded px-4 py-2">
-                <option value="">All Categories</option>
-                <option value="icons">Icons</option>
-                <option value="graphics">Graphics</option>
-                <option value="borders">Borders</option>
-                <option value="backgrounds">Backgrounds</option>
-            </select>
-            <select id="typeFilter" class="border rounded px-4 py-2">
-                <option value="">All Types</option>
-                <option value="icon">Icon</option>
-                <option value="graphic">Graphic</option>
-                <option value="border">Border</option>
-                <option value="background">Background</option>
-            </select>
-            <input type="text" id="searchInput" placeholder="Search elements..." class="border rounded px-4 py-2">
-            <button id="searchButton" class="bg-primary hover:bg-primary-dark text-primary-dark font-bold py-2 px-4 rounded">
-                Search
-            </button>
-            <a href="{{ route('admin.elements.create') }}" class="bg-primary hover:bg-primary-dark text-primary-dark font-bold py-2 px-4 rounded">
-                Upload Element
-            </a>
+    <!-- Stats Cards -->
+    <div class="row g-4 mb-4">
+        <div class="col-md-4">
+            <div class="stat-card stat-card-primary">
+                <div class="stat-card-icon">
+                    <i class="fas fa-shapes"></i>
+                </div>
+                <div class="stat-card-body">
+                    <div class="stat-card-content">
+                        <span class="stat-card-value">{{ $totalElements }}</span>
+                        <span class="stat-card-label">Total Elements</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="stat-card stat-card-success">
+                <div class="stat-card-icon">
+                    <i class="fas fa-check-circle"></i>
+                </div>
+                <div class="stat-card-body">
+                    <div class="stat-card-content">
+                        <span class="stat-card-value">{{ $activeCount }}</span>
+                        <span class="stat-card-label">Active Elements</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="stat-card stat-card-warning">
+                <div class="stat-card-icon">
+                    <i class="fas fa-pause-circle"></i>
+                </div>
+                <div class="stat-card-body">
+                    <div class="stat-card-content">
+                        <span class="stat-card-value">{{ $inactiveCount }}</span>
+                        <span class="stat-card-label">Inactive Elements</span>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 
-    <div class="overflow-x-auto">
-        <table class="min-w-full divide-y divide-secondary-light data-table">
-            <thead>
-                <tr>
-                    <th class="px-6 py-3 bg-secondary-light text-left text-xs leading-4 font-medium text-secondary-dark uppercase tracking-wider">ID</th>
-                    <th class="px-6 py-3 bg-secondary-light text-left text-xs leading-4 font-medium text-secondary-dark uppercase tracking-wider">Preview</th>
-                    <th class="px-6 py-3 bg-secondary-light text-left text-xs leading-4 font-medium text-secondary-dark uppercase tracking-wider">Name</th>
-                    <th class="px-6 py-3 bg-secondary-light text-left text-xs leading-4 font-medium text-secondary-dark uppercase tracking-wider">Type</th>
-                    <th class="px-6 py-3 bg-secondary-light text-left text-xs leading-4 font-medium text-secondary-dark uppercase tracking-wider">Category</th>
-                    <th class="px-6 py-3 bg-secondary-light text-left text-xs leading-4 font-medium text-secondary-dark uppercase tracking-wider">Status</th>
-                    <th class="px-6 py-3 bg-secondary-light text-left text-xs leading-4 font-medium text-secondary-dark uppercase tracking-wider">Actions</th>
-                </tr>
-            </thead>
-            <tbody class="bg-white divide-y divide-secondary-light">
-                @foreach($elements as $element)
-                <tr>
-                    <td class="px-6 py-4 whitespace-no-wrap">{{ $element->id }}</td>
-                    <td class="px-6 py-4 whitespace-no-wrap">
-                        @if($element->file_path)
-                            <img src="{{ asset($element->file_path) }}" alt="Preview" class="w-12 h-12 object-cover rounded">
-                        @else
-                            <div class="bg-secondary-light border-2 border-dashed rounded-xl w-12 h-12" />
-                        @endif
-                    </td>
-                    <td class="px-6 py-4 whitespace-no-wrap">{{ $element->name }}</td>
-                    <td class="px-6 py-4 whitespace-no-wrap">
-                        <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-primary-light text-primary-dark">
-                            {{ $element->type }}
-                        </span>
-                    </td>
-                    <td class="px-6 py-4 whitespace-no-wrap">{{ $element->category }}</td>
-                    <td class="px-6 py-4 whitespace-no-wrap">
-                        <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full 
-                            {{ $element->is_active ? 'bg-primary-light text-primary-dark' : 'bg-error-light text-error-dark' }}">
-                            {{ $element->is_active ? 'Active' : 'Inactive' }}
-                        </span>
-                    </td>
-                    <td class="px-6 py-4 whitespace-no-wrap">
-                        <a href="{{ route('admin.elements.show', $element->id) }}" class="text-primary hover:text-primary-dark mr-3">View</a>
-                        <a href="{{ route('admin.elements.edit', $element->id) }}" class="text-secondary hover:text-secondary-dark mr-3">Edit</a>
-                        <form action="{{ route('admin.elements.destroy', $element->id) }}" method="POST" class="inline">
-                            @csrf
-                            @method('DELETE')
-                            <button type="submit" class="text-error hover:text-error-dark" onclick="return confirm('Are you sure you want to delete this element?')">Delete</button>
-                        </form>
-                    </td>
-                </tr>
-                @endforeach
-            </tbody>
-        </table>
+    <!-- Main Card -->
+    <div class="card">
+        <div class="card-header">
+            <div class="toolbar">
+                <div class="input-group" style="max-width: 300px;">
+                    <span class="input-group-text"><i class="fas fa-search"></i></span>
+                    <input type="text" id="searchInput" class="form-control" placeholder="Search elements...">
+                </div>
+                <div class="toolbar-actions ms-auto">
+                    <select id="categoryFilter" class="form-select">
+                        <option value="">All Categories</option>
+                        <option value="icons">Icons</option>
+                        <option value="graphics">Graphics</option>
+                        <option value="borders">Borders</option>
+                        <option value="backgrounds">Backgrounds</option>
+                    </select>
+                    <select id="typeFilter" class="form-select">
+                        <option value="">All Types</option>
+                        <option value="icon">Icon</option>
+                        <option value="graphic">Graphic</option>
+                        <option value="border">Border</option>
+                        <option value="background">Background</option>
+                    </select>
+                    <select id="statusFilter" class="form-select">
+                        <option value="">All Status</option>
+                        <option value="active">Active</option>
+                        <option value="inactive">Inactive</option>
+                    </select>
+                    <a href="{{ route('admin.elements.create') }}" class="btn btn-primary">
+                        <i class="fas fa-upload me-2"></i>Upload Element
+                    </a>
+                </div>
+            </div>
+        </div>
+        <div class="card-body p-0">
+            <div class="table-responsive">
+                <table class="table table-hover data-table mb-0">
+                    <thead>
+                        <tr>
+                            <th width="60">ID</th>
+                            <th width="80">Preview</th>
+                            <th>Name</th>
+                            <th>Type</th>
+                            <th>Category</th>
+                            <th>Status</th>
+                            <th width="140">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @forelse($elements as $element)
+                        <tr data-category="{{ strtolower($element->category ?? '') }}" data-type="{{ strtolower($element->type) }}" data-status="{{ $element->is_active ? 'active' : 'inactive' }}">
+                            <td><span class="text-muted">#{{ $element->id }}</span></td>
+                            <td>
+                                @if($element->file_path)
+                                    <img src="{{ asset($element->file_path) }}" alt="{{ $element->name }}" class="rounded" style="width: 48px; height: 48px; object-fit: cover;">
+                                @else
+                                    <div class="d-flex align-items-center justify-content-center bg-light rounded" style="width: 48px; height: 48px;">
+                                        <i class="fas fa-image text-muted"></i>
+                                    </div>
+                                @endif
+                            </td>
+                            <td>
+                                <span class="fw-medium">{{ $element->name }}</span>
+                            </td>
+                            <td>
+                                <span class="badge badge-info">{{ ucfirst($element->type) }}</span>
+                            </td>
+                            <td>{{ ucfirst($element->category ?? 'Uncategorized') }}</td>
+                            <td>
+                                @if($element->is_active)
+                                    <span class="badge badge-success">Active</span>
+                                @else
+                                    <span class="badge badge-danger">Inactive</span>
+                                @endif
+                            </td>
+                            <td>
+                                <div class="table-actions">
+                                    <a href="{{ route('admin.elements.show', $element->id) }}" class="btn btn-icon btn-outline-primary" title="View">
+                                        <i class="fas fa-eye"></i>
+                                    </a>
+                                    <a href="{{ route('admin.elements.edit', $element->id) }}" class="btn btn-icon btn-outline-secondary" title="Edit">
+                                        <i class="fas fa-edit"></i>
+                                    </a>
+                                    <button type="button" class="btn btn-icon btn-outline-danger" title="Delete" onclick="confirmDelete({{ $element->id }}, '{{ addslashes($element->name) }}')">
+                                        <i class="fas fa-trash"></i>
+                                    </button>
+                                </div>
+                            </td>
+                        </tr>
+                        @empty
+                        <tr>
+                            <td colspan="7">
+                                <div class="empty-state">
+                                    <div class="empty-state-icon">
+                                        <i class="fas fa-shapes"></i>
+                                    </div>
+                                    <h4>No Elements Found</h4>
+                                    <p>Get started by uploading your first element.</p>
+                                    <a href="{{ route('admin.elements.create') }}" class="btn btn-primary">
+                                        <i class="fas fa-upload me-2"></i>Upload Element
+                                    </a>
+                                </div>
+                            </td>
+                        </tr>
+                        @endforelse
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <div class="card-footer d-flex justify-content-between align-items-center">
+            <div class="btn-group">
+                <button type="button" class="btn btn-outline-secondary" id="exportCsv">
+                    <i class="fas fa-file-csv me-2"></i>Export CSV
+                </button>
+                <button type="button" class="btn btn-outline-secondary" id="exportExcel">
+                    <i class="fas fa-file-excel me-2"></i>Export Excel
+                </button>
+            </div>
+            @if($elements->hasPages())
+            <div>
+                {{ $elements->links() }}
+            </div>
+            @endif
+        </div>
     </div>
 
-    <div class="mt-4 flex justify-between items-center">
-        <div>
-            <button id="exportCsv" class="bg-primary hover:bg-primary-dark text-primary-dark font-bold py-2 px-4 rounded mr-2">
-                Export CSV
-            </button>
-            <button id="exportExcel" class="bg-primary hover:bg-primary-dark text-primary-dark font-bold py-2 px-4 rounded">
-                Export Excel
-            </button>
-        </div>
-        <div>
-            {{ $elements->links() }}
+    <!-- Delete Confirmation Modal -->
+    <div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="deleteModalLabel">Confirm Delete</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <p>Are you sure you want to delete <strong id="deleteElementName"></strong>?</p>
+                    <p class="text-muted small mb-0">This action cannot be undone.</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                    <form id="deleteForm" method="POST" class="d-inline">
+                        @csrf
+                        @method('DELETE')
+                        <button type="submit" class="btn btn-danger">Delete Element</button>
+                    </form>
+                </div>
+            </div>
         </div>
     </div>
 
+    @push('scripts')
     <script>
-        $(document).ready(function() {
-            // Search functionality
-            $('#searchButton').on('click', function() {
-                const searchTerm = $('#searchInput').val();
-                const categoryFilter = $('#categoryFilter').val();
-                const typeFilter = $('#typeFilter').val();
-                alert(`Searching for: ${searchTerm}, Category: ${categoryFilter}, Type: ${typeFilter}`);
-                // In a real application, this would filter the table
-            });
-            
-            $('#searchInput').on('keypress', function(e) {
-                if (e.which === 13) {
-                    $('#searchButton').click();
-                }
-            });
-            
-            // Filter functionality
-            $('#categoryFilter, #typeFilter').on('change', function() {
-                $('#searchButton').click();
-            });
-            
-            // Export functionality
-            $('#exportCsv').on('click', function() {
-                alert('Exporting data as CSV');
-            });
-            
-            $('#exportExcel').on('click', function() {
-                alert('Exporting data as Excel');
+        // Search functionality
+        document.getElementById('searchInput').addEventListener('input', function() {
+            filterTable();
+        });
+
+        // Filter functionality
+        ['categoryFilter', 'typeFilter', 'statusFilter'].forEach(id => {
+            document.getElementById(id).addEventListener('change', function() {
+                filterTable();
             });
         });
+
+        function filterTable() {
+            const searchTerm = document.getElementById('searchInput').value.toLowerCase();
+            const categoryFilter = document.getElementById('categoryFilter').value.toLowerCase();
+            const typeFilter = document.getElementById('typeFilter').value.toLowerCase();
+            const statusFilter = document.getElementById('statusFilter').value.toLowerCase();
+            const rows = document.querySelectorAll('.data-table tbody tr[data-type]');
+
+            rows.forEach(row => {
+                const text = row.textContent.toLowerCase();
+                const category = row.dataset.category;
+                const type = row.dataset.type;
+                const status = row.dataset.status;
+
+                const matchesSearch = text.includes(searchTerm);
+                const matchesCategory = !categoryFilter || category === categoryFilter;
+                const matchesType = !typeFilter || type === typeFilter;
+                const matchesStatus = !statusFilter || status === statusFilter;
+
+                row.style.display = matchesSearch && matchesCategory && matchesType && matchesStatus ? '' : 'none';
+            });
+        }
+
+        // Delete confirmation
+        function confirmDelete(id, name) {
+            document.getElementById('deleteElementName').textContent = name;
+            document.getElementById('deleteForm').action = `{{ route('admin.elements.index') }}/${id}`;
+            new bootstrap.Modal(document.getElementById('deleteModal')).show();
+        }
+
+        // Export functionality
+        document.getElementById('exportCsv').addEventListener('click', function() {
+            window.location.href = '{{ route("admin.elements.index") }}?export=csv';
+        });
+
+        document.getElementById('exportExcel').addEventListener('click', function() {
+            window.location.href = '{{ route("admin.elements.index") }}?export=excel';
+        });
     </script>
+    @endpush
 </x-admin-layout>

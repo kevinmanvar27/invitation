@@ -1,214 +1,326 @@
+@php
+    $totalCoupons = $coupons->count();
+    $activeCoupons = $coupons->filter(fn($c) => $c->valid_until === null || $c->valid_until->isFuture())->count();
+    $expiredCoupons = $totalCoupons - $activeCoupons;
+    $percentageCoupons = $coupons->where('discount_type', 'percentage')->count();
+@endphp
+
 <x-admin-layout>
     <x-slot name="header">
         <div class="page-header">
-            <h1 class="text-3xl font-bold text-primary-dark">Manage Coupons</h1>
-            <p class="text-accent-dark text-sm mt-1">View and manage all discount coupons</p>
+
+            <nav aria-label="breadcrumb">
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><a href="{{ route('admin.dashboard') }}">Dashboard</a></li>
+                    <li class="breadcrumb-item active" aria-current="page">Coupons</li>
+                </ol>
+            </nav>
         </div>
     </x-slot>
 
-    <div class="py-12">
-        <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
-            <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
-                <div class="p-6 text-primary-dark">
-                    <!-- Header with Search and Add Button -->
-                    <div class="flex flex-col md:flex-row justify-between items-start md:items-center mb-6 gap-4">
-                        <div class="flex-1">
-                            <div class="relative">
-                                <input type="text" id="searchInput" class="search-input" placeholder="Search coupons...">
-                                <div class="absolute inset-y-0 right-0 flex items-center pr-3">
-                                    <svg class="w-5 h-5 text-accent-dark" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
-                                    </svg>
-                                </div>
-                            </div>
-                        </div>
-                        <a href="{{ route('admin.coupons.create') }}" class="btn-primary">
-                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path>
-                            </svg>
-                            Add Coupon
-                        </a>
+    <!-- KPI Stats Row -->
+    <div class="row g-4 mb-4">
+        <div class="col-6 col-lg-3">
+            <div class="stat-card stat-card-primary">
+                <div class="stat-card-body">
+                    <div class="stat-card-icon">
+                        <i class="fas fa-tags"></i>
                     </div>
-
-                    <!-- Statistics Cards -->
-                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
-                        <div class="stat-card">
-                            <div class="flex items-center">
-                                <div class="p-3 rounded-lg bg-primary-light mr-4">
-                                    <svg class="w-6 h-6 text-primary-dark" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z"></path>
-                                    </svg>
-                                </div>
-                                <div>
-                                    <p class="text-sm font-medium text-accent-dark">Total Coupons</p>
-                                    <p class="text-2xl font-semibold text-primary-dark">0</p>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="stat-card">
-                            <div class="flex items-center">
-                                <div class="p-3 rounded-lg bg-secondary-light mr-4">
-                                    <svg class="w-6 h-6 text-accent-dark" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-                                    </svg>
-                                </div>
-                                <div>
-                                    <p class="text-sm font-medium text-accent-dark">Active Coupons</p>
-                                    <p class="text-2xl font-semibold text-primary-dark">0%</p>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="stat-card">
-                            <div class="flex items-center">
-                                <div class="p-3 rounded-lg bg-accent-light mr-4">
-                                    <svg class="w-6 h-6 text-accent-dark" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-                                    </svg>
-                                </div>
-                                <div>
-                                    <p class="text-sm font-medium text-accent-dark">Total Discount Given</p>
-                                    <p class="text-2xl font-semibold text-primary-dark">₹0</p>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="stat-card">
-                            <div class="flex items-center">
-                                <div class="p-3 rounded-lg bg-secondary-light mr-4">
-                                    <svg class="w-6 h-6 text-accent-dark" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"></path>
-                                    </svg>
-                                </div>
-                                <div>
-                                    <p class="text-sm font-medium text-accent-dark">Most Used Coupon</p>
-                                    <p class="text-xl font-semibold text-primary-dark">N/A</p>
-                                </div>
-                            </div>
-                        </div>
+                    <div class="stat-card-content">
+                        <span class="stat-card-value">{{ $totalCoupons }}</span>
+                        <span class="stat-card-label">Total Coupons</span>
                     </div>
-
-                    <!-- Data Table -->
-                    <div class="overflow-x-auto">
-                        <table class="data-table">
-                            <thead>
-                                <tr>
-                                    <th class="text-table-header">ID</th>
-                                    <th class="text-table-header">Code</th>
-                                    <th class="text-table-header">Discount Type</th>
-                                    <th class="text-table-header">Discount Value</th>
-                                    <th class="text-table-header">Min Purchase</th>
-                                    <th class="text-table-header">Valid From</th>
-                                    <th class="text-table-header">Valid Until</th>
-                                    <th class="text-table-header">Usage Limit</th>
-                                    <th class="text-table-header">Actions</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                @foreach($coupons as $coupon)
-                                <tr>
-                                    <td class="text-table-body">{{ $coupon->id }}</td>
-                                    <td class="text-table-body">{{ $coupon->code }}</td>
-                                    <td class="text-table-body">{{ ucfirst($coupon->discount_type) }}</td>
-                                    <td class="text-table-body">
-                                        @if($coupon->discount_type === 'percentage')
-                                            {{ $coupon->discount_value }}%
-                                        @else
-                                            ₹{{ $coupon->discount_value }}
-                                        @endif
-                                    </td>
-                                    <td class="text-table-body">₹{{ $coupon->min_purchase ?? 'N/A' }}</td>
-                                    <td class="text-table-body">{{ $coupon->valid_from->format('M d, Y') }}</td>
-                                    <td class="text-table-body">{{ $coupon->valid_until ? $coupon->valid_until->format('M d, Y') : 'N/A' }}</td>
-                                    <td class="text-table-body">{{ $coupon->usage_limit ?? 'Unlimited' }}</td>
-                                    <td>
-                                        <div class="action-buttons flex gap-2">
-                                            <a href="{{ route('admin.coupons.show', $coupon->id) }}" class="btn-action btn-view">
-                                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
-                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path>
-                                                </svg>
-                                                View
-                                            </a>
-                                            <a href="{{ route('admin.coupons.edit', $coupon->id) }}" class="btn-action btn-edit">
-                                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path>
-                                                </svg>
-                                                Edit
-                                            </a>
-                                            <button class="btn-action btn-delete" onclick="confirmDelete('{{ $coupon->id }}')">
-                                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path>
-                                                </svg>
-                                                Delete
-                                            </button>
-                                        </div>
-                                    </td>
-                                </tr>
-                                @endforeach
-                            </tbody>
-                        </table>
+                </div>
+            </div>
+        </div>
+        <div class="col-6 col-lg-3">
+            <div class="stat-card stat-card-success">
+                <div class="stat-card-body">
+                    <div class="stat-card-icon">
+                        <i class="fas fa-check-circle"></i>
                     </div>
-
-                    <!-- Pagination -->
-                    <div class="mt-6">
-                        {{ $coupons->links() }}
+                    <div class="stat-card-content">
+                        <span class="stat-card-value">{{ $activeCoupons }}</span>
+                        <span class="stat-card-label">Active</span>
                     </div>
-
-                    <!-- Export Buttons -->
-                    <div class="mt-6 flex justify-end space-x-4">
-                        <button class="btn-secondary">
-                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
-                            </svg>
-                            Export CSV
-                        </button>
-                        <button class="btn-secondary">
-                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 17v-2m3 2v-4m3 4v-6m2 10H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
-                            </svg>
-                            Export Excel
-                        </button>
+                </div>
+            </div>
+        </div>
+        <div class="col-6 col-lg-3">
+            <div class="stat-card stat-card-warning">
+                <div class="stat-card-body">
+                    <div class="stat-card-icon">
+                        <i class="fas fa-clock"></i>
+                    </div>
+                    <div class="stat-card-content">
+                        <span class="stat-card-value">{{ $expiredCoupons }}</span>
+                        <span class="stat-card-label">Expired</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-6 col-lg-3">
+            <div class="stat-card stat-card-info">
+                <div class="stat-card-body">
+                    <div class="stat-card-icon">
+                        <i class="fas fa-percent"></i>
+                    </div>
+                    <div class="stat-card-content">
+                        <span class="stat-card-value">{{ $percentageCoupons }}</span>
+                        <span class="stat-card-label">Percentage Type</span>
                     </div>
                 </div>
             </div>
         </div>
     </div>
 
+    <!-- Toolbar -->
+    <div class="toolbar mb-4">
+        <div class="input-group" style="max-width: 300px;">
+            <span class="input-group-text"><i class="fas fa-search"></i></span>
+            <input type="text" id="searchInput" class="form-control" placeholder="Search coupons...">
+        </div>
+        
+        <div class="toolbar-actions ms-auto">
+            <select id="typeFilter" class="form-select">
+                <option value="">All Types</option>
+                <option value="percentage">Percentage</option>
+                <option value="fixed">Fixed Amount</option>
+            </select>
+            
+            <select id="statusFilter" class="form-select">
+                <option value="">All Status</option>
+                <option value="active">Active</option>
+                <option value="expired">Expired</option>
+            </select>
+            
+            <a href="{{ route('admin.coupons.create') }}" class="btn btn-primary">
+                <i class="fas fa-plus me-1"></i>Add Coupon
+            </a>
+        </div>
+    </div>
+
+    <!-- Coupons Table -->
+    <div class="card">
+        <div class="card-body p-0">
+            @if($coupons->count() > 0)
+                <div class="table-responsive">
+                    <table class="table table-hover data-table mb-0">
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Code</th>
+                                <th>Discount</th>
+                                <th>Min Purchase</th>
+                                <th>Valid Period</th>
+                                <th>Usage</th>
+                                <th>Status</th>
+                                <th class="text-end">Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach($coupons as $coupon)
+                            @php
+                                $isExpired = $coupon->valid_until && $coupon->valid_until->isPast();
+                                $isActive = !$isExpired && ($coupon->valid_from === null || $coupon->valid_from->isPast());
+                            @endphp
+                            <tr data-type="{{ $coupon->discount_type }}" data-status="{{ $isExpired ? 'expired' : 'active' }}">
+                                <td>
+                                    <span class="fw-medium text-primary">#{{ $coupon->id }}</span>
+                                </td>
+                                <td>
+                                    <div class="d-flex align-items-center gap-2">
+                                        <code class="bg-light px-2 py-1 rounded">{{ $coupon->code }}</code>
+                                        <button type="button" class="btn btn-sm btn-link p-0 copy-code" data-code="{{ $coupon->code }}" title="Copy code">
+                                            <i class="fas fa-copy text-muted"></i>
+                                        </button>
+                                    </div>
+                                </td>
+                                <td>
+                                    @if($coupon->discount_type === 'percentage')
+                                        <span class="badge badge-info">
+                                            <i class="fas fa-percent me-1"></i>{{ $coupon->discount_value }}%
+                                        </span>
+                                    @else
+                                        <span class="badge badge-success">
+                                            <i class="fas fa-rupee-sign me-1"></i>{{ number_format($coupon->discount_value) }}
+                                        </span>
+                                    @endif
+                                </td>
+                                <td>
+                                    @if($coupon->min_purchase)
+                                        <span class="text-muted">₹{{ number_format($coupon->min_purchase) }}</span>
+                                    @else
+                                        <span class="text-muted">No minimum</span>
+                                    @endif
+                                </td>
+                                <td>
+                                    <div class="small">
+                                        <span class="text-muted">From:</span> {{ $coupon->valid_from->format('M d, Y') }}
+                                        <br>
+                                        <span class="text-muted">Until:</span> 
+                                        @if($coupon->valid_until)
+                                            {{ $coupon->valid_until->format('M d, Y') }}
+                                        @else
+                                            <span class="text-success">No expiry</span>
+                                        @endif
+                                    </div>
+                                </td>
+                                <td>
+                                    @if($coupon->usage_limit)
+                                        <span class="badge badge-light">{{ $coupon->times_used ?? 0 }} / {{ $coupon->usage_limit }}</span>
+                                    @else
+                                        <span class="text-muted">Unlimited</span>
+                                    @endif
+                                </td>
+                                <td>
+                                    @if($isExpired)
+                                        <span class="badge badge-danger">
+                                            <i class="fas fa-times-circle me-1"></i>Expired
+                                        </span>
+                                    @elseif($isActive)
+                                        <span class="badge badge-success">
+                                            <i class="fas fa-check-circle me-1"></i>Active
+                                        </span>
+                                    @else
+                                        <span class="badge badge-warning">
+                                            <i class="fas fa-clock me-1"></i>Scheduled
+                                        </span>
+                                    @endif
+                                </td>
+                                <td>
+                                    <div class="table-actions">
+                                        <a href="{{ route('admin.coupons.show', $coupon->id) }}" 
+                                           class="btn btn-icon btn-outline-primary" 
+                                           title="View Details">
+                                            <i class="fas fa-eye"></i>
+                                        </a>
+                                        <a href="{{ route('admin.coupons.edit', $coupon->id) }}" 
+                                           class="btn btn-icon btn-outline-warning" 
+                                           title="Edit">
+                                            <i class="fas fa-edit"></i>
+                                        </a>
+                                        <button type="button" 
+                                                class="btn btn-icon btn-outline-danger" 
+                                                onclick="confirmDelete({{ $coupon->id }}, '{{ $coupon->code }}')"
+                                                title="Delete">
+                                            <i class="fas fa-trash"></i>
+                                        </button>
+                                    </div>
+                                </td>
+                            </tr>
+                            @endforeach
+                        </tbody>
+                    </table>
+                </div>
+                
+                @if($coupons->hasPages())
+                    <div class="card-footer">
+                        {{ $coupons->links() }}
+                    </div>
+                @endif
+            @else
+                <div class="empty-state">
+                    <div class="empty-state-icon">
+                        <i class="fas fa-tags"></i>
+                    </div>
+                    <h3>No Coupons Found</h3>
+                    <p>Create your first discount coupon to attract customers.</p>
+                    <a href="{{ route('admin.coupons.create') }}" class="btn btn-primary">
+                        <i class="fas fa-plus me-1"></i>Create Coupon
+                    </a>
+                </div>
+            @endif
+        </div>
+    </div>
+
+    <!-- Delete Modal -->
+    <div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="deleteModalLabel">Delete Coupon</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <p>Are you sure you want to delete coupon "<strong id="deleteItemName"></strong>"?</p>
+                    <p class="text-muted small">This action cannot be undone.</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                    <form id="deleteForm" method="POST" style="display: inline;">
+                        @csrf
+                        @method('DELETE')
+                        <button type="submit" class="btn btn-danger">
+                            <i class="fas fa-trash me-1"></i>Delete
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    @push('scripts')
     <script>
-        function confirmDelete(couponId) {
-            if (confirm('Are you sure you want to delete this coupon? This action cannot be undone.')) {
-                // Create a form dynamically and submit it
-                const form = document.createElement('form');
-                form.method = 'POST';
-                form.action = '{{ url("admin/coupons") }}/' + couponId;
-                
-                const csrfToken = document.createElement('input');
-                csrfToken.type = 'hidden';
-                csrfToken.name = '_token';
-                csrfToken.value = '{{ csrf_token() }}';
-                form.appendChild(csrfToken);
-                
-                const method = document.createElement('input');
-                method.type = 'hidden';
-                method.name = '_method';
-                method.value = 'DELETE';
-                form.appendChild(method);
-                
-                document.body.appendChild(form);
-                form.submit();
-            }
+        // Delete confirmation
+        function confirmDelete(id, name) {
+            document.getElementById('deleteItemName').textContent = name;
+            document.getElementById('deleteForm').action = `/admin/coupons/${id}`;
+            new bootstrap.Modal(document.getElementById('deleteModal')).show();
         }
         
-        $(document).ready(function() {
+        document.addEventListener('DOMContentLoaded', function() {
             // Search functionality
-            $('#searchInput').on('keyup', function() {
-                const value = $(this).val().toLowerCase();
-                $('tbody tr').filter(function() {
-                    $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
+            const searchInput = document.getElementById('searchInput');
+            const tableRows = document.querySelectorAll('.data-table tbody tr');
+            
+            searchInput.addEventListener('keyup', function() {
+                const searchTerm = this.value.toLowerCase();
+                
+                tableRows.forEach(row => {
+                    const text = row.textContent.toLowerCase();
+                    row.style.display = text.includes(searchTerm) ? '' : 'none';
+                });
+            });
+            
+            // Filter functionality
+            const typeFilter = document.getElementById('typeFilter');
+            const statusFilter = document.getElementById('statusFilter');
+            
+            function applyFilters() {
+                const type = typeFilter.value;
+                const status = statusFilter.value;
+                
+                tableRows.forEach(row => {
+                    const rowType = row.dataset.type;
+                    const rowStatus = row.dataset.status;
+                    
+                    const typeMatch = !type || rowType === type;
+                    const statusMatch = !status || rowStatus === status;
+                    
+                    row.style.display = (typeMatch && statusMatch) ? '' : 'none';
+                });
+            }
+            
+            typeFilter.addEventListener('change', applyFilters);
+            statusFilter.addEventListener('change', applyFilters);
+            
+            // Copy code functionality
+            document.querySelectorAll('.copy-code').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    const code = this.dataset.code;
+                    navigator.clipboard.writeText(code).then(() => {
+                        const icon = this.querySelector('i');
+                        icon.classList.remove('fa-copy');
+                        icon.classList.add('fa-check', 'text-success');
+                        setTimeout(() => {
+                            icon.classList.remove('fa-check', 'text-success');
+                            icon.classList.add('fa-copy', 'text-muted');
+                        }, 2000);
+                    });
                 });
             });
         });
     </script>
+    @endpush
 </x-admin-layout>

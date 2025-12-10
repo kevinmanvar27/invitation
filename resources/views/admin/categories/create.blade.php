@@ -1,89 +1,146 @@
 <x-admin-layout>
     <x-slot name="header">
-        <h2 class="font-semibold text-xl text-primary-dark leading-tight">
-            {{ __('Create Template Category') }}
-        </h2>
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="{{ route('admin.dashboard') }}">Dashboard</a></li>
+                <li class="breadcrumb-item"><a href="{{ route('admin.categories.index') }}">Categories</a></li>
+                <li class="breadcrumb-item active" aria-current="page">Create</li>
+            </ol>
+        </nav>
     </x-slot>
 
-    <div class="py-12">
-        <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
-            <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
-                <div class="p-6 text-primary-dark">
-                    <h3 class="text-lg font-medium mb-4">Add New Template Category</h3>
-
-                    <form method="POST" action="{{ route('admin.categories.store') }}">
+    <div class="row justify-content-center">
+        <div class="col-lg-8">
+            <div class="card">
+                <div class="card-header">
+                    <h5 class="card-title mb-0">
+                        <i class="fas fa-folder-plus me-2"></i>New Category Details
+                    </h5>
+                </div>
+                <div class="card-body">
+                    <form method="POST" action="{{ route('admin.categories.store') }}" id="createCategoryForm">
                         @csrf
                         
-                        <!-- Name -->
-                        <div class="mb-4">
-                            <label for="name" class="block text-primary-dark text-sm font-bold mb-2">Name</label>
-                            <input type="text" name="name" id="name" class="shadow appearance-none border border-accent rounded w-full py-2 px-3 text-primary-dark leading-tight focus:outline-none focus:shadow-outline" value="{{ old('name') }}" required>
-                            @error('name')
-                                <p class="text-error-dark text-xs italic mt-2">{{ $message }}</p>
-                            @enderror
-                        </div>
-
-                        <!-- Slug -->
-                        <div class="mb-4">
-                            <label for="slug" class="block text-primary-dark text-sm font-bold mb-2">Slug</label>
-                            <input type="text" name="slug" id="slug" class="shadow appearance-none border border-accent rounded w-full py-2 px-3 text-primary-dark leading-tight focus:outline-none focus:shadow-outline" value="{{ old('slug') }}" required>
-                            @error('slug')
-                                <p class="text-error-dark text-xs italic mt-2">{{ $message }}</p>
-                            @enderror
-                        </div>
-
-                        <!-- Parent Category -->
-                        <div class="mb-4">
-                            <label for="parent_id" class="block text-primary-dark text-sm font-bold mb-2">Parent Category</label>
-                            <select name="parent_id" id="parent_id" class="shadow appearance-none border border-accent rounded w-full py-2 px-3 text-primary-dark leading-tight focus:outline-none focus:shadow-outline">
-                                <option value="">None (Top Level)</option>
-                                @foreach($categories as $category)
-                                    <option value="{{ $category->id }}" {{ old('parent_id') == $category->id ? 'selected' : '' }}>{{ $category->name }}</option>
-                                @endforeach
-                            </select>
-                            @error('parent_id')
-                                <p class="text-error-dark text-xs italic mt-2">{{ $message }}</p>
-                            @enderror
-                        </div>
-
-                        <!-- Order -->
-                        <div class="mb-4">
-                            <label for="order" class="block text-primary-dark text-sm font-bold mb-2">Order</label>
-                            <input type="number" name="order" id="order" class="shadow appearance-none border border-accent rounded w-full py-2 px-3 text-primary-dark leading-tight focus:outline-none focus:shadow-outline" value="{{ old('order', 0) }}">
-                            @error('order')
-                                <p class="text-error-dark text-xs italic mt-2">{{ $message }}</p>
-                            @enderror
-                        </div>
-
-                        <!-- Icon -->
-                        <div class="mb-4">
-                            <label for="icon" class="block text-primary-dark text-sm font-bold mb-2">Icon</label>
-                            <input type="text" name="icon" id="icon" class="shadow appearance-none border border-accent rounded w-full py-2 px-3 text-primary-dark leading-tight focus:outline-none focus:shadow-outline" value="{{ old('icon') }}">
-                            @error('icon')
-                                <p class="text-error-dark text-xs italic mt-2">{{ $message }}</p>
-                            @enderror
-                        </div>
-
-                        <!-- Description -->
-                        <div class="mb-4">
-                            <label for="description" class="block text-primary-dark text-sm font-bold mb-2">Description</label>
-                            <textarea name="description" id="description" class="shadow appearance-none border border-accent rounded w-full py-2 px-3 text-primary-dark leading-tight focus:outline-none focus:shadow-outline" rows="3">{{ old('description') }}</textarea>
-                            @error('description')
-                                <p class="text-error-dark text-xs italic mt-2">{{ $message }}</p>
-                            @enderror
-                        </div>
-
-                        <div class="flex items-center justify-between">
-                            <a href="{{ route('admin.categories.index') }}" class="bg-secondary hover:bg-secondary-dark text-primary-dark font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">
-                                Cancel
-                            </a>
-                            <button type="submit" class="bg-primary hover:bg-primary-dark text-primary-dark font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">
-                                Create Category
-                            </button>
+                        <div class="row g-3">
+                            <!-- Name -->
+                            <div class="col-md-6">
+                                <label for="name" class="form-label">Name <span class="text-danger">*</span></label>
+                                <input type="text" 
+                                       name="name" 
+                                       id="name" 
+                                       class="form-control @error('name') is-invalid @enderror" 
+                                       value="{{ old('name') }}" 
+                                       placeholder="Enter category name"
+                                       required>
+                                @error('name')
+                                    <div class="invalid-feedback">{{ $message }}</div>
+                                @enderror
+                            </div>
+                            
+                            <!-- Slug -->
+                            <div class="col-md-6">
+                                <label for="slug" class="form-label">Slug <span class="text-danger">*</span></label>
+                                <input type="text" 
+                                       name="slug" 
+                                       id="slug" 
+                                       class="form-control @error('slug') is-invalid @enderror" 
+                                       value="{{ old('slug') }}" 
+                                       placeholder="category-url-slug"
+                                       required>
+                                @error('slug')
+                                    <div class="invalid-feedback">{{ $message }}</div>
+                                @enderror
+                                <small class="text-muted">URL-friendly identifier</small>
+                            </div>
+                            
+                            <!-- Parent Category -->
+                            <div class="col-md-6">
+                                <label for="parent_id" class="form-label">Parent Category</label>
+                                <select name="parent_id" id="parent_id" class="form-select @error('parent_id') is-invalid @enderror">
+                                    <option value="">None (Top Level)</option>
+                                    @foreach($categories as $category)
+                                        <option value="{{ $category->id }}" {{ old('parent_id') == $category->id ? 'selected' : '' }}>
+                                            {{ $category->name }}
+                                        </option>
+                                    @endforeach
+                                </select>
+                                @error('parent_id')
+                                    <div class="invalid-feedback">{{ $message }}</div>
+                                @enderror
+                            </div>
+                            
+                            <!-- Order -->
+                            <div class="col-md-3">
+                                <label for="order" class="form-label">Display Order</label>
+                                <input type="number" 
+                                       name="order" 
+                                       id="order" 
+                                       class="form-control @error('order') is-invalid @enderror" 
+                                       value="{{ old('order', 0) }}"
+                                       min="0">
+                                @error('order')
+                                    <div class="invalid-feedback">{{ $message }}</div>
+                                @enderror
+                            </div>
+                            
+                            <!-- Icon -->
+                            <div class="col-md-3">
+                                <label for="icon" class="form-label">Icon</label>
+                                <div class="input-group">
+                                    <span class="input-group-text"><i class="fas fa-icons"></i></span>
+                                    <input type="text" 
+                                           name="icon" 
+                                           id="icon" 
+                                           class="form-control @error('icon') is-invalid @enderror" 
+                                           value="{{ old('icon') }}"
+                                           placeholder="fa-heart">
+                                </div>
+                                @error('icon')
+                                    <div class="invalid-feedback">{{ $message }}</div>
+                                @enderror
+                                <small class="text-muted">FontAwesome icon class</small>
+                            </div>
+                            
+                            <!-- Description -->
+                            <div class="col-12">
+                                <label for="description" class="form-label">Description</label>
+                                <textarea name="description" 
+                                          id="description" 
+                                          class="form-control @error('description') is-invalid @enderror" 
+                                          rows="3" 
+                                          placeholder="Describe this category...">{{ old('description') }}</textarea>
+                                @error('description')
+                                    <div class="invalid-feedback">{{ $message }}</div>
+                                @enderror
+                            </div>
                         </div>
                     </form>
+                </div>
+                <div class="card-footer bg-transparent">
+                    <div class="d-flex justify-content-between">
+                        <a href="{{ route('admin.categories.index') }}" class="btn btn-secondary">
+                            <i class="fas fa-arrow-left me-1"></i> Back to Categories
+                        </a>
+                        <button type="submit" form="createCategoryForm" class="btn btn-primary">
+                            <i class="fas fa-save me-1"></i> Create Category
+                        </button>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
+
+    @push('scripts')
+    <script>
+        // Auto-generate slug from name
+        document.getElementById('name').addEventListener('input', function() {
+            const slug = this.value
+                .toLowerCase()
+                .replace(/[^a-z0-9\s-]/g, '')
+                .replace(/\s+/g, '-')
+                .replace(/-+/g, '-');
+            document.getElementById('slug').value = slug;
+        });
+    </script>
+    @endpush
 </x-admin-layout>

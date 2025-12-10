@@ -1,180 +1,249 @@
+@php
+    $totalAddresses = $shippingAddresses->count();
+    $defaultAddresses = $shippingAddresses->where('is_default', true)->count();
+@endphp
+
 <x-admin-layout>
     <x-slot name="header">
         <div class="page-header">
-            <h1 class="text-3xl font-bold text-primary-dark">Manage Shipping Addresses</h1>
-            <p class="text-accent-dark text-sm mt-1">View and manage all shipping addresses</p>
+
+            <nav aria-label="breadcrumb">
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><a href="{{ route('admin.dashboard') }}">Dashboard</a></li>
+                    <li class="breadcrumb-item active" aria-current="page">Shipping Addresses</li>
+                </ol>
+            </nav>
         </div>
     </x-slot>
 
-    <div class="py-12">
-        <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
-            <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
-                <div class="p-6 text-primary-dark">
-                    <!-- Header with Search and Add Button -->
-                    <div class="flex flex-col md:flex-row justify-between items-start md:items-center mb-6 gap-4">
-                        <div class="flex-1">
-                            <div class="relative">
-                                <input type="text" id="searchInput" class="search-input" placeholder="Search addresses...">
-                                <div class="absolute inset-y-0 right-0 flex items-center pr-3">
-                                    <svg class="w-5 h-5 text-accent-dark" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
-                                    </svg>
-                                </div>
-                            </div>
-                        </div>
-                        <a href="{{ route('admin.shipping-addresses.create') }}" class="btn-primary">
-                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path>
-                            </svg>
-                            Add Shipping Address
-                        </a>
+    <!-- KPI Stats Row -->
+    <div class="row g-4 mb-4">
+        <div class="col-6 col-lg-3">
+            <div class="stat-card stat-card-primary">
+                <div class="stat-card-body">
+                    <div class="stat-card-icon">
+                        <i class="fas fa-map-marker-alt"></i>
                     </div>
-
-                    <!-- Filters -->
-                    <div class="flex flex-col md:flex-row justify-between items-start md:items-center mb-6 gap-4">
-                        <div class="w-full md:w-1/3">
-                            <label class="block text-sm font-medium text-primary-dark mb-1">Filter by User</label>
-                            <select class="search-input">
-                                <option>All Users</option>
-                                <!-- Add user options here -->
-                            </select>
-                        </div>
-                        <div class="flex gap-2">
-                            <button class="btn-secondary">
-                                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.293A1 1 0 013 6.586V4z"></path>
-                                </svg>
-                                Filter
-                            </button>
-                            <button class="btn-secondary">
-                                Clear
-                            </button>
-                        </div>
+                    <div class="stat-card-content">
+                        <span class="stat-card-value">{{ $totalAddresses }}</span>
+                        <span class="stat-card-label">Total Addresses</span>
                     </div>
-
-                    <!-- Data Table -->
-                    <div class="overflow-x-auto">
-                        <table class="data-table">
-                            <thead>
-                                <tr>
-                                    <th class="text-table-header">ID</th>
-                                    <th class="text-table-header">User</th>
-                                    <th class="text-table-header">Full Name</th>
-                                    <th class="text-table-header">Address</th>
-                                    <th class="text-table-header">Phone</th>
-                                    <th class="text-table-header">Default</th>
-                                    <th class="text-table-header">Actions</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                @foreach($shippingAddresses as $shippingAddress)
-                                <tr>
-                                    <td class="text-table-body">{{ $shippingAddress->id }}</td>
-                                    <td class="text-table-body">{{ $shippingAddress->user->name ?? 'N/A' }}</td>
-                                    <td class="text-table-body">{{ $shippingAddress->full_name }}</td>
-                                    <td class="text-table-body">
-                                        {{ $shippingAddress->address_line1 }}
-                                        @if($shippingAddress->address_line2)
-                                            <br>{{ $shippingAddress->address_line2 }}
-                                        @endif
-                                        <br>{{ $shippingAddress->city }}, {{ $shippingAddress->state }} {{ $shippingAddress->postal_code }}
-                                        <br>{{ $shippingAddress->country }}
-                                    </td>
-                                    <td class="text-table-body">{{ $shippingAddress->phone }}</td>
-                                    <td class="text-table-body">
-                                        @if($shippingAddress->is_default)
-                                            <span class="badge badge-success">Yes</span>
-                                        @else
-                                            <span class="badge badge-neutral">No</span>
-                                        @endif
-                                    </td>
-                                    <td>
-                                        <div class="action-buttons flex gap-2">
-                                            <a href="{{ route('admin.shipping-addresses.show', $shippingAddress->id) }}" class="btn-action btn-view">
-                                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
-                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path>
-                                                </svg>
-                                                View
-                                            </a>
-                                            <a href="{{ route('admin.shipping-addresses.edit', $shippingAddress->id) }}" class="btn-action btn-edit">
-                                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path>
-                                                </svg>
-                                                Edit
-                                            </a>
-                                            <button class="btn-action btn-delete" onclick="confirmDelete('{{ $shippingAddress->id }}')">
-                                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path>
-                                                </svg>
-                                                Delete
-                                            </button>
-                                        </div>
-                                    </td>
-                                </tr>
-                                @endforeach
-                            </tbody>
-                        </table>
+                </div>
+            </div>
+        </div>
+        <div class="col-6 col-lg-3">
+            <div class="stat-card stat-card-success">
+                <div class="stat-card-body">
+                    <div class="stat-card-icon">
+                        <i class="fas fa-star"></i>
                     </div>
-
-                    <!-- Pagination -->
-                    <div class="mt-6">
-                        {{ $shippingAddresses->links() }}
-                    </div>
-
-                    <!-- Export Buttons -->
-                    <div class="mt-6 flex justify-end space-x-4">
-                        <button class="btn-secondary">
-                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
-                            </svg>
-                            Export CSV
-                        </button>
-                        <button class="btn-secondary">
-                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 17v-2m3 2v-4m3 4v-6m2 10H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
-                            </svg>
-                            Export Excel
-                        </button>
+                    <div class="stat-card-content">
+                        <span class="stat-card-value">{{ $defaultAddresses }}</span>
+                        <span class="stat-card-label">Default Addresses</span>
                     </div>
                 </div>
             </div>
         </div>
     </div>
 
+    <!-- Toolbar -->
+    <div class="toolbar mb-4">
+        <div class="input-group" style="max-width: 300px;">
+            <span class="input-group-text"><i class="fas fa-search"></i></span>
+            <input type="text" id="searchInput" class="form-control" placeholder="Search addresses...">
+        </div>
+        
+        <div class="toolbar-actions ms-auto">
+            <select id="defaultFilter" class="form-select">
+                <option value="">All Addresses</option>
+                <option value="default">Default Only</option>
+                <option value="non-default">Non-Default</option>
+            </select>
+            
+            <a href="{{ route('admin.shipping-addresses.create') }}" class="btn btn-primary">
+                <i class="fas fa-plus me-1"></i>Add Address
+            </a>
+        </div>
+    </div>
+
+    <!-- Shipping Addresses Table -->
+    <div class="card">
+        <div class="card-body p-0">
+            @if($shippingAddresses->count() > 0)
+                <div class="table-responsive">
+                    <table class="table table-hover data-table mb-0">
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>User</th>
+                                <th>Full Name</th>
+                                <th>Address</th>
+                                <th>Phone</th>
+                                <th>Default</th>
+                                <th class="text-end">Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach($shippingAddresses as $shippingAddress)
+                            <tr data-default="{{ $shippingAddress->is_default ? 'default' : 'non-default' }}">
+                                <td>
+                                    <span class="fw-medium text-primary">#{{ $shippingAddress->id }}</span>
+                                </td>
+                                <td>
+                                    @if($shippingAddress->user)
+                                        <div class="d-flex align-items-center gap-2">
+                                            <div class="avatar avatar-sm">
+                                                @if($shippingAddress->user->avatar)
+                                                    <img src="{{ asset('storage/' . $shippingAddress->user->avatar) }}" alt="{{ $shippingAddress->user->name }}">
+                                                @else
+                                                    <span class="avatar-initials">{{ strtoupper(substr($shippingAddress->user->name, 0, 1)) }}</span>
+                                                @endif
+                                            </div>
+                                            <span>{{ $shippingAddress->user->name }}</span>
+                                        </div>
+                                    @else
+                                        <span class="text-muted">N/A</span>
+                                    @endif
+                                </td>
+                                <td>
+                                    <span class="fw-medium">{{ $shippingAddress->full_name }}</span>
+                                </td>
+                                <td>
+                                    <div class="small">
+                                        <i class="fas fa-map-marker-alt text-muted me-1"></i>
+                                        {{ $shippingAddress->address_line1 }}
+                                        @if($shippingAddress->address_line2)
+                                            <br><span class="ms-3">{{ $shippingAddress->address_line2 }}</span>
+                                        @endif
+                                        <br><span class="ms-3 text-muted">{{ $shippingAddress->city }}, {{ $shippingAddress->state }} {{ $shippingAddress->postal_code }}</span>
+                                        <br><span class="ms-3 text-muted">{{ $shippingAddress->country }}</span>
+                                    </div>
+                                </td>
+                                <td>
+                                    <a href="tel:{{ $shippingAddress->phone }}" class="text-muted">
+                                        <i class="fas fa-phone me-1"></i>{{ $shippingAddress->phone }}
+                                    </a>
+                                </td>
+                                <td>
+                                    @if($shippingAddress->is_default)
+                                        <span class="badge badge-success">
+                                            <i class="fas fa-star me-1"></i>Default
+                                        </span>
+                                    @else
+                                        <span class="badge badge-light">No</span>
+                                    @endif
+                                </td>
+                                <td>
+                                    <div class="table-actions">
+                                        <a href="{{ route('admin.shipping-addresses.show', $shippingAddress->id) }}" 
+                                           class="btn btn-icon btn-outline-primary" 
+                                           title="View Details">
+                                            <i class="fas fa-eye"></i>
+                                        </a>
+                                        <a href="{{ route('admin.shipping-addresses.edit', $shippingAddress->id) }}" 
+                                           class="btn btn-icon btn-outline-warning" 
+                                           title="Edit">
+                                            <i class="fas fa-edit"></i>
+                                        </a>
+                                        <button type="button" 
+                                                class="btn btn-icon btn-outline-danger" 
+                                                onclick="confirmDelete({{ $shippingAddress->id }}, '{{ $shippingAddress->full_name }}')"
+                                                title="Delete">
+                                            <i class="fas fa-trash"></i>
+                                        </button>
+                                    </div>
+                                </td>
+                            </tr>
+                            @endforeach
+                        </tbody>
+                    </table>
+                </div>
+                
+                @if($shippingAddresses->hasPages())
+                    <div class="card-footer">
+                        {{ $shippingAddresses->links() }}
+                    </div>
+                @endif
+            @else
+                <div class="empty-state">
+                    <div class="empty-state-icon">
+                        <i class="fas fa-map-marker-alt"></i>
+                    </div>
+                    <h3>No Shipping Addresses Found</h3>
+                    <p>No shipping addresses have been added yet.</p>
+                    <a href="{{ route('admin.shipping-addresses.create') }}" class="btn btn-primary">
+                        <i class="fas fa-plus me-1"></i>Add Address
+                    </a>
+                </div>
+            @endif
+        </div>
+    </div>
+
+    <!-- Delete Modal -->
+    <div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="deleteModalLabel">Delete Shipping Address</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <p>Are you sure you want to delete the address for "<strong id="deleteItemName"></strong>"?</p>
+                    <p class="text-muted small">This action cannot be undone.</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                    <form id="deleteForm" method="POST" style="display: inline;">
+                        @csrf
+                        @method('DELETE')
+                        <button type="submit" class="btn btn-danger">
+                            <i class="fas fa-trash me-1"></i>Delete
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    @push('scripts')
     <script>
-        function confirmDelete(addressId) {
-            if (confirm('Are you sure you want to delete this shipping address? This action cannot be undone.')) {
-                // Create a form dynamically and submit it
-                const form = document.createElement('form');
-                form.method = 'POST';
-                form.action = '{{ url("admin/shipping-addresses") }}/' + addressId;
-                
-                const csrfToken = document.createElement('input');
-                csrfToken.type = 'hidden';
-                csrfToken.name = '_token';
-                csrfToken.value = '{{ csrf_token() }}';
-                form.appendChild(csrfToken);
-                
-                const method = document.createElement('input');
-                method.type = 'hidden';
-                method.name = '_method';
-                method.value = 'DELETE';
-                form.appendChild(method);
-                
-                document.body.appendChild(form);
-                form.submit();
-            }
+        // Delete confirmation
+        function confirmDelete(id, name) {
+            document.getElementById('deleteItemName').textContent = name;
+            document.getElementById('deleteForm').action = `/admin/shipping-addresses/${id}`;
+            new bootstrap.Modal(document.getElementById('deleteModal')).show();
         }
         
-        $(document).ready(function() {
+        document.addEventListener('DOMContentLoaded', function() {
             // Search functionality
-            $('#searchInput').on('keyup', function() {
-                const value = $(this).val().toLowerCase();
-                $('tbody tr').filter(function() {
-                    $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
+            const searchInput = document.getElementById('searchInput');
+            const tableRows = document.querySelectorAll('.data-table tbody tr');
+            
+            searchInput.addEventListener('keyup', function() {
+                const searchTerm = this.value.toLowerCase();
+                
+                tableRows.forEach(row => {
+                    const text = row.textContent.toLowerCase();
+                    row.style.display = text.includes(searchTerm) ? '' : 'none';
                 });
             });
+            
+            // Filter functionality
+            const defaultFilter = document.getElementById('defaultFilter');
+            
+            function applyFilters() {
+                const filter = defaultFilter.value;
+                
+                tableRows.forEach(row => {
+                    const rowDefault = row.dataset.default;
+                    const match = !filter || rowDefault === filter;
+                    
+                    row.style.display = match ? '' : 'none';
+                });
+            }
+            
+            defaultFilter.addEventListener('change', applyFilters);
         });
     </script>
+    @endpush
 </x-admin-layout>

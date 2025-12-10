@@ -66,4 +66,12 @@ class Template extends Model
     {
         return $this->hasMany(UserDesign::class);
     }
+
+    /**
+     * Alias for userDesigns - Get designs using this template.
+     */
+    public function designs(): HasMany
+    {
+        return $this->hasMany(UserDesign::class);
+    }
 }

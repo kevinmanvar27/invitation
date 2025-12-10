@@ -1,249 +1,303 @@
 <x-admin-layout>
     <x-slot name="header">
-        <div class="row mb-2">
-            <div class="col-sm-6">
-                <h1>Manage Subscriptions</h1>
-            </div>
-            <div class="col-sm-6">
-                <ol class="breadcrumb float-sm-right">
-                    <li class="breadcrumb-item"><a href="{{ route('admin.dashboard') }}">Dashboard</a></li>
-                    <li class="breadcrumb-item active">Subscriptions</li>
-                </ol>
-            </div>
-        </div>
-        <p class="text-muted">View and manage all user subscriptions</p>
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="{{ route('admin.dashboard') }}">Dashboard</a></li>
+                <li class="breadcrumb-item active" aria-current="page">Subscriptions</li>
+            </ol>
+        </nav>
     </x-slot>
 
-    <div class="container-fluid">
-        <!-- Unified Toolbar -->
-        <div class="toolbar">
-            <div class="d-flex flex-column flex-sm-row gap-2 flex-grow-1">
-                <input type="text" id="searchInput" class="toolbar-search" placeholder="Search subscriptions...">
-                
-                <div class="toolbar-filters">
-                    <select id="planFilter" class="toolbar-select">
-                        <option value="">All Plans</option>
-                        <option value="basic">Basic</option>
-                        <option value="premium">Premium</option>
-                        <option value="enterprise">Enterprise</option>
-                    </select>
-                    
-                    <select id="statusFilter" class="toolbar-select">
-                        <option value="">All Statuses</option>
-                        <option value="active">Active</option>
-                        <option value="inactive">Inactive</option>
-                        <option value="cancelled">Cancelled</option>
-                    </select>
-                    
-                    <button type="button" class="btn btn-secondary" id="filterButton">
-                        <i class="fas fa-filter"></i>
-                        Filter
-                    </button>
-                    
-                    <a href="#" class="btn btn-ghost" id="clearFilters">
-                        Clear
-                    </a>
+    <!-- KPI Stats Row -->
+    <div class="row mb-4">
+        <div class="col-lg-3 col-md-6 mb-3">
+            <div class="stat-card">
+                <div class="stat-card-content">
+                    <div class="stat-card-value">₹{{ number_format($mrr ?? 0, 2) }}</div>
+                    <div class="stat-card-label">Monthly Recurring Revenue</div>
                 </div>
-            </div>
-            
-            <div class="d-flex gap-2 ms-auto">
-                <a href="{{ route('admin.subscriptions.create') }}" class="btn btn-primary">
-                    <i class="fas fa-plus"></i>
-                    Add Subscription
-                </a>
-            </div>
-        </div>
-        
-        <!-- KPI Cards -->
-        <div class="row mb-4">
-            <div class="col-lg-3 col-6 mb-4">
-                <div class="card card-stat">
-                    <div class="inner">
-                        <h3>₹{{ number_format($mrr ?? 0, 2) }}</h3>
-                        <p>MRR</p>
-                    </div>
-                    <div class="icon">
-                        <i class="fas fa-rupee-sign"></i>
-                    </div>
-                </div>
-            </div>
-            
-            <div class="col-lg-3 col-6 mb-4">
-                <div class="card card-stat">
-                    <div class="inner">
-                        <h3>{{ $activeSubscriptions ?? 0 }}</h3>
-                        <p>Active Subscriptions</p>
-                    </div>
-                    <div class="icon">
-                        <i class="fas fa-users"></i>
-                    </div>
-                </div>
-            </div>
-            
-            <div class="col-lg-3 col-6 mb-4">
-                <div class="card card-stat">
-                    <div class="inner">
-                        <h3>{{ $churnRate ?? 0 }}%</h3>
-                        <p>Churn Rate</p>
-                    </div>
-                    <div class="icon">
-                        <i class="fas fa-chart-line"></i>
-                    </div>
-                </div>
-            </div>
-            
-            <div class="col-lg-3 col-6 mb-4">
-                <div class="card card-stat">
-                    <div class="inner">
-                        <h3>₹{{ number_format($avgRevenue ?? 0, 2) }}</h3>
-                        <p>Avg. Revenue/User</p>
-                    </div>
-                    <div class="icon">
-                        <i class="fas fa-chart-bar"></i>
-                    </div>
+                <div class="stat-card-icon primary">
+                    <i class="fas fa-rupee-sign"></i>
                 </div>
             </div>
         </div>
-        
-        <div class="card">
-            <div class="card-body">
-                <!-- Data Table -->
-                <div class="table-container">
-                    <table id="subscriptionsTable" class="data-table">
-                        <thead>
-                            <tr>
-                                <th>ID</th>
-                                <th>User Name</th>
-                                <th>Plan Name</th>
-                                <th class="text-right">Price</th>
-                                <th>Start Date</th>
-                                <th>End Date</th>
-                                <th>Status</th>
-                                <th>Auto-renewal</th>
-                                <th>Actions</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            @foreach($subscriptions as $subscription)
-                            <tr>
-                                <td>{{ $subscription->id }}</td>
-                                <td>{{ $subscription->user->name ?? 'N/A' }}</td>
-                                <td>{{ $subscription->plan_name }}</td>
-                                <td class="text-right">₹{{ number_format($subscription->price, 2) }}</td>
-                                <td>{{ $subscription->start_date ? $subscription->start_date->format('M d, Y') : 'N/A' }}</td>
-                                <td>{{ $subscription->end_date ? $subscription->end_date->format('M d, Y') : 'N/A' }}</td>
-                                <td>
-                                    @if($subscription->status === 'active')
-                                        <span class="badge badge-success">Active</span>
-                                    @elseif($subscription->status === 'cancelled')
-                                        <span class="badge badge-danger">Cancelled</span>
-                                    @else
-                                        <span class="badge badge-warning">Inactive</span>
-                                    @endif
-                                </td>
-                                <td>
-                                    @if($subscription->auto_renewal)
-                                        <span class="badge badge-info">Yes</span>
-                                    @else
-                                        <span class="badge badge-secondary">No</span>
-                                    @endif
-                                </td>
-                                <td>
-                                    <div class="btn-group" role="group">
-                                        <button data-subscription-id="{{ $subscription->id }}" class="extend-subscription-btn btn btn-secondary btn-sm">
-                                            <i class="fas fa-redo"></i>
-                                            Extend
-                                        </button>
-                                        <a href="{{ route('admin.subscriptions.edit', $subscription->id) }}" class="btn btn-secondary btn-sm">
-                                            <i class="fas fa-pencil-alt"></i>
-                                            Edit
-                                        </a>
-                                        <button class="btn btn-danger btn-sm" onclick="confirmDelete('{{ $subscription->id }}')">
-                                            <i class="fas fa-trash"></i>
-                                            Delete
-                                        </button>
-                                    </div>
-                                </td>
-                            </tr>
-                            @endforeach
-                        </tbody>
-                    </table>
+        <div class="col-lg-3 col-md-6 mb-3">
+            <div class="stat-card">
+                <div class="stat-card-content">
+                    <div class="stat-card-value">{{ $activeSubscriptions ?? 0 }}</div>
+                    <div class="stat-card-label">Active Subscriptions</div>
                 </div>
-
-                <!-- Pagination -->
-                <div class="pagination mt-4">
-                    {{ $subscriptions->links() }}
+                <div class="stat-card-icon secondary">
+                    <i class="fas fa-users"></i>
                 </div>
-
-                <!-- Export Buttons -->
-                <div class="mt-4 d-flex justify-content-end gap-2">
-                    <button id="exportCsv" class="btn btn-ghost">
-                        <i class="fas fa-file-csv"></i>
-                        Export CSV
-                    </button>
-                    <button id="exportExcel" class="btn btn-ghost">
-                        <i class="fas fa-file-excel"></i>
-                        Export Excel
-                    </button>
+            </div>
+        </div>
+        <div class="col-lg-3 col-md-6 mb-3">
+            <div class="stat-card">
+                <div class="stat-card-content">
+                    <div class="stat-card-value">{{ $churnRate ?? 0 }}%</div>
+                    <div class="stat-card-label">Churn Rate</div>
+                </div>
+                <div class="stat-card-icon accent">
+                    <i class="fas fa-chart-line"></i>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-3 col-md-6 mb-3">
+            <div class="stat-card">
+                <div class="stat-card-content">
+                    <div class="stat-card-value">₹{{ number_format($avgRevenue ?? 0, 2) }}</div>
+                    <div class="stat-card-label">Avg. Revenue/User</div>
+                </div>
+                <div class="stat-card-icon info">
+                    <i class="fas fa-chart-bar"></i>
                 </div>
             </div>
         </div>
     </div>
 
+    <!-- Toolbar -->
+    <div class="toolbar mb-4">
+        <form method="GET" action="{{ route('admin.subscriptions.index') }}" class="toolbar-search-form">
+            <div class="input-group">
+                <span class="input-group-text bg-white border-end-0">
+                    <i class="fas fa-search text-muted"></i>
+                </span>
+                <input type="text" name="search" value="{{ request('search') }}" 
+                       class="form-control border-start-0" 
+                       placeholder="Search subscriptions...">
+            </div>
+            
+            <select name="plan" class="form-select">
+                <option value="">All Plans</option>
+                <option value="basic" {{ request('plan') === 'basic' ? 'selected' : '' }}>Basic</option>
+                <option value="premium" {{ request('plan') === 'premium' ? 'selected' : '' }}>Premium</option>
+                <option value="enterprise" {{ request('plan') === 'enterprise' ? 'selected' : '' }}>Enterprise</option>
+            </select>
+            
+            <select name="status" class="form-select">
+                <option value="">All Statuses</option>
+                <option value="active" {{ request('status') === 'active' ? 'selected' : '' }}>Active</option>
+                <option value="inactive" {{ request('status') === 'inactive' ? 'selected' : '' }}>Inactive</option>
+                <option value="cancelled" {{ request('status') === 'cancelled' ? 'selected' : '' }}>Cancelled</option>
+            </select>
+            
+            <button type="submit" class="btn btn-secondary">
+                <i class="fas fa-filter me-1"></i> Filter
+            </button>
+            
+            @if(request()->hasAny(['search', 'plan', 'status']))
+                <a href="{{ route('admin.subscriptions.index') }}" class="btn btn-outline-secondary">
+                    <i class="fas fa-times me-1"></i> Clear
+                </a>
+            @endif
+        </form>
+        
+        <div class="toolbar-actions">
+            <a href="{{ route('admin.subscriptions.create') }}" class="btn btn-primary">
+                <i class="fas fa-plus me-1"></i> Add Subscription
+            </a>
+        </div>
+    </div>
+    
+    <!-- Data Card -->
+    <div class="card">
+        <div class="card-body p-0">
+            <div class="table-responsive">
+                <table class="table table-hover data-table mb-0">
+                    <thead>
+                        <tr>
+                            <th width="60">ID</th>
+                            <th>User</th>
+                            <th>Plan</th>
+                            <th width="100" class="text-end">Price</th>
+                            <th width="110">Start Date</th>
+                            <th width="110">End Date</th>
+                            <th width="100">Status</th>
+                            <th width="90" class="text-center">Renewal</th>
+                            <th width="180" class="text-end">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @forelse($subscriptions as $subscription)
+                            <tr>
+                                <td class="text-muted">#{{ $subscription->id }}</td>
+                                <td>
+                                    @if($subscription->user)
+                                        <div class="d-flex align-items-center">
+                                            <img src="https://ui-avatars.com/api/?name={{ urlencode($subscription->user->name) }}&color=ffffff&background=ff6b6b&size=28" 
+                                                 class="rounded-circle me-2" 
+                                                 width="28" 
+                                                 height="28" 
+                                                 alt="{{ $subscription->user->name }}">
+                                            <span>{{ $subscription->user->name }}</span>
+                                        </div>
+                                    @else
+                                        <span class="text-muted">—</span>
+                                    @endif
+                                </td>
+                                <td>
+                                    <span class="badge badge-primary">{{ $subscription->plan_name }}</span>
+                                </td>
+                                <td class="text-end fw-medium">₹{{ number_format($subscription->price, 2) }}</td>
+                                <td class="text-muted">
+                                    {{ $subscription->start_date ? $subscription->start_date->format('M d, Y') : '—' }}
+                                </td>
+                                <td class="text-muted">
+                                    {{ $subscription->end_date ? $subscription->end_date->format('M d, Y') : '—' }}
+                                </td>
+                                <td>
+                                    @if($subscription->status === 'active')
+                                        <span class="badge badge-success">
+                                            <i class="fas fa-check-circle me-1"></i>Active
+                                        </span>
+                                    @elseif($subscription->status === 'cancelled')
+                                        <span class="badge badge-danger">
+                                            <i class="fas fa-times-circle me-1"></i>Cancelled
+                                        </span>
+                                    @else
+                                        <span class="badge badge-warning">
+                                            <i class="fas fa-pause-circle me-1"></i>Inactive
+                                        </span>
+                                    @endif
+                                </td>
+                                <td class="text-center">
+                                    @if($subscription->auto_renewal)
+                                        <span class="badge badge-info">
+                                            <i class="fas fa-sync me-1"></i>Yes
+                                        </span>
+                                    @else
+                                        <span class="badge badge-secondary">No</span>
+                                    @endif
+                                </td>
+                                <td>
+                                    <div class="table-actions">
+                                        <button type="button" 
+                                                class="btn btn-icon btn-outline-secondary" 
+                                                data-bs-toggle="tooltip" 
+                                                title="Extend"
+                                                onclick="extendSubscription('{{ $subscription->id }}')">
+                                            <i class="fas fa-redo"></i>
+                                        </button>
+                                        <a href="{{ route('admin.subscriptions.show', $subscription->id) }}" 
+                                           class="btn btn-icon btn-outline-secondary" 
+                                           data-bs-toggle="tooltip" 
+                                           title="View">
+                                            <i class="fas fa-eye"></i>
+                                        </a>
+                                        <a href="{{ route('admin.subscriptions.edit', $subscription->id) }}" 
+                                           class="btn btn-icon btn-outline-primary" 
+                                           data-bs-toggle="tooltip" 
+                                           title="Edit">
+                                            <i class="fas fa-pencil-alt"></i>
+                                        </a>
+                                        <button type="button" 
+                                                class="btn btn-icon btn-outline-danger" 
+                                                data-bs-toggle="tooltip" 
+                                                title="Delete"
+                                                onclick="confirmDelete('{{ $subscription->id }}', '{{ $subscription->plan_name }}')">
+                                            <i class="fas fa-trash"></i>
+                                        </button>
+                                    </div>
+                                </td>
+                            </tr>
+                        @empty
+                            <tr>
+                                <td colspan="9">
+                                    <div class="empty-state">
+                                        <div class="empty-state-icon">
+                                            <i class="fas fa-credit-card"></i>
+                                        </div>
+                                        <h5 class="empty-state-title">No subscriptions found</h5>
+                                        <p class="empty-state-description">Get started by creating a new subscription.</p>
+                                        <a href="{{ route('admin.subscriptions.create') }}" class="btn btn-primary">
+                                            <i class="fas fa-plus me-1"></i> Add Subscription
+                                        </a>
+                                    </div>
+                                </td>
+                            </tr>
+                        @endforelse
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        
+        @if($subscriptions->hasPages())
+            <div class="card-footer bg-transparent">
+                {{ $subscriptions->links() }}
+            </div>
+        @endif
+    </div>
+
+    <!-- Delete Confirmation Modal -->
+    <div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header border-0">
+                    <h5 class="modal-title" id="deleteModalLabel">
+                        <i class="fas fa-exclamation-triangle text-danger me-2"></i>Confirm Delete
+                    </h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <p>Are you sure you want to delete the <strong id="deleteSubscriptionName"></strong> subscription?</p>
+                    <p class="text-muted mb-0">This action cannot be undone.</p>
+                </div>
+                <div class="modal-footer border-0">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                    <form id="deleteForm" method="POST" class="d-inline">
+                        @csrf
+                        @method('DELETE')
+                        <button type="submit" class="btn btn-danger">
+                            <i class="fas fa-trash me-1"></i> Delete
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Extend Subscription Modal -->
+    <div class="modal fade" id="extendModal" tabindex="-1" aria-labelledby="extendModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header border-0">
+                    <h5 class="modal-title" id="extendModalLabel">
+                        <i class="fas fa-redo text-primary me-2"></i>Extend Subscription
+                    </h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <form id="extendForm" method="POST">
+                    @csrf
+                    <div class="modal-body">
+                        <div class="mb-3">
+                            <label for="extendDays" class="form-label">Extension Period (Days)</label>
+                            <input type="number" class="form-control" id="extendDays" name="days" value="30" min="1" required>
+                        </div>
+                    </div>
+                    <div class="modal-footer border-0">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                        <button type="submit" class="btn btn-primary">
+                            <i class="fas fa-redo me-1"></i> Extend
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    @push('scripts')
     <script>
-        function confirmDelete(subscriptionId) {
-            if (confirm('Are you sure you want to delete this subscription? This action cannot be undone.')) {
-                // Create a form dynamically and submit it
-                const form = document.createElement('form');
-                form.method = 'POST';
-                form.action = '{{ url("admin/subscriptions") }}/' + subscriptionId;
-                
-                const csrfToken = document.createElement('input');
-                csrfToken.type = 'hidden';
-                csrfToken.name = '_token';
-                csrfToken.value = '{{ csrf_token() }}';
-                form.appendChild(csrfToken);
-                
-                const method = document.createElement('input');
-                method.type = 'hidden';
-                method.name = '_method';
-                method.value = 'DELETE';
-                form.appendChild(method);
-                
-                document.body.appendChild(form);
-                form.submit();
-            }
+        function confirmDelete(subscriptionId, planName) {
+            document.getElementById('deleteSubscriptionName').textContent = planName;
+            document.getElementById('deleteForm').action = `{{ url('admin/subscriptions') }}/${subscriptionId}`;
+            new bootstrap.Modal(document.getElementById('deleteModal')).show();
         }
         
-        $(document).ready(function() {
-            // Initialize DataTables
-            $("#subscriptionsTable").DataTable({
-                "responsive": true,
-                "lengthChange": false,
-                "autoWidth": false,
-                "buttons": ["copy", "csv", "excel", "pdf", "print", "colvis"]
-            });
-            
-            // Search functionality
-            $('#searchInput').on('keyup', function() {
-                const value = $(this).val().toLowerCase();
-                $('tbody tr').filter(function() {
-                    $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
-                });
-            });
-            
-            // Filter functionality
-            $('#planFilter, #statusFilter').on('change', function() {
-                // In a real application, this would filter the table
-                alert('Filtering functionality would be implemented here');
-            });
-            
-            // Extend subscription functionality
-            $('.extend-subscription-btn').on('click', function() {
-                const subscriptionId = $(this).data('subscription-id');
-                alert(`Extending subscription with ID: ${subscriptionId}`);
-                // In a real application, this would open a modal or form to extend the subscription
-            });
-        });
+        function extendSubscription(subscriptionId) {
+            document.getElementById('extendForm').action = `{{ url('admin/subscriptions') }}/${subscriptionId}/extend`;
+            new bootstrap.Modal(document.getElementById('extendModal')).show();
+        }
     </script>
+    @endpush
 </x-admin-layout>

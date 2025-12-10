@@ -1259,3 +1259,60 @@ h3 {
     order: 2;
   }
 }
+
+/* ==========================================================================
+   AdminLTE Sidebar Customizations
+   ========================================================================== */
+
+/* Nav Header / Section Titles - Proper spacing and styling */
+.nav-sidebar .nav-header {
+  padding: 0.75rem 1rem 0.5rem 1rem;
+  margin-top: 1rem;
+  margin-bottom: 0.25rem;
+  font-size: 0.7rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: rgba(255, 255, 255, 0.4);
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+/* First nav-header should not have top border or margin */
+.nav-sidebar .nav-header:first-child,
+.nav-sidebar > .nav-item:first-child + .nav-header {
+  margin-top: 0.5rem;
+  border-top: none;
+}
+
+/* Ensure nav items have consistent padding */
+.nav-sidebar > .nav-item > .nav-link {
+  padding: 0.6rem 1rem;
+}
+
+/* Active nav link styling */
+.nav-sidebar > .nav-item > .nav-link.active {
+  background-color: rgba(255, 255, 255, 0.1);
+  color: #fff;
+}
+
+/* Hover state for nav links */
+.nav-sidebar > .nav-item > .nav-link:hover {
+  background-color: rgba(255, 255, 255, 0.05);
+}
+
+/* Nav icon alignment */
+.nav-sidebar .nav-link .nav-icon {
+  margin-right: 0.5rem;
+  width: 1.6rem;
+  text-align: center;
+}
+
+/* Sidebar collapsed state - hide section headers text */
+.sidebar-mini.sidebar-collapse .nav-sidebar .nav-header {
+  display: none;
+}
+
+/* Sidebar brand spacing */
+.sidebar-dark-primary .brand-link {
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}

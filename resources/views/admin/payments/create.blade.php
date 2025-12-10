@@ -1,101 +1,158 @@
 <x-admin-layout>
-    <x-slot name="header">
-        <h2 class="font-semibold text-xl text-primary-dark leading-tight">
-            {{ __('Create Payment') }}
-        </h2>
-    </x-slot>
+    <!-- Page Header -->
+            <nav aria-label="breadcrumb">
+                <ol class="breadcrumb mb-0">
+                    <li class="breadcrumb-item"><a href="{{ route('admin.dashboard') }}">Dashboard</a></li>
+                    <li class="breadcrumb-item"><a href="{{ route('admin.payments.index') }}">Payments</a></li>
+                    <li class="breadcrumb-item active">Create</li>
+                </ol>
+            </nav>
+        </div>
+    </div>
 
-    <div class="py-12">
-        <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
-            <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
-                <div class="p-6 text-primary-dark">
-                    <h3 class="text-lg font-medium mb-6">Create New Payment</h3>
-
-                    <form action="{{ route('admin.payments.store') }}" method="POST">
-                        @csrf
-                        
-                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                            <div>
-                                <label for="user_id" class="block text-sm font-medium text-primary-dark">User</label>
-                                <select name="user_id" id="user_id" class="mt-1 block w-full border border-accent rounded-md shadow-sm focus:ring-primary focus:border-primary sm:text-sm" required>
+    <!-- Create Form -->
+    <div class="row justify-content-center">
+        <div class="col-lg-8">
+            <div class="card">
+                <div class="card-header">
+                    <div class="d-flex align-items-center gap-3">
+                        <div class="avatar bg-primary text-white d-flex align-items-center justify-content-center" style="width: 48px; height: 48px;">
+                            <i class="fas fa-credit-card fs-5"></i>
+                        </div>
+                        <div>
+                            <h5 class="mb-0">Payment Details</h5>
+                            <small class="text-muted">Enter the payment information below</small>
+                        </div>
+                    </div>
+                </div>
+                <form action="{{ route('admin.payments.store') }}" method="POST">
+                    @csrf
+                    <div class="card-body">
+                        <div class="row g-3">
+                            <!-- User -->
+                            <div class="col-md-6">
+                                <label for="user_id" class="form-label">User <span class="text-danger">*</span></label>
+                                <select name="user_id" id="user_id" class="form-select @error('user_id') is-invalid @enderror" required>
                                     <option value="">Select User</option>
-                                    <!-- In a real application, this would be populated with actual users -->
-                                    <option value="1">John Doe</option>
-                                    <option value="2">Jane Smith</option>
+                                    @if(isset($users))
+                                        @foreach($users as $user)
+                                            <option value="{{ $user->id }}" {{ old('user_id') == $user->id ? 'selected' : '' }}>{{ $user->name }} ({{ $user->email }})</option>
+                                        @endforeach
+                                    @endif
                                 </select>
                                 @error('user_id')
-                                    <p class="mt-1 text-sm text-error-dark">{{ $message }}</p>
+                                    <div class="invalid-feedback">{{ $message }}</div>
                                 @enderror
                             </div>
-                            
-                            <div>
-                                <label for="amount" class="block text-sm font-medium text-primary-dark">Amount</label>
-                                <input type="number" name="amount" id="amount" step="0.01" min="0" class="mt-1 block w-full border border-accent rounded-md shadow-sm focus:ring-primary focus:border-primary sm:text-sm" required>
-                                @error('amount')
-                                    <p class="mt-1 text-sm text-error-dark">{{ $message }}</p>
+
+                            <!-- Amount -->
+                            <div class="col-md-6">
+                                <label for="amount" class="form-label">Amount <span class="text-danger">*</span></label>
+                                <div class="input-group">
+                                    <span class="input-group-text">$</span>
+                                    <input type="number" name="amount" id="amount" step="0.01" min="0" value="{{ old('amount') }}" class="form-control @error('amount') is-invalid @enderror" placeholder="0.00" required>
+                                    @error('amount')
+                                        <div class="invalid-feedback">{{ $message }}</div>
+                                    @enderror
+                                </div>
+                            </div>
+
+                            <!-- Currency -->
+                            <div class="col-md-6">
+                                <label for="currency" class="form-label">Currency <span class="text-danger">*</span></label>
+                                <select name="currency" id="currency" class="form-select @error('currency') is-invalid @enderror" required>
+                                    <option value="USD" {{ old('currency') == 'USD' ? 'selected' : '' }}>USD - US Dollar</option>
+                                    <option value="EUR" {{ old('currency') == 'EUR' ? 'selected' : '' }}>EUR - Euro</option>
+                                    <option value="GBP" {{ old('currency') == 'GBP' ? 'selected' : '' }}>GBP - British Pound</option>
+                                    <option value="CAD" {{ old('currency') == 'CAD' ? 'selected' : '' }}>CAD - Canadian Dollar</option>
+                                    <option value="AUD" {{ old('currency') == 'AUD' ? 'selected' : '' }}>AUD - Australian Dollar</option>
+                                </select>
+                                @error('currency')
+                                    <div class="invalid-feedback">{{ $message }}</div>
                                 @enderror
                             </div>
-                            
-                            <div>
-                                <label for="payment_method" class="block text-sm font-medium text-primary-dark">Payment Method</label>
-                                <select name="payment_method" id="payment_method" class="mt-1 block w-full border border-accent rounded-md shadow-sm focus:ring-primary focus:border-primary sm:text-sm" required>
+
+                            <!-- Payment Method -->
+                            <div class="col-md-6">
+                                <label for="payment_method" class="form-label">Payment Method <span class="text-danger">*</span></label>
+                                <select name="payment_method" id="payment_method" class="form-select @error('payment_method') is-invalid @enderror" required>
                                     <option value="">Select Payment Method</option>
-                                    <option value="credit_card">Credit Card</option>
-                                    <option value="debit_card">Debit Card</option>
-                                    <option value="paypal">PayPal</option>
-                                    <option value="bank_transfer">Bank Transfer</option>
+                                    <option value="credit_card" {{ old('payment_method') == 'credit_card' ? 'selected' : '' }}>Credit Card</option>
+                                    <option value="debit_card" {{ old('payment_method') == 'debit_card' ? 'selected' : '' }}>Debit Card</option>
+                                    <option value="paypal" {{ old('payment_method') == 'paypal' ? 'selected' : '' }}>PayPal</option>
+                                    <option value="bank_transfer" {{ old('payment_method') == 'bank_transfer' ? 'selected' : '' }}>Bank Transfer</option>
                                 </select>
                                 @error('payment_method')
-                                    <p class="mt-1 text-sm text-error-dark">{{ $message }}</p>
+                                    <div class="invalid-feedback">{{ $message }}</div>
                                 @enderror
                             </div>
-                            
-                            <div>
-                                <label for="gateway" class="block text-sm font-medium text-primary-dark">Payment Gateway</label>
-                                <select name="gateway" id="gateway" class="mt-1 block w-full border border-accent rounded-md shadow-sm focus:ring-primary focus:border-primary sm:text-sm" required>
+
+                            <!-- Payment Gateway -->
+                            <div class="col-md-6">
+                                <label for="gateway" class="form-label">Payment Gateway <span class="text-danger">*</span></label>
+                                <select name="gateway" id="gateway" class="form-select @error('gateway') is-invalid @enderror" required>
                                     <option value="">Select Gateway</option>
-                                    <option value="stripe">Stripe</option>
-                                    <option value="paypal">PayPal</option>
-                                    <option value="bank">Bank Transfer</option>
+                                    <option value="stripe" {{ old('gateway') == 'stripe' ? 'selected' : '' }}>Stripe</option>
+                                    <option value="paypal" {{ old('gateway') == 'paypal' ? 'selected' : '' }}>PayPal</option>
+                                    <option value="bank" {{ old('gateway') == 'bank' ? 'selected' : '' }}>Bank Transfer</option>
                                 </select>
                                 @error('gateway')
-                                    <p class="mt-1 text-sm text-error-dark">{{ $message }}</p>
+                                    <div class="invalid-feedback">{{ $message }}</div>
                                 @enderror
                             </div>
-                            
-                            <div>
-                                <label for="transaction_id" class="block text-sm font-medium text-primary-dark">Transaction ID</label>
-                                <input type="text" name="transaction_id" id="transaction_id" class="mt-1 block w-full border border-accent rounded-md shadow-sm focus:ring-primary focus:border-primary sm:text-sm" required>
+
+                            <!-- Transaction ID -->
+                            <div class="col-md-6">
+                                <label for="transaction_id" class="form-label">Transaction ID <span class="text-danger">*</span></label>
+                                <input type="text" name="transaction_id" id="transaction_id" value="{{ old('transaction_id') }}" class="form-control @error('transaction_id') is-invalid @enderror" placeholder="e.g., txn_1234567890" required>
                                 @error('transaction_id')
-                                    <p class="mt-1 text-sm text-error-dark">{{ $message }}</p>
+                                    <div class="invalid-feedback">{{ $message }}</div>
                                 @enderror
+                                <div class="form-text">Unique identifier from the payment gateway</div>
                             </div>
-                            
-                            <div>
-                                <label for="status" class="block text-sm font-medium text-primary-dark">Status</label>
-                                <select name="status" id="status" class="mt-1 block w-full border border-accent rounded-md shadow-sm focus:ring-primary focus:border-primary sm:text-sm" required>
+
+                            <!-- Status -->
+                            <div class="col-md-6">
+                                <label for="status" class="form-label">Status <span class="text-danger">*</span></label>
+                                <select name="status" id="status" class="form-select @error('status') is-invalid @enderror" required>
                                     <option value="">Select Status</option>
-                                    <option value="pending">Pending</option>
-                                    <option value="completed">Completed</option>
-                                    <option value="failed">Failed</option>
-                                    <option value="refunded">Refunded</option>
+                                    <option value="pending" {{ old('status') == 'pending' ? 'selected' : '' }}>Pending</option>
+                                    <option value="completed" {{ old('status') == 'completed' ? 'selected' : '' }}>Completed</option>
+                                    <option value="failed" {{ old('status') == 'failed' ? 'selected' : '' }}>Failed</option>
+                                    <option value="refunded" {{ old('status') == 'refunded' ? 'selected' : '' }}>Refunded</option>
                                 </select>
                                 @error('status')
-                                    <p class="mt-1 text-sm text-error-dark">{{ $message }}</p>
+                                    <div class="invalid-feedback">{{ $message }}</div>
                                 @enderror
                             </div>
+
+                            <!-- Subscription (Optional) -->
+                            <div class="col-md-6">
+                                <label for="subscription_id" class="form-label">Subscription</label>
+                                <select name="subscription_id" id="subscription_id" class="form-select @error('subscription_id') is-invalid @enderror">
+                                    <option value="">No Subscription</option>
+                                    @if(isset($subscriptions))
+                                        @foreach($subscriptions as $subscription)
+                                            <option value="{{ $subscription->id }}" {{ old('subscription_id') == $subscription->id ? 'selected' : '' }}>{{ $subscription->plan_type }} - {{ $subscription->user->name ?? 'Unknown' }}</option>
+                                        @endforeach
+                                    @endif
+                                </select>
+                                @error('subscription_id')
+                                    <div class="invalid-feedback">{{ $message }}</div>
+                                @enderror
+                                <div class="form-text">Link this payment to a subscription (optional)</div>
+                            </div>
                         </div>
-                        
-                        <div class="mt-6">
-                            <button type="submit" class="bg-primary hover:bg-primary-dark text-primary-dark font-bold py-2 px-4 rounded">
-                                Create Payment
-                            </button>
-                            <a href="{{ route('admin.payments.index') }}" class="ml-2 bg-secondary hover:bg-secondary-dark text-primary-dark font-bold py-2 px-4 rounded">
-                                Cancel
-                            </a>
-                        </div>
-                    </form>
-                </div>
+                    </div>
+                    <div class="card-footer d-flex justify-content-between">
+                        <a href="{{ route('admin.payments.index') }}" class="btn btn-outline-secondary">
+                            <i class="fas fa-times me-1"></i> Cancel
+                        </a>
+                        <button type="submit" class="btn btn-primary">
+                            <i class="fas fa-save me-1"></i> Create Payment
+                        </button>
+                    </div>
+                </form>
             </div>
         </div>
     </div>

@@ -55,27 +55,30 @@ class UserDesignController extends Controller
 
     /**
      * Display the specified resource.
+     * Route parameter: {design}
      */
-    public function show(UserDesign $userDesign)
+    public function show(UserDesign $design)
     {
-        $userDesign->load('user', 'template', 'customization', 'sharedInvitations', 'downloads');
-        return view('admin.designs.show', compact('userDesign'));
+        $design->load('user', 'template', 'customization', 'sharedInvitations', 'downloads');
+        return view('admin.designs.show', compact('design'));
     }
 
     /**
      * Show the form for editing the specified resource.
+     * Route parameter: {design}
      */
-    public function edit(UserDesign $userDesign)
+    public function edit(UserDesign $design)
     {
         $users = User::all();
         $templates = Template::all();
-        return view('admin.designs.edit', compact('userDesign', 'users', 'templates'));
+        return view('admin.designs.edit', compact('design', 'users', 'templates'));
     }
 
     /**
      * Update the specified resource in storage.
+     * Route parameter: {design}
      */
-    public function update(Request $request, UserDesign $userDesign)
+    public function update(Request $request, UserDesign $design)
     {
         $request->validate([
             'user_id' => 'required|exists:users,id',
@@ -85,7 +88,7 @@ class UserDesignController extends Controller
             'status' => 'required|string|max:50',
         ]);
 
-        $userDesign->update([
+        $design->update([
             'user_id' => $request->user_id,
             'template_id' => $request->template_id,
             'design_name' => $request->design_name,
@@ -98,10 +101,45 @@ class UserDesignController extends Controller
 
     /**
      * Remove the specified resource from storage.
+     * Route parameter: {design}
      */
-    public function destroy(UserDesign $userDesign)
+    public function destroy(UserDesign $design)
     {
-        $userDesign->delete();
+        $design->delete();
         return redirect()->route('admin.designs.index')->with('success', 'Design deleted successfully.');
+    }
+
+    /**
+     * Export designs to CSV.
+     */
+    public function export(Request $request)
+    {
+        $designs = UserDesign::with('user', 'template')->get();
+        $filename = 'designs_' . date('Y-m-d') . '.csv';
+        
+        $headers = [
+            'Content-Type' => 'text/csv',
+            'Content-Disposition' => "attachment; filename=$filename",
+        ];
+        
+        $callback = function() use ($designs) {
+            $file = fopen('php://output', 'w');
+            fputcsv($file, ['ID', 'Design Name', 'User', 'Template', 'Status', 'Completed', 'Created At']);
+            
+            foreach ($designs as $design) {
+                fputcsv($file, [
+                    $design->id,
+                    $design->design_name,
+                    $design->user->name ?? 'N/A',
+                    $design->template->name ?? 'N/A',
+                    $design->status,
+                    $design->is_completed ? 'Yes' : 'No',
+                    $design->created_at
+                ]);
+            }
+            fclose($file);
+        };
+        
+        return response()->stream($callback, 200, $headers);
     }
 }

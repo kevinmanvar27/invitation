@@ -1,67 +1,209 @@
+{{-- Fonts Index - Admin Panel --}}
+{{-- Updated to Bootstrap 5 + custom admin theme --}}
+
+@php
+    $totalFonts = $fonts->total() ?? count($fonts);
+    $activeFonts = $fonts->where('is_active', true)->count();
+    $inactiveFonts = $fonts->where('is_active', false)->count();
+@endphp
+
 <x-admin-layout>
     <x-slot name="header">
         <div class="page-header">
-            <h1 class="page-header-title text-primary-dark">Fonts</h1>
-            <p class="page-header-subtitle text-secondary-dark">Manage fonts used in invitation designs</p>
+
+            <nav aria-label="breadcrumb">
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><a href="{{ route('admin.dashboard') }}">Dashboard</a></li>
+                    <li class="breadcrumb-item active" aria-current="page">Fonts</li>
+                </ol>
+            </nav>
         </div>
     </x-slot>
 
-    <!-- Header with Search and Upload Button -->
-    <div class="flex justify-between items-center mb-6">
-        <h3 class="text-lg font-medium text-primary-dark">Fonts</h3>
-        <div class="flex space-x-2">
-            <input type="text" id="searchInput" placeholder="Search fonts..." class="border border-accent rounded px-4 py-2 text-primary-dark">
-            <button id="searchButton" class="bg-primary hover:bg-primary-dark text-primary-dark font-bold py-2 px-4 rounded">
-                Search
-            </button>
-            <button id="uploadButton" class="bg-primary hover:bg-primary-dark text-primary-dark font-bold py-2 px-4 rounded">
-                Upload Font
-            </button>
+    <!-- Stats Cards -->
+    <div class="row g-4 mb-4">
+        <div class="col-md-4">
+            <div class="stat-card stat-card-primary">
+                <div class="stat-card-icon">
+                    <i class="fas fa-font"></i>
+                </div>
+                <div class="stat-card-body">
+                    <div class="stat-card-content">
+                        <span class="stat-card-value">{{ $totalFonts }}</span>
+                        <span class="stat-card-label">Total Fonts</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="stat-card stat-card-success">
+                <div class="stat-card-icon">
+                    <i class="fas fa-check-circle"></i>
+                </div>
+                <div class="stat-card-body">
+                    <div class="stat-card-content">
+                        <span class="stat-card-value">{{ $activeFonts }}</span>
+                        <span class="stat-card-label">Active Fonts</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="stat-card stat-card-warning">
+                <div class="stat-card-icon">
+                    <i class="fas fa-pause-circle"></i>
+                </div>
+                <div class="stat-card-body">
+                    <div class="stat-card-content">
+                        <span class="stat-card-value">{{ $inactiveFonts }}</span>
+                        <span class="stat-card-label">Inactive Fonts</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Card -->
+    <div class="card">
+        <div class="card-header">
+            <div class="toolbar">
+                <div class="input-group" style="max-width: 300px;">
+                    <span class="input-group-text"><i class="fas fa-search"></i></span>
+                    <input type="text" id="searchInput" class="form-control" placeholder="Search fonts...">
+                </div>
+                <div class="toolbar-actions ms-auto">
+                    <select id="statusFilter" class="form-select">
+                        <option value="">All Status</option>
+                        <option value="active">Active</option>
+                        <option value="inactive">Inactive</option>
+                    </select>
+                    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#uploadModal">
+                        <i class="fas fa-upload me-2"></i>Upload Font
+                    </button>
+                </div>
+            </div>
+        </div>
+        <div class="card-body p-0">
+            <div class="table-responsive">
+                <table class="table table-hover data-table mb-0">
+                    <thead>
+                        <tr>
+                            <th width="60">ID</th>
+                            <th>Font Name</th>
+                            <th>Font Family</th>
+                            <th width="300">Preview</th>
+                            <th>Status</th>
+                            <th width="160">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @forelse($fonts as $font)
+                        <tr data-status="{{ $font->is_active ? 'active' : 'inactive' }}">
+                            <td><span class="text-muted">#{{ $font->id }}</span></td>
+                            <td>
+                                <span class="fw-medium">{{ $font->font_name }}</span>
+                            </td>
+                            <td>
+                                <code class="small">{{ $font->font_family }}</code>
+                            </td>
+                            <td>
+                                <div style="font-family: '{{ $font->font_family }}', sans-serif; font-size: 14px;" class="text-truncate">
+                                    The quick brown fox jumps over the lazy dog
+                                </div>
+                            </td>
+                            <td>
+                                @if($font->is_active)
+                                    <span class="badge badge-success">Active</span>
+                                @else
+                                    <span class="badge badge-danger">Inactive</span>
+                                @endif
+                            </td>
+                            <td>
+                                <div class="table-actions">
+                                    <button type="button" class="btn btn-icon btn-outline-info preview-font-btn" title="Preview" data-font-id="{{ $font->id }}" data-font-family="{{ $font->font_family }}">
+                                        <i class="fas fa-eye"></i>
+                                    </button>
+                                    <a href="{{ route('admin.fonts.edit', $font->id) }}" class="btn btn-icon btn-outline-secondary" title="Edit">
+                                        <i class="fas fa-edit"></i>
+                                    </a>
+                                    <button type="button" class="btn btn-icon btn-outline-danger" title="Delete" onclick="confirmDelete({{ $font->id }}, '{{ addslashes($font->font_name) }}')">
+                                        <i class="fas fa-trash"></i>
+                                    </button>
+                                </div>
+                            </td>
+                        </tr>
+                        @empty
+                        <tr>
+                            <td colspan="6">
+                                <div class="empty-state">
+                                    <div class="empty-state-icon">
+                                        <i class="fas fa-font"></i>
+                                    </div>
+                                    <h4>No Fonts Found</h4>
+                                    <p>Get started by uploading your first font.</p>
+                                    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#uploadModal">
+                                        <i class="fas fa-upload me-2"></i>Upload Font
+                                    </button>
+                                </div>
+                            </td>
+                        </tr>
+                        @endforelse
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <div class="card-footer d-flex justify-content-between align-items-center">
+            <div class="btn-group">
+                <button type="button" class="btn btn-outline-secondary" id="exportCsv">
+                    <i class="fas fa-file-csv me-2"></i>Export CSV
+                </button>
+                <button type="button" class="btn btn-outline-secondary" id="exportExcel">
+                    <i class="fas fa-file-excel me-2"></i>Export Excel
+                </button>
+            </div>
+            @if($fonts->hasPages())
+            <div>
+                {{ $fonts->links() }}
+            </div>
+            @endif
         </div>
     </div>
 
     <!-- Upload Modal -->
-    <div id="uploadModal" class="fixed inset-0 bg-secondary bg-opacity-50 hidden overflow-y-auto h-full w-full">
-        <div class="relative top-20 mx-auto p-5 border border-accent w-96 shadow-lg rounded-md bg-white">
-            <div class="mt-3">
-                <div class="flex items-center justify-between mb-4">
-                    <h3 class="text-lg font-medium text-primary-dark">Upload Font</h3>
-                    <button id="closeUploadModal" class="text-secondary hover:bg-secondary-light hover:text-primary rounded-lg text-sm p-1.5">
-                        <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
-                            <path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd"></path>
-                        </svg>
-                    </button>
+    <div class="modal fade" id="uploadModal" tabindex="-1" aria-labelledby="uploadModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="uploadModalLabel">
+                        <i class="fas fa-upload me-2"></i>Upload Font
+                    </h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
-                <form id="uploadForm">
-                    <div class="mb-4">
-                        <label class="block text-primary-dark text-sm font-bold mb-2" for="fontName">
-                            Font Name
-                        </label>
-                        <input type="text" id="fontName" class="shadow appearance-none border border-accent rounded w-full py-2 px-3 text-primary-dark leading-tight focus:outline-none focus:shadow-outline" required>
+                <form action="{{ route('admin.fonts.store') }}" method="POST" enctype="multipart/form-data">
+                    @csrf
+                    <div class="modal-body">
+                        <div class="mb-3">
+                            <label for="fontName" class="form-label">Font Name <span class="text-danger">*</span></label>
+                            <input type="text" class="form-control" id="fontName" name="font_name" required placeholder="e.g., Great Vibes">
+                        </div>
+                        <div class="mb-3">
+                            <label for="fontFamily" class="form-label">Font Family <span class="text-danger">*</span></label>
+                            <input type="text" class="form-control" id="fontFamily" name="font_family" required placeholder="e.g., 'Great Vibes', cursive">
+                        </div>
+                        <div class="mb-3">
+                            <label for="fontFile" class="form-label">Font File <span class="text-danger">*</span></label>
+                            <input type="file" class="form-control" id="fontFile" name="font_file" accept=".ttf,.otf,.woff,.woff2" required>
+                            <div class="form-text">Accepted formats: TTF, OTF, WOFF, WOFF2</div>
+                        </div>
+                        <div class="form-check">
+                            <input type="checkbox" class="form-check-input" id="isActive" name="is_active" value="1" checked>
+                            <label class="form-check-label" for="isActive">Active</label>
+                        </div>
                     </div>
-                    <div class="mb-4">
-                        <label class="block text-primary-dark text-sm font-bold mb-2" for="fontFamily">
-                            Font Family
-                        </label>
-                        <input type="text" id="fontFamily" class="shadow appearance-none border border-accent rounded w-full py-2 px-3 text-primary-dark leading-tight focus:outline-none focus:shadow-outline" required>
-                    </div>
-                    <div class="mb-4">
-                        <label class="block text-primary-dark text-sm font-bold mb-2" for="fontFile">
-                            Font File (TTF, OTF, WOFF)
-                        </label>
-                        <input type="file" id="fontFile" class="shadow appearance-none border border-accent rounded w-full py-2 px-3 text-primary-dark leading-tight focus:outline-none focus:shadow-outline" accept=".ttf,.otf,.woff" required>
-                    </div>
-                    <div class="mb-4">
-                        <label class="block text-primary-dark text-sm font-bold mb-2">
-                            <input type="checkbox" id="isActive" class="mr-2"> Active
-                        </label>
-                    </div>
-                    <div class="flex items-center justify-between">
-                        <button type="button" id="cancelUpload" class="bg-secondary hover:bg-secondary-dark text-primary-dark font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">
-                            Cancel
-                        </button>
-                        <button type="submit" class="bg-primary hover:bg-primary-dark text-primary-dark font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">
-                            Upload
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                        <button type="submit" class="btn btn-primary">
+                            <i class="fas fa-upload me-2"></i>Upload Font
                         </button>
                     </div>
                 </form>
@@ -69,109 +211,109 @@
         </div>
     </div>
 
-    <div class="overflow-x-auto">
-        <table class="min-w-full divide-y divide-secondary-light data-table">
-            <thead>
-                <tr>
-                    <th class="px-6 py-3 bg-secondary-light text-left text-xs leading-4 font-medium text-secondary-dark uppercase tracking-wider">ID</th>
-                    <th class="px-6 py-3 bg-secondary-light text-left text-xs leading-4 font-medium text-secondary-dark uppercase tracking-wider">Font Name</th>
-                    <th class="px-6 py-3 bg-secondary-light text-left text-xs leading-4 font-medium text-secondary-dark uppercase tracking-wider">Font Family</th>
-                    <th class="px-6 py-3 bg-secondary-light text-left text-xs leading-4 font-medium text-secondary-dark uppercase tracking-wider">Preview</th>
-                    <th class="px-6 py-3 bg-secondary-light text-left text-xs leading-4 font-medium text-secondary-dark uppercase tracking-wider">Status</th>
-                    <th class="px-6 py-3 bg-secondary-light text-left text-xs leading-4 font-medium text-secondary-dark uppercase tracking-wider">Actions</th>
-                </tr>
-            </thead>
-            <tbody class="bg-white divide-y divide-secondary-light">
-                @foreach($fonts as $font)
-                <tr>
-                    <td class="px-6 py-4 whitespace-no-wrap text-primary-dark">{{ $font->id }}</td>
-                    <td class="px-6 py-4 whitespace-no-wrap text-primary-dark">{{ $font->font_name }}</td>
-                    <td class="px-6 py-4 whitespace-no-wrap text-primary-dark">{{ $font->font_family }}</td>
-                    <td class="px-6 py-4 whitespace-no-wrap">
-                        <div style="font-family: '{{ $font->font_family }}', sans-serif;" class="text-primary-dark">
-                            The quick brown fox jumps over the lazy dog
-                        </div>
-                    </td>
-                    <td class="px-6 py-4 whitespace-no-wrap">
-                        <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full 
-                            {{ $font->is_active ? 'bg-primary-light text-primary-dark' : 'bg-secondary-light text-secondary-dark' }}">
-                            {{ $font->is_active ? 'Active' : 'Inactive' }}
-                        </span>
-                    </td>
-                    <td class="px-6 py-4 whitespace-no-wrap">
-                        <button data-font-id="{{ $font->id }}" class="preview-font-btn text-primary hover:text-primary-dark mr-3">Preview</button>
-                        <a href="{{ route('admin.fonts.edit', $font->id) }}" class="text-secondary hover:text-secondary-dark mr-3">Edit</a>
-                        <form action="{{ route('admin.fonts.destroy', $font->id) }}" method="POST" class="inline">
-                            @csrf
-                            @method('DELETE')
-                            <button type="submit" class="text-error hover:text-error-dark" onclick="return confirm('Are you sure?')">Delete</button>
-                        </form>
-                    </td>
-                </tr>
-                @endforeach
-            </tbody>
-        </table>
-    </div>
-
-    <div class="mt-4 flex justify-between items-center">
-        <div>
-            <button id="exportCsv" class="bg-primary hover:bg-primary-dark text-primary-dark font-bold py-2 px-4 rounded mr-2">
-                Export CSV
-            </button>
-            <button id="exportExcel" class="bg-primary hover:bg-primary-dark text-primary-dark font-bold py-2 px-4 rounded">
-                Export Excel
-            </button>
-        </div>
-        <div>
-            {{ $fonts->links() }}
+    <!-- Font Preview Modal -->
+    <div class="modal fade" id="previewModal" tabindex="-1" aria-labelledby="previewModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="previewModalLabel">
+                        <i class="fas fa-font me-2"></i>Font Preview
+                    </h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div id="fontPreviewContent" class="p-4 bg-light rounded">
+                        <p style="font-size: 48px;" class="mb-3">Aa Bb Cc Dd Ee Ff</p>
+                        <p style="font-size: 32px;" class="mb-3">The quick brown fox jumps over the lazy dog</p>
+                        <p style="font-size: 24px;" class="mb-3">ABCDEFGHIJKLMNOPQRSTUVWXYZ</p>
+                        <p style="font-size: 24px;" class="mb-3">abcdefghijklmnopqrstuvwxyz</p>
+                        <p style="font-size: 24px;" class="mb-0">0123456789 !@#$%^&*()</p>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                </div>
+            </div>
         </div>
     </div>
 
+    <!-- Delete Confirmation Modal -->
+    <div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="deleteModalLabel">Confirm Delete</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <p>Are you sure you want to delete <strong id="deleteFontName"></strong>?</p>
+                    <p class="text-muted small mb-0">This action cannot be undone. Designs using this font may be affected.</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                    <form id="deleteForm" method="POST" class="d-inline">
+                        @csrf
+                        @method('DELETE')
+                        <button type="submit" class="btn btn-danger">Delete Font</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    @push('scripts')
     <script>
-        $(document).ready(function() {
-            // Search functionality
-            $('#searchButton').on('click', function() {
-                const searchTerm = $('#searchInput').val();
-                alert(`Searching for: ${searchTerm}`);
-                // In a real application, this would filter the table
+        // Search functionality
+        document.getElementById('searchInput').addEventListener('input', function() {
+            filterTable();
+        });
+
+        // Filter functionality
+        document.getElementById('statusFilter').addEventListener('change', function() {
+            filterTable();
+        });
+
+        function filterTable() {
+            const searchTerm = document.getElementById('searchInput').value.toLowerCase();
+            const statusFilter = document.getElementById('statusFilter').value.toLowerCase();
+            const rows = document.querySelectorAll('.data-table tbody tr[data-status]');
+
+            rows.forEach(row => {
+                const text = row.textContent.toLowerCase();
+                const status = row.dataset.status;
+
+                const matchesSearch = text.includes(searchTerm);
+                const matchesStatus = !statusFilter || status === statusFilter;
+
+                row.style.display = matchesSearch && matchesStatus ? '' : 'none';
             });
-            
-            $('#searchInput').on('keypress', function(e) {
-                if (e.which === 13) {
-                    $('#searchButton').click();
-                }
-            });
-            
-            // Upload modal functionality
-            $('#uploadButton').on('click', function() {
-                $('#uploadModal').removeClass('hidden');
-            });
-            
-            $('#closeUploadModal, #cancelUpload').on('click', function() {
-                $('#uploadModal').addClass('hidden');
-            });
-            
-            $('#uploadForm').on('submit', function(e) {
-                e.preventDefault();
-                alert('Font uploaded successfully!');
-                $('#uploadModal').addClass('hidden');
-                // In a real application, this would submit the form via AJAX
-            });
-            
-            // Font preview functionality
-            $('.preview-font-btn').on('click', function() {
-                const fontId = $(this).data('font-id');
-                alert(`Previewing font with ID: ${fontId}`);
-            });
-            
-            // Export functionality
-            $('#exportCsv').on('click', function() {
-                alert('Exporting data as CSV');
-            });
-            
-            $('#exportExcel').on('click', function() {
-                alert('Exporting data as Excel');
+        }
+
+        // Font preview
+        document.querySelectorAll('.preview-font-btn').forEach(btn => {
+            btn.addEventListener('click', function() {
+                const fontFamily = this.dataset.fontFamily;
+                const previewContent = document.getElementById('fontPreviewContent');
+                previewContent.style.fontFamily = `'${fontFamily}', sans-serif`;
+                new bootstrap.Modal(document.getElementById('previewModal')).show();
             });
         });
+
+        // Delete confirmation
+        function confirmDelete(id, name) {
+            document.getElementById('deleteFontName').textContent = name;
+            document.getElementById('deleteForm').action = `{{ route('admin.fonts.index') }}/${id}`;
+            new bootstrap.Modal(document.getElementById('deleteModal')).show();
+        }
+
+        // Export functionality
+        document.getElementById('exportCsv').addEventListener('click', function() {
+            window.location.href = '{{ route("admin.fonts.index") }}?export=csv';
+        });
+
+        document.getElementById('exportExcel').addEventListener('click', function() {
+            window.location.href = '{{ route("admin.fonts.index") }}?export=excel';
+        });
     </script>
+    @endpush
 </x-admin-layout>

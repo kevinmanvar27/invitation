@@ -39,7 +39,7 @@ class SharedInvitation extends Model
      */
     public function design(): BelongsTo
     {
-        return $this->belongsTo(UserDesign::class);
+        return $this->belongsTo(UserDesign::class, 'design_id');
     }
 
     /**

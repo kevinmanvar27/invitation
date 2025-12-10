@@ -1,193 +1,200 @@
 <x-admin-layout>
     <x-slot name="header">
-        <div class="row mb-2">
-            <div class="col-sm-6">
-                <h1>{{ __('Manage Users') }}</h1>
-            </div>
-            <div class="col-sm-6">
-                <ol class="breadcrumb float-sm-end">
-                    <li class="breadcrumb-item"><a href="{{ route('admin.dashboard') }}">Dashboard</a></li>
-                    <li class="breadcrumb-item active">Users</li>
-                </ol>
-            </div>
-        </div>
-        <p class="text-muted">View and manage all users in the system</p>
+
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="{{ route('admin.dashboard') }}">Dashboard</a></li>
+                <li class="breadcrumb-item active" aria-current="page">Users</li>
+            </ol>
+        </nav>
     </x-slot>
 
-    <div class="container-fluid">
-        <!-- Unified Toolbar -->
-        <div class="toolbar">
-            <form method="GET" action="{{ route('admin.users.index') }}" class="d-flex flex-column flex-sm-row gap-2 flex-grow-1">
-                <input type="text" name="search" value="{{ request('search') }}" class="toolbar-search" placeholder="Search users by name or email...">
-                
-                <div class="toolbar-filters">
-                    <select name="role" class="toolbar-select">
-                        <option value="">All Roles</option>
-                        <option value="admin" {{ request('role') === 'admin' ? 'selected' : '' }}>Admin</option>
-                        <option value="user" {{ request('role') === 'user' ? 'selected' : '' }}>User</option>
-                    </select>
-                    
-                    <select name="status" class="toolbar-select">
-                        <option value="">All Statuses</option>
-                        <option value="active" {{ request('status') === 'active' ? 'selected' : '' }}>Active</option>
-                        <option value="inactive" {{ request('status') === 'inactive' ? 'selected' : '' }}>Inactive</option>
-                    </select>
-                    
-                    <button type="submit" class="btn btn-secondary">
-                        <i class="fas fa-filter"></i>
-                        Filter
-                    </button>
-                    
-                    <a href="{{ route('admin.users.index') }}" class="btn btn-outline-secondary">
-                        Clear
-                    </a>
-                </div>
-            </form>
-            
-            <div class="d-flex gap-2 ms-auto">
-                <a href="{{ route('admin.users.export') }}" class="btn btn-outline-secondary">
-                    <i class="fas fa-download"></i>
-                    Export
-                </a>
-                <a href="{{ route('admin.users.create') }}" class="btn btn-primary">
-                    <i class="fas fa-plus"></i>
-                    Add User
-                </a>
+    <!-- Toolbar -->
+    <div class="toolbar mb-4">
+        <form method="GET" action="{{ route('admin.users.index') }}" class="toolbar-search-form">
+            <div class="input-group">
+                <span class="input-group-text bg-white border-end-0">
+                    <i class="fas fa-search text-muted"></i>
+                </span>
+                <input type="text" name="search" value="{{ request('search') }}" 
+                       class="form-control border-start-0" 
+                       placeholder="Search users by name or email...">
             </div>
-        </div>
+            
+            <select name="role" class="form-select">
+                <option value="">All Roles</option>
+                <option value="admin" {{ request('role') === 'admin' ? 'selected' : '' }}>Admin</option>
+                <option value="user" {{ request('role') === 'user' ? 'selected' : '' }}>User</option>
+            </select>
+            
+            <select name="status" class="form-select">
+                <option value="">All Statuses</option>
+                <option value="active" {{ request('status') === 'active' ? 'selected' : '' }}>Active</option>
+                <option value="inactive" {{ request('status') === 'inactive' ? 'selected' : '' }}>Inactive</option>
+            </select>
+            
+            <button type="submit" class="btn btn-secondary">
+                <i class="fas fa-filter me-1"></i> Filter
+            </button>
+            
+            @if(request()->hasAny(['search', 'role', 'status']))
+                <a href="{{ route('admin.users.index') }}" class="btn btn-outline-secondary">
+                    <i class="fas fa-times me-1"></i> Clear
+                </a>
+            @endif
+        </form>
         
-        <div class="card">
-            <div class="card-body">
-                <!-- Data Table -->
-                <div class="table-responsive">
-                    <table class="table data-table">
-                        <thead>
+        <div class="toolbar-actions">
+            <a href="{{ route('admin.users.export') }}" class="btn btn-outline-secondary">
+                <i class="fas fa-download me-1"></i> Export
+            </a>
+            <a href="{{ route('admin.users.create') }}" class="btn btn-primary">
+                <i class="fas fa-plus me-1"></i> Add User
+            </a>
+        </div>
+    </div>
+    
+    <!-- Data Card -->
+    <div class="card">
+        <div class="card-body p-0">
+            <div class="table-responsive">
+                <table class="table table-hover data-table mb-0">
+                    <thead>
+                        <tr>
+                            <th width="60">ID</th>
+                            <th>User</th>
+                            <th>Email</th>
+                            <th width="100">Role</th>
+                            <th width="100">Status</th>
+                            <th width="120">Created</th>
+                            <th width="150" class="text-end">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @forelse($users as $user)
                             <tr>
-                                <th>ID</th>
-                                <th>Name</th>
-                                <th>Email</th>
-                                <th>Role</th>
-                                <th>Status</th>
-                                <th>Created At</th>
-                                <th class="text-end">Actions</th>
+                                <td class="text-muted">#{{ $user->id }}</td>
+                                <td>
+                                    <div class="d-flex align-items-center">
+                                        <img src="https://ui-avatars.com/api/?name={{ urlencode($user->name) }}&color=ffffff&background=ff6b6b&size=36" 
+                                             class="rounded-circle me-2" 
+                                             width="36" 
+                                             height="36" 
+                                             alt="{{ $user->name }}">
+                                        <span class="fw-medium">{{ $user->name }}</span>
+                                    </div>
+                                </td>
+                                <td>{{ $user->email }}</td>
+                                <td>
+                                    @if($user->is_admin)
+                                        <span class="badge badge-info">
+                                            <i class="fas fa-shield-alt me-1"></i>Admin
+                                        </span>
+                                    @else
+                                        <span class="badge badge-secondary">
+                                            <i class="fas fa-user me-1"></i>User
+                                        </span>
+                                    @endif
+                                </td>
+                                <td>
+                                    @if($user->is_active)
+                                        <span class="badge badge-success">
+                                            <i class="fas fa-check-circle me-1"></i>Active
+                                        </span>
+                                    @else
+                                        <span class="badge badge-danger">
+                                            <i class="fas fa-times-circle me-1"></i>Inactive
+                                        </span>
+                                    @endif
+                                </td>
+                                <td class="text-muted">{{ $user->created_at->format('M d, Y') }}</td>
+                                <td>
+                                    <div class="table-actions">
+                                        <a href="{{ route('admin.users.show', $user->id) }}" 
+                                           class="btn btn-icon btn-outline-secondary" 
+                                           data-bs-toggle="tooltip" 
+                                           title="View">
+                                            <i class="fas fa-eye"></i>
+                                        </a>
+                                        <a href="{{ route('admin.users.edit', $user->id) }}" 
+                                           class="btn btn-icon btn-outline-primary" 
+                                           data-bs-toggle="tooltip" 
+                                           title="Edit">
+                                            <i class="fas fa-pencil-alt"></i>
+                                        </a>
+                                        <button type="button" 
+                                                class="btn btn-icon btn-outline-danger" 
+                                                data-bs-toggle="tooltip" 
+                                                title="Delete"
+                                                onclick="confirmDelete('{{ $user->id }}', '{{ $user->name }}')">
+                                            <i class="fas fa-trash"></i>
+                                        </button>
+                                    </div>
+                                </td>
                             </tr>
-                        </thead>
-                        <tbody>
-                            @forelse($users as $user)
-                                <tr>
-                                    <td>{{ $user->id }}</td>
-                                    <td>{{ $user->name }}</td>
-                                    <td>{{ $user->email }}</td>
-                                    <td>
-                                        @if($user->is_admin)
-                                            <span class="badge bg-info">
-                                                <i class="fas fa-shield-alt"></i>
-                                                Admin
-                                            </span>
-                                        @else
-                                            <span class="badge bg-secondary">
-                                                <i class="fas fa-user"></i>
-                                                User
-                                            </span>
-                                        @endif
-                                    </td>
-                                    <td>
-                                        @if($user->is_active)
-                                            <span class="badge bg-success">
-                                                <i class="fas fa-check-circle"></i>
-                                                Active
-                                            </span>
-                                        @else
-                                            <span class="badge bg-danger">
-                                                <i class="fas fa-times-circle"></i>
-                                                Inactive
-                                            </span>
-                                        @endif
-                                    </td>
-                                    <td>{{ $user->created_at->format('M d, Y') }}</td>
-                                    <td class="text-end">
-                                        <div class="btn-group" role="group">
-                                            <a href="{{ route('admin.users.show', $user->id) }}" class="btn btn-outline-secondary btn-sm">
-                                                <i class="fas fa-eye"></i>
-                                                View
-                                            </a>
-                                            <a href="{{ route('admin.users.edit', $user->id) }}" class="btn btn-outline-primary btn-sm">
-                                                <i class="fas fa-pencil-alt"></i>
-                                                Edit
-                                            </a>
-                                            <button class="btn btn-outline-danger btn-sm" onclick="confirmDelete('{{ $user->id }}')">
-                                                <i class="fas fa-trash"></i>
-                                                Delete
-                                            </button>
-                                        </div>
-                                    </td>
-                                </tr>
-                            @empty
-                                <tr>
-                                    <td colspan="7" class="text-center empty-state">
+                        @empty
+                            <tr>
+                                <td colspan="7">
+                                    <div class="empty-state">
                                         <div class="empty-state-icon">
                                             <i class="fas fa-users"></i>
                                         </div>
-                                        <div class="empty-state-text">No users found.</div>
-                                        <a href="{{ route('admin.users.create') }}" class="btn btn-primary">Add New User</a>
-                                    </td>
-                                </tr>
-                            @endforelse
-                        </tbody>
-                    </table>
-                </div>
+                                        <h5 class="empty-state-title">No users found</h5>
+                                        <p class="empty-state-description">Get started by creating a new user.</p>
+                                        <a href="{{ route('admin.users.create') }}" class="btn btn-primary">
+                                            <i class="fas fa-plus me-1"></i> Add User
+                                        </a>
+                                    </div>
+                                </td>
+                            </tr>
+                        @endforelse
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        
+        @if($users->hasPages())
+            <div class="card-footer bg-transparent">
+                {{ $users->links() }}
+            </div>
+        @endif
+    </div>
 
-                <!-- Pagination -->
-                <div class="pagination mt-4">
-                    {{ $users->links() }}
+    <!-- Delete Confirmation Modal -->
+    <div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header border-0">
+                    <h5 class="modal-title" id="deleteModalLabel">
+                        <i class="fas fa-exclamation-triangle text-danger me-2"></i>Confirm Delete
+                    </h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <p>Are you sure you want to delete <strong id="deleteUserName"></strong>?</p>
+                    <p class="text-muted mb-0">This action cannot be undone.</p>
+                </div>
+                <div class="modal-footer border-0">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                    <form id="deleteForm" method="POST" class="d-inline">
+                        @csrf
+                        @method('DELETE')
+                        <button type="submit" class="btn btn-danger">
+                            <i class="fas fa-trash me-1"></i> Delete
+                        </button>
+                    </form>
                 </div>
             </div>
         </div>
     </div>
 
+    @push('scripts')
     <script>
-        function confirmDelete(userId) {
-            if (confirm('Are you sure you want to delete this user? This action cannot be undone.')) {
-                // Create a form dynamically and submit it
-                const form = document.createElement('form');
-                form.method = 'POST';
-                form.action = `{{ url('admin/users') }}/${userId}`;
-                
-                const csrfToken = document.createElement('input');
-                csrfToken.type = 'hidden';
-                csrfToken.name = '_token';
-                csrfToken.value = '{{ csrf_token() }}';
-                form.appendChild(csrfToken);
-                
-                const method = document.createElement('input');
-                method.type = 'hidden';
-                method.name = '_method';
-                method.value = 'DELETE';
-                form.appendChild(method);
-                
-                document.body.appendChild(form);
-                form.submit();
-            }
+        function confirmDelete(userId, userName) {
+            document.getElementById('deleteUserName').textContent = userName;
+            document.getElementById('deleteForm').action = `{{ url('admin/users') }}/${userId}`;
+            new bootstrap.Modal(document.getElementById('deleteModal')).show();
         }
-        
-        $(document).ready(function() {
-            // Initialize DataTables
-            $(".data-table").DataTable({
-                "pageLength": 25,
-                "order": [],
-                "responsive": true,
-                "language": {
-                    "search": "Search:",
-                    "lengthMenu": "Show _MENU_ entries",
-                    "info": "Showing _START_ to _END_ of _TOTAL_ entries",
-                    "paginate": {
-                        "first": "First",
-                        "last": "Last",
-                        "next": "Next",
-                        "previous": "Previous"
-                    }
-                }
-            });
-        });
     </script>
+    @endpush
 </x-admin-layout>

@@ -1,129 +1,191 @@
 <x-admin-layout>
-    <x-slot name="header">
-        <h2 class="font-semibold text-xl text-primary-dark leading-tight">
-            {{ __('Edit Shipping Address') }}
-        </h2>
-    </x-slot>
+    <x-slot name="title">Edit Shipping Address</x-slot>
 
-    <div class="py-12">
-        <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
-            <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
-                <div class="p-6 text-primary-dark">
-                    <h3 class="text-lg font-medium mb-4">Edit Shipping Address</h3>
+    <!-- Page Header -->
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <div>
 
-                    <form method="POST" action="{{ route('admin.shipping-addresses.update', $shippingAddress->id) }}">
-                        @csrf
-                        @method('PUT')
+            <nav aria-label="breadcrumb">
+                <ol class="breadcrumb mb-0">
+                    <li class="breadcrumb-item"><a href="{{ route('admin.dashboard') }}">Dashboard</a></li>
+                    <li class="breadcrumb-item"><a href="{{ route('admin.shipping-addresses.index') }}">Shipping Addresses</a></li>
+                    <li class="breadcrumb-item active">Edit</li>
+                </ol>
+            </nav>
+        </div>
+        <a href="{{ route('admin.shipping-addresses.show', $shippingAddress->id) }}" class="btn btn-outline-primary">
+            <i class="fas fa-eye me-1"></i> View
+        </a>
+    </div>
+
+    <!-- Edit Form -->
+    <div class="row justify-content-center">
+        <div class="col-lg-8">
+            <div class="card">
+                <div class="card-header">
+                    <div class="d-flex align-items-center justify-content-between">
+                        <div class="d-flex align-items-center">
+                            <div class="avatar bg-primary bg-opacity-10 text-primary me-3" style="width: 48px; height: 48px;">
+                                <i class="fas fa-map-marker-alt"></i>
+                            </div>
+                            <div>
+                                <h5 class="mb-0">{{ $shippingAddress->full_name }}</h5>
+                                <small class="text-muted">{{ $shippingAddress->city }}, {{ $shippingAddress->country }}</small>
+                            </div>
+                        </div>
+                        @if($shippingAddress->is_default)
+                            <span class="badge bg-success">Default</span>
+                        @endif
+                    </div>
+                    <!-- Meta Info -->
+                    <div class="row mt-3 pt-3 border-top">
+                        <div class="col-4 text-center">
+                            <small class="text-muted d-block">User</small>
+                            <strong>{{ $shippingAddress->user->name ?? 'N/A' }}</strong>
+                        </div>
+                        <div class="col-4 text-center">
+                            <small class="text-muted d-block">City</small>
+                            <strong>{{ $shippingAddress->city }}</strong>
+                        </div>
+                        <div class="col-4 text-center">
+                            <small class="text-muted d-block">Country</small>
+                            <strong>{{ $shippingAddress->country }}</strong>
+                        </div>
+                    </div>
+                </div>
+                <form method="POST" action="{{ route('admin.shipping-addresses.update', $shippingAddress->id) }}">
+                    @csrf
+                    @method('PUT')
+                    <div class="card-body">
+                        <!-- User Selection -->
+                        <h6 class="text-muted mb-3"><i class="fas fa-user me-2"></i>User Information</h6>
                         
-                        <!-- User -->
-                        <div class="mb-4">
-                            <label for="user_id" class="block text-primary-dark text-sm font-bold mb-2">User</label>
-                            <select name="user_id" id="user_id" class="shadow appearance-none border rounded w-full py-2 px-3 text-primary-dark leading-tight focus:outline-none focus:shadow-outline" required>
-                                <option value="">Select a User</option>
-                                @foreach($users as $user)
-                                    <option value="{{ $user->id }}" {{ (old('user_id', $shippingAddress->user_id) == $user->id) ? 'selected' : '' }}>
-                                        {{ $user->name }} ({{ $user->email }})
-                                    </option>
-                                @endforeach
-                            </select>
-                            @error('user_id')
-                                <p class="text-error-dark text-xs italic mt-2">{{ $message }}</p>
-                            @enderror
+                        <div class="row g-3">
+                            <div class="col-12">
+                                <label for="user_id" class="form-label">User <span class="text-danger">*</span></label>
+                                <select name="user_id" id="user_id" class="form-select @error('user_id') is-invalid @enderror" required>
+                                    <option value="">Select a User</option>
+                                    @foreach($users as $user)
+                                        <option value="{{ $user->id }}" {{ old('user_id', $shippingAddress->user_id) == $user->id ? 'selected' : '' }}>
+                                            {{ $user->name }} ({{ $user->email }})
+                                        </option>
+                                    @endforeach
+                                </select>
+                                @error('user_id')
+                                    <div class="invalid-feedback">{{ $message }}</div>
+                                @enderror
+                            </div>
                         </div>
 
-                        <!-- Full Name -->
-                        <div class="mb-4">
-                            <label for="full_name" class="block text-primary-dark text-sm font-bold mb-2">Full Name</label>
-                            <input type="text" name="full_name" id="full_name" class="shadow appearance-none border rounded w-full py-2 px-3 text-primary-dark leading-tight focus:outline-none focus:shadow-outline" value="{{ old('full_name', $shippingAddress->full_name) }}" required>
-                            @error('full_name')
-                                <p class="text-error-dark text-xs italic mt-2">{{ $message }}</p>
-                            @enderror
+                        <hr class="my-4">
+
+                        <!-- Contact Information -->
+                        <h6 class="text-muted mb-3"><i class="fas fa-address-card me-2"></i>Contact Information</h6>
+                        
+                        <div class="row g-3">
+                            <div class="col-md-6">
+                                <label for="full_name" class="form-label">Full Name <span class="text-danger">*</span></label>
+                                <input type="text" name="full_name" id="full_name" class="form-control @error('full_name') is-invalid @enderror" value="{{ old('full_name', $shippingAddress->full_name) }}" required>
+                                @error('full_name')
+                                    <div class="invalid-feedback">{{ $message }}</div>
+                                @enderror
+                            </div>
+                            <div class="col-md-6">
+                                <label for="phone" class="form-label">Phone <span class="text-danger">*</span></label>
+                                <div class="input-group">
+                                    <span class="input-group-text"><i class="fas fa-phone"></i></span>
+                                    <input type="text" name="phone" id="phone" class="form-control @error('phone') is-invalid @enderror" value="{{ old('phone', $shippingAddress->phone) }}" required>
+                                    @error('phone')
+                                        <div class="invalid-feedback">{{ $message }}</div>
+                                    @enderror
+                                </div>
+                            </div>
                         </div>
 
-                        <!-- Phone -->
-                        <div class="mb-4">
-                            <label for="phone" class="block text-primary-dark text-sm font-bold mb-2">Phone</label>
-                            <input type="text" name="phone" id="phone" class="shadow appearance-none border rounded w-full py-2 px-3 text-primary-dark leading-tight focus:outline-none focus:shadow-outline" value="{{ old('phone', $shippingAddress->phone) }}" required>
-                            @error('phone')
-                                <p class="text-error-dark text-xs italic mt-2">{{ $message }}</p>
-                            @enderror
+                        <hr class="my-4">
+
+                        <!-- Address Details -->
+                        <h6 class="text-muted mb-3"><i class="fas fa-home me-2"></i>Address Details</h6>
+                        
+                        <div class="row g-3">
+                            <div class="col-12">
+                                <label for="address_line1" class="form-label">Address Line 1 <span class="text-danger">*</span></label>
+                                <input type="text" name="address_line1" id="address_line1" class="form-control @error('address_line1') is-invalid @enderror" value="{{ old('address_line1', $shippingAddress->address_line1) }}" placeholder="Street address, P.O. box" required>
+                                @error('address_line1')
+                                    <div class="invalid-feedback">{{ $message }}</div>
+                                @enderror
+                            </div>
+                            <div class="col-12">
+                                <label for="address_line2" class="form-label">Address Line 2</label>
+                                <input type="text" name="address_line2" id="address_line2" class="form-control @error('address_line2') is-invalid @enderror" value="{{ old('address_line2', $shippingAddress->address_line2) }}" placeholder="Apartment, suite, unit, building, floor, etc.">
+                                @error('address_line2')
+                                    <div class="invalid-feedback">{{ $message }}</div>
+                                @enderror
+                            </div>
+                            <div class="col-md-6">
+                                <label for="city" class="form-label">City <span class="text-danger">*</span></label>
+                                <input type="text" name="city" id="city" class="form-control @error('city') is-invalid @enderror" value="{{ old('city', $shippingAddress->city) }}" required>
+                                @error('city')
+                                    <div class="invalid-feedback">{{ $message }}</div>
+                                @enderror
+                            </div>
+                            <div class="col-md-6">
+                                <label for="state" class="form-label">State/Province <span class="text-danger">*</span></label>
+                                <input type="text" name="state" id="state" class="form-control @error('state') is-invalid @enderror" value="{{ old('state', $shippingAddress->state) }}" required>
+                                @error('state')
+                                    <div class="invalid-feedback">{{ $message }}</div>
+                                @enderror
+                            </div>
+                            <div class="col-md-6">
+                                <label for="postal_code" class="form-label">Postal Code <span class="text-danger">*</span></label>
+                                <input type="text" name="postal_code" id="postal_code" class="form-control @error('postal_code') is-invalid @enderror" value="{{ old('postal_code', $shippingAddress->postal_code) }}" required>
+                                @error('postal_code')
+                                    <div class="invalid-feedback">{{ $message }}</div>
+                                @enderror
+                            </div>
+                            <div class="col-md-6">
+                                <label for="country" class="form-label">Country <span class="text-danger">*</span></label>
+                                <input type="text" name="country" id="country" class="form-control @error('country') is-invalid @enderror" value="{{ old('country', $shippingAddress->country) }}" required>
+                                @error('country')
+                                    <div class="invalid-feedback">{{ $message }}</div>
+                                @enderror
+                            </div>
                         </div>
 
-                        <!-- Address Line 1 -->
-                        <div class="mb-4">
-                            <label for="address_line1" class="block text-primary-dark text-sm font-bold mb-2">Address Line 1</label>
-                            <input type="text" name="address_line1" id="address_line1" class="shadow appearance-none border rounded w-full py-2 px-3 text-primary-dark leading-tight focus:outline-none focus:shadow-outline" value="{{ old('address_line1', $shippingAddress->address_line1) }}" required>
-                            @error('address_line1')
-                                <p class="text-error-dark text-xs italic mt-2">{{ $message }}</p>
-                            @enderror
-                        </div>
+                        <hr class="my-4">
 
-                        <!-- Address Line 2 -->
-                        <div class="mb-4">
-                            <label for="address_line2" class="block text-primary-dark text-sm font-bold mb-2">Address Line 2</label>
-                            <input type="text" name="address_line2" id="address_line2" class="shadow appearance-none border rounded w-full py-2 px-3 text-primary-dark leading-tight focus:outline-none focus:shadow-outline" value="{{ old('address_line2', $shippingAddress->address_line2) }}">
-                            @error('address_line2')
-                                <p class="text-error-dark text-xs italic mt-2">{{ $message }}</p>
-                            @enderror
+                        <!-- Settings -->
+                        <h6 class="text-muted mb-3"><i class="fas fa-cog me-2"></i>Settings</h6>
+                        
+                        <div class="row g-3">
+                            <div class="col-12">
+                                <div class="form-check">
+                                    <input type="checkbox" name="is_default" id="is_default" class="form-check-input" value="1" {{ old('is_default', $shippingAddress->is_default) ? 'checked' : '' }}>
+                                    <label for="is_default" class="form-check-label">
+                                        <strong>Set as Default Address</strong>
+                                        <br><small class="text-muted">This address will be used as the default shipping address for this user</small>
+                                    </label>
+                                </div>
+                                @error('is_default')
+                                    <div class="text-danger small mt-1">{{ $message }}</div>
+                                @enderror
+                            </div>
                         </div>
-
-                        <!-- City -->
-                        <div class="mb-4">
-                            <label for="city" class="block text-primary-dark text-sm font-bold mb-2">City</label>
-                            <input type="text" name="city" id="city" class="shadow appearance-none border rounded w-full py-2 px-3 text-primary-dark leading-tight focus:outline-none focus:shadow-outline" value="{{ old('city', $shippingAddress->city) }}" required>
-                            @error('city')
-                                <p class="text-error-dark text-xs italic mt-2">{{ $message }}</p>
-                            @enderror
-                        </div>
-
-                        <!-- State -->
-                        <div class="mb-4">
-                            <label for="state" class="block text-primary-dark text-sm font-bold mb-2">State</label>
-                            <input type="text" name="state" id="state" class="shadow appearance-none border rounded w-full py-2 px-3 text-primary-dark leading-tight focus:outline-none focus:shadow-outline" value="{{ old('state', $shippingAddress->state) }}" required>
-                            @error('state')
-                                <p class="text-error-dark text-xs italic mt-2">{{ $message }}</p>
-                            @enderror
-                        </div>
-
-                        <!-- Postal Code -->
-                        <div class="mb-4">
-                            <label for="postal_code" class="block text-primary-dark text-sm font-bold mb-2">Postal Code</label>
-                            <input type="text" name="postal_code" id="postal_code" class="shadow appearance-none border rounded w-full py-2 px-3 text-primary-dark leading-tight focus:outline-none focus:shadow-outline" value="{{ old('postal_code', $shippingAddress->postal_code) }}" required>
-                            @error('postal_code')
-                                <p class="text-error-dark text-xs italic mt-2">{{ $message }}</p>
-                            @enderror
-                        </div>
-
-                        <!-- Country -->
-                        <div class="mb-4">
-                            <label for="country" class="block text-primary-dark text-sm font-bold mb-2">Country</label>
-                            <input type="text" name="country" id="country" class="shadow appearance-none border rounded w-full py-2 px-3 text-primary-dark leading-tight focus:outline-none focus:shadow-outline" value="{{ old('country', $shippingAddress->country) }}" required>
-                            @error('country')
-                                <p class="text-error-dark text-xs italic mt-2">{{ $message }}</p>
-                            @enderror
-                        </div>
-
-                        <!-- Is Default -->
-                        <div class="mb-4">
-                            <label class="block text-primary-dark text-sm font-bold mb-2">
-                                <input type="checkbox" name="is_default" id="is_default" class="mr-2" {{ old('is_default', $shippingAddress->is_default) ? 'checked' : '' }}>
-                                Set as Default Address
-                            </label>
-                            @error('is_default')
-                                <p class="text-error-dark text-xs italic mt-2">{{ $message }}</p>
-                            @enderror
-                        </div>
-
-                        <div class="flex items-center justify-between">
-                            <a href="{{ route('admin.shipping-addresses.index') }}" class="bg-secondary hover:bg-secondary-dark text-primary-dark font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">
-                                Cancel
+                    </div>
+                    <div class="card-footer d-flex justify-content-between">
+                        <a href="{{ route('admin.shipping-addresses.index') }}" class="btn btn-outline-secondary">
+                            <i class="fas fa-arrow-left me-1"></i> Back
+                        </a>
+                        <div class="d-flex gap-2">
+                            <a href="{{ route('admin.shipping-addresses.show', $shippingAddress->id) }}" class="btn btn-outline-primary">
+                                <i class="fas fa-eye me-1"></i> View
                             </a>
-                            <button type="submit" class="bg-primary hover:bg-primary-dark text-primary-dark font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">
-                                Update Shipping Address
+                            <button type="submit" class="btn btn-primary">
+                                <i class="fas fa-save me-1"></i> Update Shipping Address
                             </button>
                         </div>
-                    </form>
-                </div>
+                    </div>
+                </form>
             </div>
         </div>
     </div>

@@ -1,91 +1,137 @@
 <x-admin-layout>
-    <x-slot name="header">
-        <h2 class="font-semibold text-xl text-primary-dark leading-tight">
-            {{ __('Edit User Design') }}
-        </h2>
-    </x-slot>
+    <!-- Page Header -->
+            <nav aria-label="breadcrumb">
+                <ol class="breadcrumb mb-0">
+                    <li class="breadcrumb-item"><a href="{{ route('admin.dashboard') }}">Dashboard</a></li>
+                    <li class="breadcrumb-item"><a href="{{ route('admin.designs.index') }}">Designs</a></li>
+                    <li class="breadcrumb-item active">Edit</li>
+                </ol>
+            </nav>
+        </div>
+    </div>
 
-    <div class="py-12">
-        <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
-            <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
-                <div class="p-6 text-primary-dark">
-                    <h3 class="text-lg font-medium mb-4">Edit User Design</h3>
-
-                    <form method="POST" action="{{ route('admin.designs.update', $userDesign->id) }}">
-                        @csrf
-                        @method('PUT')
-                        
-                        <!-- User -->
-                        <div class="mb-4">
-                            <label for="user_id" class="block text-primary-dark text-sm font-bold mb-2">User</label>
-                            <select name="user_id" id="user_id" class="shadow appearance-none border border-accent rounded w-full py-2 px-3 text-primary-dark leading-tight focus:outline-none focus:shadow-outline" required>
-                                <option value="">Select a User</option>
-                                @foreach($users as $user)
-                                    <option value="{{ $user->id }}" {{ old('user_id', $userDesign->user_id) == $user->id ? 'selected' : '' }}>{{ $user->name }} ({{ $user->email }})</option>
-                                @endforeach
-                            </select>
-                            @error('user_id')
-                                <p class="text-error-dark text-xs italic mt-2">{{ $message }}</p>
-                            @enderror
+    <!-- Edit Form -->
+    <div class="row justify-content-center">
+        <div class="col-lg-8">
+            <div class="card">
+                <div class="card-header">
+                    <div class="d-flex align-items-center justify-content-between">
+                        <div class="d-flex align-items-center gap-3">
+                            <div class="avatar bg-primary text-white d-flex align-items-center justify-content-center" style="width: 48px; height: 48px;">
+                                <i class="fas fa-palette fs-5"></i>
+                            </div>
+                            <div>
+                                <h5 class="mb-0">{{ $design->design_name }}</h5>
+                                <small class="text-muted">{{ $design->user->name ?? 'Unknown User' }}</small>
+                            </div>
                         </div>
-
-                        <!-- Template -->
-                        <div class="mb-4">
-                            <label for="template_id" class="block text-primary-dark text-sm font-bold mb-2">Template</label>
-                            <select name="template_id" id="template_id" class="shadow appearance-none border border-accent rounded w-full py-2 px-3 text-primary-dark leading-tight focus:outline-none focus:shadow-outline" required>
-                                <option value="">Select a Template</option>
-                                @foreach($templates as $template)
-                                    <option value="{{ $template->id }}" {{ old('template_id', $userDesign->template_id) == $template->id ? 'selected' : '' }}>{{ $template->name }}</option>
-                                @endforeach
-                            </select>
-                            @error('template_id')
-                                <p class="text-error-dark text-xs italic mt-2">{{ $message }}</p>
-                            @enderror
+                        <div class="d-flex align-items-center gap-2">
+                            @if($design->status == 'published')
+                                <span class="badge bg-success">Published</span>
+                            @elseif($design->status == 'completed')
+                                <span class="badge bg-info">Completed</span>
+                            @else
+                                <span class="badge bg-warning">Draft</span>
+                            @endif
                         </div>
-
-                        <!-- Design Name -->
-                        <div class="mb-4">
-                            <label for="design_name" class="block text-primary-dark text-sm font-bold mb-2">Design Name</label>
-                            <input type="text" name="design_name" id="design_name" class="shadow appearance-none border border-accent rounded w-full py-2 px-3 text-primary-dark leading-tight focus:outline-none focus:shadow-outline" value="{{ old('design_name', $userDesign->design_name) }}" required>
-                            @error('design_name')
-                                <p class="text-error-dark text-xs italic mt-2">{{ $message }}</p>
-                            @enderror
-                        </div>
-
-                        <!-- Status -->
-                        <div class="mb-4">
-                            <label for="status" class="block text-primary-dark text-sm font-bold mb-2">Status</label>
-                            <select name="status" id="status" class="shadow appearance-none border border-accent rounded w-full py-2 px-3 text-primary-dark leading-tight focus:outline-none focus:shadow-outline" required>
-                                <option value="draft" {{ old('status', $userDesign->status) == 'draft' ? 'selected' : '' }}>Draft</option>
-                                <option value="completed" {{ old('status', $userDesign->status) == 'completed' ? 'selected' : '' }}>Completed</option>
-                                <option value="published" {{ old('status', $userDesign->status) == 'published' ? 'selected' : '' }}>Published</option>
-                            </select>
-                            @error('status')
-                                <p class="text-error-dark text-xs italic mt-2">{{ $message }}</p>
-                            @enderror
-                        </div>
-
-                        <!-- Is Completed -->
-                        <div class="mb-4">
-                            <label class="block text-primary-dark text-sm font-bold mb-2">
-                                <input type="checkbox" name="is_completed" id="is_completed" class="mr-2 leading-tight" {{ old('is_completed', $userDesign->is_completed) ? 'checked' : '' }}>
-                                Is Completed
-                            </label>
-                            @error('is_completed')
-                                <p class="text-error-dark text-xs italic mt-2">{{ $message }}</p>
-                            @enderror
-                        </div>
-
-                        <div class="flex items-center justify-between">
-                            <a href="{{ route('admin.designs.index') }}" class="bg-secondary hover:bg-secondary-dark text-primary-dark font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">
-                                Cancel
-                            </a>
-                            <button type="submit" class="bg-primary hover:bg-primary-dark text-primary-dark font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">
-                                Update Design
-                            </button>
-                        </div>
-                    </form>
+                    </div>
                 </div>
+                <form method="POST" action="{{ route('admin.designs.update', $design->id) }}">
+                    @csrf
+                    @method('PUT')
+                    <div class="card-body">
+                        <!-- Meta Info -->
+                        <div class="bg-light rounded p-3 mb-4">
+                            <div class="row text-center">
+                                <div class="col-4">
+                                    <small class="text-muted d-block">Template</small>
+                                    <span class="fw-medium">{{ $design->template->name ?? 'N/A' }}</span>
+                                </div>
+                                <div class="col-4">
+                                    <small class="text-muted d-block">Created</small>
+                                    <span class="fw-medium">{{ $design->created_at->format('M d, Y') }}</span>
+                                </div>
+                                <div class="col-4">
+                                    <small class="text-muted d-block">Last Updated</small>
+                                    <span class="fw-medium">{{ $design->updated_at->format('M d, Y') }}</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row g-3">
+                            <!-- User -->
+                            <div class="col-md-6">
+                                <label for="user_id" class="form-label">User <span class="text-danger">*</span></label>
+                                <select name="user_id" id="user_id" class="form-select @error('user_id') is-invalid @enderror" required>
+                                    <option value="">Select a User</option>
+                                    @foreach($users as $user)
+                                        <option value="{{ $user->id }}" {{ old('user_id', $design->user_id) == $user->id ? 'selected' : '' }}>{{ $user->name }} ({{ $user->email }})</option>
+                                    @endforeach
+                                </select>
+                                @error('user_id')
+                                    <div class="invalid-feedback">{{ $message }}</div>
+                                @enderror
+                            </div>
+
+                            <!-- Template -->
+                            <div class="col-md-6">
+                                <label for="template_id" class="form-label">Template <span class="text-danger">*</span></label>
+                                <select name="template_id" id="template_id" class="form-select @error('template_id') is-invalid @enderror" required>
+                                    <option value="">Select a Template</option>
+                                    @foreach($templates as $template)
+                                        <option value="{{ $template->id }}" {{ old('template_id', $design->template_id) == $template->id ? 'selected' : '' }}>{{ $template->name }}</option>
+                                    @endforeach
+                                </select>
+                                @error('template_id')
+                                    <div class="invalid-feedback">{{ $message }}</div>
+                                @enderror
+                            </div>
+
+                            <!-- Design Name -->
+                            <div class="col-12">
+                                <label for="design_name" class="form-label">Design Name <span class="text-danger">*</span></label>
+                                <input type="text" name="design_name" id="design_name" class="form-control @error('design_name') is-invalid @enderror" value="{{ old('design_name', $design->design_name) }}" required>
+                                @error('design_name')
+                                    <div class="invalid-feedback">{{ $message }}</div>
+                                @enderror
+                            </div>
+
+                            <!-- Status -->
+                            <div class="col-md-6">
+                                <label for="status" class="form-label">Status <span class="text-danger">*</span></label>
+                                <select name="status" id="status" class="form-select @error('status') is-invalid @enderror" required>
+                                    <option value="draft" {{ old('status', $design->status) == 'draft' ? 'selected' : '' }}>Draft</option>
+                                    <option value="completed" {{ old('status', $design->status) == 'completed' ? 'selected' : '' }}>Completed</option>
+                                    <option value="published" {{ old('status', $design->status) == 'published' ? 'selected' : '' }}>Published</option>
+                                </select>
+                                @error('status')
+                                    <div class="invalid-feedback">{{ $message }}</div>
+                                @enderror
+                            </div>
+
+                            <!-- Is Completed -->
+                            <div class="col-md-6">
+                                <label class="form-label d-block">Completion Status</label>
+                                <div class="form-check form-switch mt-2">
+                                    <input type="hidden" name="is_completed" value="0">
+                                    <input class="form-check-input" type="checkbox" name="is_completed" id="is_completed" value="1" {{ old('is_completed', $design->is_completed) ? 'checked' : '' }}>
+                                    <label class="form-check-label" for="is_completed">Mark as Completed</label>
+                                </div>
+                                @error('is_completed')
+                                    <div class="text-danger small">{{ $message }}</div>
+                                @enderror
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-footer d-flex justify-content-between">
+                        <a href="{{ route('admin.designs.index') }}" class="btn btn-outline-secondary">
+                            <i class="fas fa-arrow-left me-1"></i> Back
+                        </a>
+                        <button type="submit" class="btn btn-primary">
+                            <i class="fas fa-save me-1"></i> Update Design
+                        </button>
+                    </div>
+                </form>
             </div>
         </div>
     </div>
