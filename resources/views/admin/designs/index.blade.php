@@ -38,6 +38,9 @@
         </form>
         
         <div class="toolbar-actions">
+            <a href="{{ route('admin.designs.create') }}" class="btn btn-primary">
+                <i class="fas fa-plus me-1"></i> Create Design
+            </a>
             <a href="{{ route('admin.designs.export', ['format' => 'csv']) }}" class="btn btn-outline-secondary">
                 <i class="fas fa-download me-1"></i> Export CSV
             </a>

@@ -40,12 +40,20 @@ class UserDesignController extends Controller
             'design_name' => 'required|string|max:255',
             'is_completed' => 'boolean',
             'status' => 'required|string|max:50',
+            'canvas_data' => 'nullable|string',
         ]);
+
+        // Parse canvas_data if it's a JSON string
+        $canvasData = null;
+        if ($request->canvas_data) {
+            $canvasData = json_decode($request->canvas_data, true);
+        }
 
         UserDesign::create([
             'user_id' => $request->user_id,
             'template_id' => $request->template_id,
             'design_name' => $request->design_name,
+            'canvas_data' => $canvasData,
             'is_completed' => $request->is_completed ?? false,
             'status' => $request->status,
         ]);
