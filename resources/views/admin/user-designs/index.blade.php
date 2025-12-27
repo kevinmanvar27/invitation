@@ -117,9 +117,9 @@
                                 </div>
                             </td>
                             <td>
-                                @if($design->template)
-                                    <a href="{{ route('admin.templates.show', $design->template->id) }}" class="text-primary">
-                                        {{ $design->template->name }}
+                                @if($design->category)
+                                    <a href="{{ route('admin.categories.show', $design->category->id) }}" class="text-primary">
+                                        {{ $design->category->name }}
                                     </a>
                                 @else
                                     <span class="text-muted">N/A</span>

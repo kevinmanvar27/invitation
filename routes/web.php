@@ -1,7 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\TemplateController;
+
 use App\Http\Controllers\EditorController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\Auth\LoginController;
@@ -14,14 +14,14 @@ use App\Http\Controllers\Admin\CouponController;
 use App\Http\Controllers\Admin\ShippingAddressController;
 use App\Http\Controllers\Admin\ReferralController;
 use App\Http\Controllers\Admin\UserController;
-use App\Http\Controllers\Admin\TemplateController as AdminTemplateController;
+
 use App\Http\Controllers\Admin\TemplateCategoryController;
 use App\Http\Controllers\Admin\TemplateTagController;
 use App\Http\Controllers\Admin\UserDesignController;
 use App\Http\Controllers\Admin\UserCustomizationController;
 use App\Http\Controllers\Admin\DesignElementController;
 use App\Http\Controllers\Admin\FontController;
-use App\Http\Controllers\Admin\SubscriptionController;
+
 use App\Http\Controllers\Admin\PaymentController;
 use App\Http\Controllers\Admin\DownloadController;
 use App\Http\Controllers\Admin\SharedInvitationController;
@@ -108,8 +108,7 @@ Route::prefix('admin')->name('admin.')->middleware(['auth', 'admin'])->group(fun
     Route::resource('users', UserController::class);
     Route::get('/users-export', [UserController::class, 'export'])->name('users.export');
     
-    // Template Management
-    Route::resource('templates', AdminTemplateController::class);
+    // Categories & Tags
     Route::resource('categories', TemplateCategoryController::class);
     Route::resource('tags', TemplateTagController::class);
     
@@ -132,7 +131,7 @@ Route::prefix('admin')->name('admin.')->middleware(['auth', 'admin'])->group(fun
     ]);
     
     // Business Operations
-    Route::resource('subscriptions', SubscriptionController::class);
+
     Route::resource('payments', PaymentController::class);
     Route::resource('downloads', DownloadController::class);
     Route::resource('shared-invitations', SharedInvitationController::class);
@@ -147,7 +146,6 @@ Route::prefix('admin')->name('admin.')->middleware(['auth', 'admin'])->group(fun
     Route::resource('referrals', ReferralController::class);
 });
 
-Route::resource('templates', TemplateController::class)->except(['show']);
 Route::get('/editor/{template}', [EditorController::class, 'show'])->name('editor.show');
 Route::post('/editor/{template}/save', [EditorController::class, 'saveDesign'])->name('editor.save');
 Route::post('/editor/upload-image', [EditorController::class, 'uploadImage'])->name('editor.upload-image');

@@ -136,8 +136,8 @@
                                             <strong>{{ $category->updated_at->format('M d, Y') }}</strong>
                                         </div>
                                         <div class="col-md-4">
-                                            <small class="text-muted d-block">Templates</small>
-                                            <strong>{{ $category->templates_count ?? $category->templates()->count() }}</strong>
+                                            <small class="text-muted d-block">Designs</small>
+                                            <strong>{{ $category->designs_count ?? $category->designs()->count() }}</strong>
                                         </div>
                                     </div>
                                 </div>

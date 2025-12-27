@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Template;
+use App\Models\TemplateCategory;
 use App\Models\UserDesign;
 use App\Models\UserDesignElement;
 use Illuminate\Http\Request;
@@ -11,9 +11,9 @@ use Illuminate\Support\Facades\Auth;
 class EditorController extends Controller
 {
     /**
-     * Show the editor for a specific template.
+     * Show the editor for a specific category.
      */
-    public function show(Template $template)
+    public function show(TemplateCategory $template)
     {
         return view('editor.show', compact('template'));
     }
@@ -21,7 +21,7 @@ class EditorController extends Controller
     /**
      * Save the user's design.
      */
-    public function saveDesign(Request $request, Template $template)
+    public function saveDesign(Request $request, TemplateCategory $template)
     {
         $request->validate([
             'design_name' => 'required|string|max:255',
@@ -31,7 +31,7 @@ class EditorController extends Controller
         // Create or update the user design
         $userDesign = UserDesign::create([
             'user_id' => Auth::id(),
-            'template_id' => $template->id,
+            'category_id' => $template->id,
             'design_name' => $request->design_name,
             'is_completed' => false,
             'status' => 'draft',

@@ -16,7 +16,7 @@ return new class extends Migration
             $table->foreignId('user_id')->constrained()->onDelete('cascade');
             $table->foreignId('template_id')->constrained();
             $table->string('design_name');
-            $table->json('canvas_data'); // Complete fabric.js JSON
+            $table->json('canvas_data')->nullable(); // Complete canvas JSON data
             $table->string('thumbnail_path')->nullable();
             $table->boolean('is_completed')->default(false);
             $table->enum('status', ['draft', 'completed', 'archived'])->default('draft');

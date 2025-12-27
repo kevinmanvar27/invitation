@@ -282,8 +282,8 @@
                         <polyline points="2 12 12 17 22 12"></polyline>
                     </svg>
                 </div>
-                <h3 class="action-title">Browse Templates</h3>
-                <p class="action-description">Find the perfect template for your wedding</p>
+                <h3 class="action-title">Browse Categories</h3>
+                <p class="action-description">Find the perfect design category for your wedding</p>
             </a>
             
             <a href="#" class="action-card">

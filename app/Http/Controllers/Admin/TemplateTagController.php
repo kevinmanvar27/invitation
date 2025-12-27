@@ -4,7 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\TemplateTag;
-use App\Models\Template;
+use App\Models\TemplateCategory;
 use Illuminate\Http\Request;
 
 class TemplateTagController extends Controller
@@ -14,7 +14,7 @@ class TemplateTagController extends Controller
      */
     public function index()
     {
-        $tags = TemplateTag::with('template')->paginate(10);
+        $tags = TemplateTag::with('category')->paginate(10);
         return view('admin.tags.index', compact('tags'));
     }
 
@@ -23,8 +23,8 @@ class TemplateTagController extends Controller
      */
     public function create()
     {
-        $templates = Template::all();
-        return view('admin.tags.create', compact('templates'));
+        $categories = TemplateCategory::all();
+        return view('admin.tags.create', compact('categories'));
     }
 
     /**
@@ -33,12 +33,12 @@ class TemplateTagController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'template_id' => 'required|exists:templates,id',
+            'category_id' => 'required|exists:template_categories,id',
             'tag_name' => 'required|string|max:255',
         ]);
 
         TemplateTag::create([
-            'template_id' => $request->template_id,
+            'category_id' => $request->category_id,
             'tag_name' => $request->tag_name,
         ]);
 
@@ -50,8 +50,7 @@ class TemplateTagController extends Controller
      */
     public function show($id)
     {
-        $templateTag = TemplateTag::with('template')->findOrFail($id);
-        // Fixed: Pass the correct variable name to the view
+        $templateTag = TemplateTag::with('category')->findOrFail($id);
         return view('admin.tags.show', compact('templateTag'));
     }
 
@@ -60,10 +59,9 @@ class TemplateTagController extends Controller
      */
     public function edit($id)
     {
-        $templateTag = TemplateTag::with('template')->findOrFail($id);
-        $templates = Template::all();
-        // Fixed: Pass the correct variable name to the view
-        return view('admin.tags.edit', compact('templateTag', 'templates'));
+        $templateTag = TemplateTag::with('category')->findOrFail($id);
+        $categories = TemplateCategory::all();
+        return view('admin.tags.edit', compact('templateTag', 'categories'));
     }
 
     /**
@@ -72,14 +70,14 @@ class TemplateTagController extends Controller
     public function update(Request $request, $id)
     {
         $request->validate([
-            'template_id' => 'required|exists:templates,id',
+            'category_id' => 'required|exists:template_categories,id',
             'tag_name' => 'required|string|max:255',
         ]);
 
         $templateTag = TemplateTag::findOrFail($id);
         
         $templateTag->update([
-            'template_id' => $request->template_id,
+            'category_id' => $request->category_id,
             'tag_name' => $request->tag_name,
         ]);
 

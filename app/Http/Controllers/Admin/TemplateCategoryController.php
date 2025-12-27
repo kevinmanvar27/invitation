@@ -13,7 +13,7 @@ class TemplateCategoryController extends Controller
      */
     public function index()
     {
-        $categories = TemplateCategory::with('parent')->withCount('templates')->paginate(10);
+        $categories = TemplateCategory::with('parent')->withCount('designs')->paginate(10);
         return view('admin.categories.index', compact('categories'));
     }
 
@@ -57,7 +57,7 @@ class TemplateCategoryController extends Controller
      */
     public function show(TemplateCategory $category)
     {
-        $category->load('parent', 'children', 'templates');
+        $category->load('parent', 'children', 'designs');
         return view('admin.categories.show', compact('category'));
     }
 
@@ -101,10 +101,10 @@ class TemplateCategoryController extends Controller
      */
     public function destroy(TemplateCategory $category)
     {
-        // Check if category has templates
-        if ($category->templates()->count() > 0) {
+        // Check if category has designs
+        if ($category->designs()->count() > 0) {
             return redirect()->route('admin.categories.index')
-                ->with('error', 'Cannot delete category with associated templates. Please move or delete templates first.');
+                ->with('error', 'Cannot delete category with associated designs. Please move or delete designs first.');
         }
 
         // Check if category has child categories

@@ -14,7 +14,6 @@ class Payment extends Model
      */
     protected $fillable = [
         'user_id',
-        'subscription_id',
         'amount',
         'payment_method',
         'payment_gateway_id',
@@ -38,11 +37,4 @@ class Payment extends Model
         return $this->belongsTo(User::class);
     }
 
-    /**
-     * Get the subscription associated with the payment.
-     */
-    public function subscription(): BelongsTo
-    {
-        return $this->belongsTo(Subscription::class);
-    }
 }

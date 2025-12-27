@@ -16,7 +16,7 @@ class UserDesign extends Model
      */
     protected $fillable = [
         'user_id',
-        'template_id',
+        'category_id',
         'design_name',
         'canvas_data',
         'thumbnail_path',
@@ -43,11 +43,11 @@ class UserDesign extends Model
     }
 
     /**
-     * Get the template that owns the design.
+     * Get the category for the design.
      */
-    public function template(): BelongsTo
+    public function category(): BelongsTo
     {
-        return $this->belongsTo(Template::class);
+        return $this->belongsTo(TemplateCategory::class, 'category_id');
     }
 
     /**
@@ -72,29 +72,5 @@ class UserDesign extends Model
     public function downloads(): HasMany
     {
         return $this->hasMany(Download::class, 'design_id');
-    }
-
-    /**
-     * Get the print orders for the design.
-     */
-    public function printOrders(): HasMany
-    {
-        return $this->hasMany(PrintOrder::class, 'design_id');
-    }
-
-    /**
-     * Get the RSVP settings for the design.
-     */
-    public function rsvpSettings(): HasOne
-    {
-        return $this->hasOne(RsvpSetting::class, 'design_id');
-    }
-
-    /**
-     * Get the design elements for the design.
-     */
-    public function designElements(): HasMany
-    {
-        return $this->hasMany(UserDesignElement::class, 'user_design_id');
     }
 }

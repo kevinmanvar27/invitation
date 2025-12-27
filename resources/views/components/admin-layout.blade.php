@@ -78,14 +78,7 @@
                         </a>
                     </li>
                     
-                    <!-- Template Management Section -->
-                    <li class="nav-section">Template Management</li>
-                    <li class="nav-item">
-                        <a href="{{ route('admin.templates.index') }}" class="nav-link {{ request()->routeIs('admin.templates.*') ? 'active' : '' }}">
-                            <i class="fas fa-file-image"></i>
-                            <span>Templates</span>
-                        </a>
-                    </li>
+                    <!-- Design Management Section -->
                     <li class="nav-item">
                         <a href="{{ route('admin.categories.index') }}" class="nav-link {{ request()->routeIs('admin.categories.*') ? 'active' : '' }}">
                             <i class="fas fa-folder"></i>
@@ -128,12 +121,6 @@
                     
                     <!-- Business Operations Section -->
                     <li class="nav-section">Business Operations</li>
-                    <li class="nav-item">
-                        <a href="{{ route('admin.subscriptions.index') }}" class="nav-link {{ request()->routeIs('admin.subscriptions.*') ? 'active' : '' }}">
-                            <i class="fas fa-crown"></i>
-                            <span>Subscriptions</span>
-                        </a>
-                    </li>
                     <li class="nav-item">
                         <a href="{{ route('admin.payments.index') }}" class="nav-link {{ request()->routeIs('admin.payments.*') ? 'active' : '' }}">
                             <i class="fas fa-credit-card"></i>

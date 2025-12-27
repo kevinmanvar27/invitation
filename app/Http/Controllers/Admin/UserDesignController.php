@@ -5,7 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\UserDesign;
 use App\Models\User;
-use App\Models\Template;
+use App\Models\TemplateCategory;
 use Illuminate\Http\Request;
 
 class UserDesignController extends Controller
@@ -15,7 +15,7 @@ class UserDesignController extends Controller
      */
     public function index()
     {
-        $designs = UserDesign::with('user', 'template')->paginate(10);
+        $designs = UserDesign::with('user', 'category')->paginate(10);
         return view('admin.designs.index', compact('designs'));
     }
 
@@ -25,8 +25,8 @@ class UserDesignController extends Controller
     public function create()
     {
         $users = User::all();
-        $templates = Template::all();
-        return view('admin.designs.create', compact('users', 'templates'));
+        $categories = TemplateCategory::all();
+        return view('admin.designs.create', compact('users', 'categories'));
     }
 
     /**
@@ -36,7 +36,7 @@ class UserDesignController extends Controller
     {
         $request->validate([
             'user_id' => 'required|exists:users,id',
-            'template_id' => 'required|exists:templates,id',
+            'category_id' => 'required|exists:template_categories,id',
             'design_name' => 'required|string|max:255',
             'is_completed' => 'boolean',
             'status' => 'required|string|max:50',
@@ -51,7 +51,7 @@ class UserDesignController extends Controller
 
         UserDesign::create([
             'user_id' => $request->user_id,
-            'template_id' => $request->template_id,
+            'category_id' => $request->category_id,
             'design_name' => $request->design_name,
             'canvas_data' => $canvasData,
             'is_completed' => $request->is_completed ?? false,
@@ -67,7 +67,7 @@ class UserDesignController extends Controller
      */
     public function show(UserDesign $design)
     {
-        $design->load('user', 'template', 'customization', 'sharedInvitations', 'downloads');
+        $design->load('user', 'category', 'customization', 'sharedInvitations', 'downloads');
         return view('admin.designs.show', compact('design'));
     }
 
@@ -78,8 +78,8 @@ class UserDesignController extends Controller
     public function edit(UserDesign $design)
     {
         $users = User::all();
-        $templates = Template::all();
-        return view('admin.designs.edit', compact('design', 'users', 'templates'));
+        $categories = TemplateCategory::all();
+        return view('admin.designs.edit', compact('design', 'users', 'categories'));
     }
 
     /**
@@ -90,16 +90,24 @@ class UserDesignController extends Controller
     {
         $request->validate([
             'user_id' => 'required|exists:users,id',
-            'template_id' => 'required|exists:templates,id',
+            'category_id' => 'required|exists:template_categories,id',
             'design_name' => 'required|string|max:255',
             'is_completed' => 'boolean',
             'status' => 'required|string|max:50',
+            'canvas_data' => 'nullable|string',
         ]);
+
+        // Parse canvas_data if it's a JSON string
+        $canvasData = $design->canvas_data; // Keep existing if not provided
+        if ($request->has('canvas_data') && $request->canvas_data) {
+            $canvasData = json_decode($request->canvas_data, true);
+        }
 
         $design->update([
             'user_id' => $request->user_id,
-            'template_id' => $request->template_id,
+            'category_id' => $request->category_id,
             'design_name' => $request->design_name,
+            'canvas_data' => $canvasData,
             'is_completed' => $request->is_completed ?? false,
             'status' => $request->status,
         ]);
@@ -122,7 +130,7 @@ class UserDesignController extends Controller
      */
     public function export(Request $request)
     {
-        $designs = UserDesign::with('user', 'template')->get();
+        $designs = UserDesign::with('user', 'category')->get();
         $filename = 'designs_' . date('Y-m-d') . '.csv';
         
         $headers = [
@@ -132,14 +140,14 @@ class UserDesignController extends Controller
         
         $callback = function() use ($designs) {
             $file = fopen('php://output', 'w');
-            fputcsv($file, ['ID', 'Design Name', 'User', 'Template', 'Status', 'Completed', 'Created At']);
+            fputcsv($file, ['ID', 'Design Name', 'User', 'Category', 'Status', 'Completed', 'Created At']);
             
             foreach ($designs as $design) {
                 fputcsv($file, [
                     $design->id,
                     $design->design_name,
                     $design->user->name ?? 'N/A',
-                    $design->template->name ?? 'N/A',
+                    $design->category->name ?? 'N/A',
                     $design->status,
                     $design->is_completed ? 'Yes' : 'No',
                     $design->created_at

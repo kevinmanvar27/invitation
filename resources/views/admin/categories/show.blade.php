@@ -65,8 +65,8 @@
                     <div class="stat-card stat-card-primary">
                         <div class="stat-card-body">
                             <div class="stat-card-content">
-                                <span class="stat-card-value">{{ $category->templates->count() }}</span>
-                                <span class="stat-card-label">Templates</span>
+                                <span class="stat-card-value">{{ $category->designs->count() }}</span>
+                                <span class="stat-card-label">Designs</span>
                             </div>
                         </div>
                     </div>
@@ -132,7 +132,7 @@
                                             <i class="fas {{ $child->icon ?? 'fa-folder' }} text-warning me-2"></i>
                                             <strong>{{ $child->name }}</strong>
                                         </div>
-                                        <div class="text-muted small mb-2">{{ $child->templates_count ?? $child->templates()->count() }} templates</div>
+                                        <div class="text-muted small mb-2">{{ $child->designs_count ?? $child->designs()->count() }} designs</div>
                                         <a href="{{ route('admin.categories.show', $child->id) }}" class="btn btn-sm btn-outline-primary">View</a>
                                     </div>
                                 </div>
@@ -147,48 +147,43 @@
                 </div>
             </div>
             
-            <!-- Templates in Category -->
+            <!-- Designs in Category -->
             <div class="card">
                 <div class="card-header d-flex justify-content-between align-items-center">
                     <h5 class="card-title mb-0">
-                        <i class="fas fa-palette me-2 text-primary"></i>Templates ({{ $category->templates->count() }})
+                        <i class="fas fa-palette me-2 text-primary"></i>Designs ({{ $category->designs->count() }})
                     </h5>
-                    <a href="{{ route('admin.templates.index', ['category_id' => $category->id]) }}" class="btn btn-sm btn-outline-primary">View All</a>
                 </div>
                 <div class="card-body p-0">
-                    @if($category->templates->count() > 0)
+                    @if($category->designs->count() > 0)
                         <div class="table-responsive">
                             <table class="table table-hover mb-0">
                                 <thead>
                                     <tr>
-                                        <th>Template</th>
-                                        <th>Price</th>
+                                        <th>Design</th>
+                                        <th>User</th>
                                         <th>Status</th>
                                         <th class="text-end">Actions</th>
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    @foreach($category->templates->take(5) as $template)
+                                    @foreach($category->designs->take(5) as $design)
                                         <tr>
                                             <td>
-                                                <strong>{{ $template->name }}</strong>
+                                                <strong>{{ $design->name }}</strong>
                                             </td>
                                             <td>
-                                                @if($template->is_premium)
-                                                    <span class="text-warning">₹{{ number_format($template->price, 2) }}</span>
-                                                @else
-                                                    <span class="text-success">Free</span>
-                                                @endif
+                                                {{ $design->user->name ?? 'N/A' }}
                                             </td>
                                             <td>
-                                                @if($template->is_active)
-                                                    <span class="badge badge-success">Active</span>
+                                                @if($design->is_published)
+                                                    <span class="badge badge-success">Published</span>
                                                 @else
-                                                    <span class="badge badge-secondary">Inactive</span>
+                                                    <span class="badge badge-secondary">Draft</span>
                                                 @endif
                                             </td>
                                             <td class="text-end">
-                                                <a href="{{ route('admin.templates.show', $template->id) }}" class="btn btn-icon btn-outline-secondary btn-sm">
+                                                <a href="{{ route('admin.user-designs.show', $design->id) }}" class="btn btn-icon btn-outline-secondary btn-sm">
                                                     <i class="fas fa-eye"></i>
                                                 </a>
                                             </td>
@@ -200,7 +195,7 @@
                     @else
                         <div class="text-center py-4 text-muted">
                             <i class="fas fa-palette fa-2x mb-2"></i>
-                            <p class="mb-0">No templates in this category</p>
+                            <p class="mb-0">No designs in this category</p>
                         </div>
                     @endif
                 </div>
@@ -227,10 +222,10 @@
                 </div>
                 <div class="modal-body">
                     <p>Are you sure you want to delete <strong>{{ $category->name }}</strong>?</p>
-                    @if($category->templates->count() > 0 || $category->children->count() > 0)
+                    @if($category->designs->count() > 0 || $category->children->count() > 0)
                         <div class="alert alert-warning mb-0">
                             <i class="fas fa-exclamation-circle me-2"></i>
-                            This category has {{ $category->templates->count() }} templates and {{ $category->children->count() }} subcategories that may be affected.
+                            This category has {{ $category->designs->count() }} designs and {{ $category->children->count() }} subcategories that may be affected.
                         </div>
                     @else
                         <p class="text-muted mb-0">This action cannot be undone.</p>

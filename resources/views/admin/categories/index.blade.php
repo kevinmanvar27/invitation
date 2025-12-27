@@ -60,7 +60,7 @@
                             <th>Slug</th>
                             <th width="150">Parent</th>
                             <th width="80" class="text-center">Order</th>
-                            <th width="100" class="text-center">Templates</th>
+                            <th width="100" class="text-center">Designs</th>
                             <th width="150" class="text-end">Actions</th>
                         </tr>
                     </thead>
@@ -92,7 +92,7 @@
                                     <span class="badge badge-info">{{ $category->order }}</span>
                                 </td>
                                 <td class="text-center">
-                                    <span class="fw-medium">{{ $category->templates_count ?? 0 }}</span>
+                                    <span class="fw-medium">{{ $category->designs_count ?? 0 }}</span>
                                 </td>
                                 <td>
                                     <div class="table-actions">
@@ -158,7 +158,7 @@
                 </div>
                 <div class="modal-body">
                     <p>Are you sure you want to delete <strong id="deleteCategoryName"></strong>?</p>
-                    <p class="text-muted mb-0">This action cannot be undone. Templates in this category may be affected.</p>
+                    <p class="text-muted mb-0">This action cannot be undone. Designs in this category may be affected.</p>
                 </div>
                 <div class="modal-footer border-0">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>

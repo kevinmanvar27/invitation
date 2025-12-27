@@ -22,8 +22,9 @@
             
             <select name="status" class="form-select">
                 <option value="">All Statuses</option>
-                <option value="published" {{ request('status') === 'published' ? 'selected' : '' }}>Published</option>
                 <option value="draft" {{ request('status') === 'draft' ? 'selected' : '' }}>Draft</option>
+                <option value="completed" {{ request('status') === 'completed' ? 'selected' : '' }}>Completed</option>
+                <option value="archived" {{ request('status') === 'archived' ? 'selected' : '' }}>Archived</option>
             </select>
             
             <button type="submit" class="btn btn-secondary">
@@ -58,7 +59,7 @@
                             <th width="80">Preview</th>
                             <th>Design Name</th>
                             <th>User</th>
-                            <th>Template</th>
+                            <th>Category</th>
                             <th width="100">Status</th>
                             <th width="120">Created</th>
                             <th width="150" class="text-end">Actions</th>
@@ -80,7 +81,7 @@
                                     @endif
                                 </td>
                                 <td>
-                                    <span class="fw-medium">{{ $design->name ?? 'Untitled Design' }}</span>
+                                    <span class="fw-medium">{{ $design->design_name ?? 'Untitled Design' }}</span>
                                 </td>
                                 <td>
                                     @if($design->user)
@@ -97,21 +98,25 @@
                                     @endif
                                 </td>
                                 <td>
-                                    @if($design->template)
-                                        <a href="{{ route('admin.templates.show', $design->template->id) }}" class="text-decoration-none">
-                                            {{ $design->template->name }}
+                                    @if($design->category)
+                                        <a href="{{ route('admin.categories.show', $design->category->id) }}" class="text-decoration-none">
+                                            {{ $design->category->name }}
                                         </a>
                                     @else
                                         <span class="text-muted">—</span>
                                     @endif
                                 </td>
                                 <td>
-                                    @if($design->is_published ?? false)
-                                        <span class="badge badge-success">
-                                            <i class="fas fa-check-circle me-1"></i>Published
+                                    @if($design->status === 'completed')
+                                        <span class="badge bg-success">
+                                            <i class="fas fa-check-circle me-1"></i>Completed
+                                        </span>
+                                    @elseif($design->status === 'archived')
+                                        <span class="badge bg-secondary">
+                                            <i class="fas fa-archive me-1"></i>Archived
                                         </span>
                                     @else
-                                        <span class="badge badge-secondary">
+                                        <span class="badge bg-warning text-dark">
                                             <i class="fas fa-file me-1"></i>Draft
                                         </span>
                                     @endif
@@ -135,7 +140,7 @@
                                                 class="btn btn-icon btn-outline-danger" 
                                                 data-bs-toggle="tooltip" 
                                                 title="Delete"
-                                                onclick="confirmDelete('{{ $design->id }}', '{{ $design->name ?? 'this design' }}')">
+                                                onclick="confirmDelete('{{ $design->id }}', '{{ $design->design_name ?? 'this design' }}')">
                                             <i class="fas fa-trash"></i>
                                         </button>
                                     </div>

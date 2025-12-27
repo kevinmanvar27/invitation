@@ -1,5 +1,5 @@
 <x-admin-layout>
-    <x-slot name="title">Create Template Tag</x-slot>
+    <x-slot name="title">Create Tag</x-slot>
 
     <!-- Page Header -->
             <nav aria-label="breadcrumb">
@@ -28,18 +28,18 @@
                     @csrf
                     <div class="card-body">
                         <div class="row g-3">
-                            <!-- Template -->
+                            <!-- Category -->
                             <div class="col-12">
-                                <label for="template_id" class="form-label">Template <span class="text-danger">*</span></label>
-                                <select name="template_id" id="template_id" class="form-select @error('template_id') is-invalid @enderror" required>
-                                    <option value="">Select a template</option>
-                                    @foreach($templates as $template)
-                                        <option value="{{ $template->id }}" {{ old('template_id') == $template->id ? 'selected' : '' }}>
-                                            {{ $template->name }}
+                                <label for="category_id" class="form-label">Category <span class="text-danger">*</span></label>
+                                <select name="category_id" id="category_id" class="form-select @error('category_id') is-invalid @enderror" required>
+                                    <option value="">Select a category</option>
+                                    @foreach($categories as $category)
+                                        <option value="{{ $category->id }}" {{ old('category_id') == $category->id ? 'selected' : '' }}>
+                                            {{ $category->name }}
                                         </option>
                                     @endforeach
                                 </select>
-                                @error('template_id')
+                                @error('category_id')
                                     <div class="invalid-feedback">{{ $message }}</div>
                                 @enderror
                             </div>
@@ -57,7 +57,7 @@
                                 @error('tag_name')
                                     <div class="invalid-feedback">{{ $message }}</div>
                                 @enderror
-                                <div class="form-text">Tags help users find templates by keywords</div>
+                                <div class="form-text">Tags help users find designs by keywords</div>
                             </div>
                         </div>
                     </div>

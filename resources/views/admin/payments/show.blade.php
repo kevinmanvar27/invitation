@@ -201,38 +201,6 @@
                 </div>
             </div>
 
-            <!-- Subscription Information -->
-            @if($payment->subscription)
-            <div class="card mb-4">
-                <div class="card-header">
-                    <h6 class="mb-0"><i class="fas fa-sync-alt me-2"></i>Related Subscription</h6>
-                </div>
-                <div class="card-body">
-                    <div class="detail-grid">
-                        <div class="detail-item">
-                            <div class="detail-label">Subscription ID</div>
-                            <div class="detail-value">#{{ $payment->subscription->id }}</div>
-                        </div>
-                        <div class="detail-item">
-                            <div class="detail-label">Plan Type</div>
-                            <div class="detail-value">{{ ucfirst($payment->subscription->plan_type) }}</div>
-                        </div>
-                        <div class="detail-item">
-                            <div class="detail-label">Status</div>
-                            <div class="detail-value">
-                                <span class="badge bg-{{ $payment->subscription->status == 'active' ? 'success' : 'secondary' }}">
-                                    {{ ucfirst($payment->subscription->status) }}
-                                </span>
-                            </div>
-                        </div>
-                    </div>
-                    <a href="{{ route('admin.subscriptions.show', $payment->subscription) }}" class="btn btn-sm btn-outline-primary mt-3">
-                        <i class="fas fa-external-link-alt me-1"></i> View Subscription
-                    </a>
-                </div>
-            </div>
-            @endif
-
             <!-- Timestamps -->
             <div class="card mb-4">
                 <div class="card-header">

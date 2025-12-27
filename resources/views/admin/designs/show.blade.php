@@ -64,12 +64,12 @@
                     <hr>
                     <div class="row mb-3">
                         <div class="col-md-4">
-                            <label class="form-label text-muted">Template</label>
+                            <label class="form-label text-muted">Category</label>
                         </div>
                         <div class="col-md-8">
                             <p class="mb-0">
-                                @if($design->template)
-                                    <a href="{{ route('admin.templates.show', $design->template->id) }}">{{ $design->template->name }}</a>
+                                @if($design->category)
+                                    <a href="{{ route('admin.categories.show', $design->category->id) }}">{{ $design->category->name }}</a>
                                 @else
                                     <span class="text-muted">N/A</span>
                                 @endif

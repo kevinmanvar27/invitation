@@ -4,12 +4,11 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\User;
-use App\Models\Template;
-use App\Models\Subscription;
 use App\Models\UserDesign;
 use App\Models\Payment;
 use App\Models\RsvpResponse;
 use App\Models\PrintOrder;
+use App\Models\TemplateCategory;
 use Illuminate\Http\Request;
 
 class AdminController extends Controller
@@ -28,8 +27,7 @@ class AdminController extends Controller
         // Gather statistics for the dashboard
         $stats = [
             'users' => User::count(),
-            'templates' => Template::count(),
-            'subscriptions' => Subscription::where('status', 'active')->count(),
+            'categories' => TemplateCategory::count(),
             'designs' => UserDesign::count(),
             'payments' => Payment::count(),
             'rsvp_responses' => RsvpResponse::count(),

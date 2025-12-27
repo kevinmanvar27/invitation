@@ -126,22 +126,7 @@
                                 @enderror
                             </div>
 
-                            <!-- Subscription (Optional) -->
-                            <div class="col-md-6">
-                                <label for="subscription_id" class="form-label">Subscription</label>
-                                <select name="subscription_id" id="subscription_id" class="form-select @error('subscription_id') is-invalid @enderror">
-                                    <option value="">No Subscription</option>
-                                    @if(isset($subscriptions))
-                                        @foreach($subscriptions as $subscription)
-                                            <option value="{{ $subscription->id }}" {{ old('subscription_id') == $subscription->id ? 'selected' : '' }}>{{ $subscription->plan_type }} - {{ $subscription->user->name ?? 'Unknown' }}</option>
-                                        @endforeach
-                                    @endif
-                                </select>
-                                @error('subscription_id')
-                                    <div class="invalid-feedback">{{ $message }}</div>
-                                @enderror
-                                <div class="form-text">Link this payment to a subscription (optional)</div>
-                            </div>
+
                         </div>
                     </div>
                     <div class="card-footer d-flex justify-content-between">

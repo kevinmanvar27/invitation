@@ -13,15 +13,15 @@ class TemplateTag extends Model
      * @var array
      */
     protected $fillable = [
-        'template_id',
+        'category_id',
         'tag_name',
     ];
 
     /**
-     * Get the template that owns the tag.
+     * Get the category that owns the tag.
      */
-    public function template(): BelongsTo
+    public function category(): BelongsTo
     {
-        return $this->belongsTo(Template::class);
+        return $this->belongsTo(TemplateCategory::class, 'category_id');
     }
 }

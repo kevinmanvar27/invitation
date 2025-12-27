@@ -52,9 +52,9 @@
                     <h6 class="mb-0"><i class="fas fa-bolt me-2"></i>Quick Actions</h6>
                 </div>
                 <div class="list-group list-group-flush">
-                    @if($templateTag->template)
-                        <a href="{{ route('admin.templates.show', $templateTag->template->id) }}" class="list-group-item list-group-item-action">
-                            <i class="fas fa-file-alt me-2 text-muted"></i> View Template
+                    @if($templateTag->category)
+                        <a href="{{ route('admin.categories.show', $templateTag->category->id) }}" class="list-group-item list-group-item-action">
+                            <i class="fas fa-folder me-2 text-muted"></i> View Category
                         </a>
                     @endif
                     <a href="{{ route('admin.tags.create') }}" class="list-group-item list-group-item-action">
@@ -87,11 +87,11 @@
                             </span>
                         </div>
                         <div class="detail-item">
-                            <span class="detail-label">Template</span>
+                            <span class="detail-label">Category</span>
                             <span class="detail-value">
-                                @if($templateTag->template)
-                                    <a href="{{ route('admin.templates.show', $templateTag->template->id) }}" class="text-decoration-none">
-                                        {{ $templateTag->template->name }}
+                                @if($templateTag->category)
+                                    <a href="{{ route('admin.categories.show', $templateTag->category->id) }}" class="text-decoration-none">
+                                        {{ $templateTag->category->name }}
                                     </a>
                                 @else
                                     <span class="text-muted">N/A</span>
@@ -110,33 +110,20 @@
                 </div>
             </div>
 
-            <!-- Associated Template Details -->
-            @if($templateTag->template)
+            <!-- Associated Category Details -->
+            @if($templateTag->category)
             <div class="card mb-4">
                 <div class="card-header">
-                    <h5 class="mb-0"><i class="fas fa-file-alt me-2"></i>Associated Template</h5>
+                    <h5 class="mb-0"><i class="fas fa-folder me-2"></i>Associated Category</h5>
                 </div>
                 <div class="card-body">
                     <div class="d-flex align-items-center">
-                        @if($templateTag->template->preview_image)
-                            <img src="{{ asset('storage/' . $templateTag->template->preview_image) }}" 
-                                 alt="{{ $templateTag->template->name }}" 
-                                 class="rounded me-3"
-                                 style="width: 80px; height: 80px; object-fit: cover;">
-                        @else
-                            <div class="avatar me-3" style="width: 80px; height: 80px; font-size: 1.5rem;">
-                                <i class="fas fa-file-alt"></i>
-                            </div>
-                        @endif
+                        <div class="avatar me-3" style="width: 80px; height: 80px; font-size: 1.5rem;">
+                            <i class="fas fa-folder"></i>
+                        </div>
                         <div>
-                            <h6 class="mb-1">{{ $templateTag->template->name }}</h6>
-                            <p class="text-muted mb-1 small">{{ Str::limit($templateTag->template->description, 100) }}</p>
-                            <span class="badge {{ $templateTag->template->is_active ? 'bg-success' : 'bg-secondary' }}">
-                                {{ $templateTag->template->is_active ? 'Active' : 'Inactive' }}
-                            </span>
-                            @if($templateTag->template->is_premium)
-                                <span class="badge bg-warning text-dark">Premium</span>
-                            @endif
+                            <h6 class="mb-1">{{ $templateTag->category->name }}</h6>
+                            <p class="text-muted mb-1 small">{{ Str::limit($templateTag->category->description, 100) }}</p>
                         </div>
                     </div>
                 </div>

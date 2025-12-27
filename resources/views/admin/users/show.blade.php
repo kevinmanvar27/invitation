@@ -80,9 +80,7 @@
                         <a href="{{ route('admin.designs.index', ['user_id' => $user->id]) }}" class="list-group-item list-group-item-action">
                             <i class="fas fa-paint-brush me-2 text-primary"></i> View Designs
                         </a>
-                        <a href="{{ route('admin.subscriptions.index', ['user_id' => $user->id]) }}" class="list-group-item list-group-item-action">
-                            <i class="fas fa-crown me-2 text-warning"></i> View Subscriptions
-                        </a>
+
                         <a href="{{ route('admin.payments.index', ['user_id' => $user->id]) }}" class="list-group-item list-group-item-action">
                             <i class="fas fa-credit-card me-2 text-success"></i> View Payments
                         </a>
@@ -108,16 +106,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="col-md-3 col-6">
-                    <div class="stat-card stat-card-success">
-                        <div class="stat-card-body">
-                            <div class="stat-card-content">
-                                <span class="stat-card-value">{{ $user->subscriptions->count() }}</span>
-                                <span class="stat-card-label">Subscriptions</span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+
                 <div class="col-md-3 col-6">
                     <div class="stat-card stat-card-warning">
                         <div class="stat-card-body">
@@ -249,7 +238,7 @@
                                             <td>
                                                 <strong>{{ $design->name ?? 'Untitled Design' }}</strong>
                                             </td>
-                                            <td>{{ $design->template->name ?? 'N/A' }}</td>
+                                            <td>{{ $design->category->name ?? 'N/A' }}</td>
                                             <td class="text-muted">{{ $design->created_at->diffForHumans() }}</td>
                                             <td class="text-end">
                                                 <a href="{{ route('admin.designs.show', $design->id) }}" class="btn btn-icon btn-outline-secondary btn-sm">

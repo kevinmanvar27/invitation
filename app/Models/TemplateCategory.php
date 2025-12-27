@@ -39,10 +39,10 @@ class TemplateCategory extends Model
     }
 
     /**
-     * Get the templates for the category.
+     * Get the designs for the category.
      */
-    public function templates(): HasMany
+    public function designs(): HasMany
     {
-        return $this->hasMany(Template::class, 'category_id');
+        return $this->hasMany(UserDesign::class, 'category_id');
     }
 }

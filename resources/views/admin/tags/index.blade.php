@@ -62,9 +62,18 @@
                                     </span>
                                 </td>
                                 <td>
-                                    @if($tag->template)
-                                        <a href="{{ route('admin.templates.show', $tag->template->id) }}" class="text-decoration-none">
-                                            {{ $tag->template->name }}
+                                    @if($tag->category)
+                                        <a href="{{ route('admin.categories.show', $tag->category->id) }}" class="text-decoration-none">
+                                            {{ $tag->category->name }}
+                                        </a>
+                                    @else
+                                        <span class="text-muted">—</span>
+                                    @endif
+                                </td>
+                                <td>
+                                    @if($tag->category)
+                                        <a href="{{ route('admin.categories.show', $tag->category->id) }}" class="text-decoration-none">
+                                            {{ $tag->category->name }}
                                         </a>
                                     @else
                                         <span class="text-muted">—</span>

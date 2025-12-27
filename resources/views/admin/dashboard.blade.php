@@ -32,15 +32,15 @@
             <div class="stat-card stat-card-success">
                 <div class="stat-card-body">
                     <div class="stat-card-icon">
-                        <i class="fas fa-file-image"></i>
+                        <i class="fas fa-folder"></i>
                     </div>
                     <div class="stat-card-content">
-                        <span class="stat-card-value">{{ $stats['templates'] ?? '0' }}</span>
-                        <span class="stat-card-label">Templates</span>
+                        <span class="stat-card-value">{{ $stats['categories'] ?? '0' }}</span>
+                        <span class="stat-card-label">Categories</span>
                     </div>
                 </div>
-                <a href="{{ route('admin.templates.index') }}" class="stat-card-footer">
-                    View all templates <i class="fas fa-arrow-right ms-2"></i>
+                <a href="{{ route('admin.categories.index') }}" class="stat-card-footer">
+                    View all categories <i class="fas fa-arrow-right ms-2"></i>
                 </a>
             </div>
         </div>
@@ -49,15 +49,15 @@
             <div class="stat-card stat-card-warning">
                 <div class="stat-card-body">
                     <div class="stat-card-icon">
-                        <i class="fas fa-crown"></i>
+                        <i class="fas fa-paint-brush"></i>
                     </div>
                     <div class="stat-card-content">
-                        <span class="stat-card-value">{{ $stats['subscriptions'] ?? '0' }}</span>
-                        <span class="stat-card-label">Active Subscriptions</span>
+                        <span class="stat-card-value">{{ $stats['designs'] ?? '0' }}</span>
+                        <span class="stat-card-label">User Designs</span>
                     </div>
                 </div>
-                <a href="{{ route('admin.subscriptions.index') }}" class="stat-card-footer">
-                    View subscriptions <i class="fas fa-arrow-right ms-2"></i>
+                <a href="{{ route('admin.designs.index') }}" class="stat-card-footer">
+                    View designs <i class="fas fa-arrow-right ms-2"></i>
                 </a>
             </div>
         </div>
@@ -151,21 +151,15 @@
                                 <i class="fas fa-chevron-right text-muted"></i>
                             </div>
                         </a>
-                        <a href="{{ route('admin.templates.index') }}" class="list-group-item list-group-item-action">
-                            <div class="d-flex justify-content-between align-items-center">
-                                <span><i class="fas fa-file-image me-3 text-success"></i>Manage Templates</span>
-                                <i class="fas fa-chevron-right text-muted"></i>
-                            </div>
-                        </a>
                         <a href="{{ route('admin.categories.index') }}" class="list-group-item list-group-item-action">
                             <div class="d-flex justify-content-between align-items-center">
-                                <span><i class="fas fa-folder me-3 text-info"></i>Template Categories</span>
+                                <span><i class="fas fa-folder me-3 text-info"></i>Categories</span>
                                 <i class="fas fa-chevron-right text-muted"></i>
                             </div>
                         </a>
                         <a href="{{ route('admin.tags.index') }}" class="list-group-item list-group-item-action">
                             <div class="d-flex justify-content-between align-items-center">
-                                <span><i class="fas fa-tags me-3 text-secondary"></i>Template Tags</span>
+                                <span><i class="fas fa-tags me-3 text-secondary"></i>Tags</span>
                                 <i class="fas fa-chevron-right text-muted"></i>
                             </div>
                         </a>
@@ -221,12 +215,6 @@
                 </div>
                 <div class="card-body p-0">
                     <div class="list-group list-group-flush">
-                        <a href="{{ route('admin.subscriptions.index') }}" class="list-group-item list-group-item-action">
-                            <div class="d-flex justify-content-between align-items-center">
-                                <span><i class="fas fa-crown me-3 text-warning"></i>Subscriptions</span>
-                                <i class="fas fa-chevron-right text-muted"></i>
-                            </div>
-                        </a>
                         <a href="{{ route('admin.payments.index') }}" class="list-group-item list-group-item-action">
                             <div class="d-flex justify-content-between align-items-center">
                                 <span><i class="fas fa-credit-card me-3 text-success"></i>Payments</span>

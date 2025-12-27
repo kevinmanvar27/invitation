@@ -103,13 +103,7 @@
                             </a>
                         </li>
                         
-                        <li class="nav-header">TEMPLATE MANAGEMENT</li>
-                        <li class="nav-item">
-                            <a href="{{ route('admin.templates.index') }}" class="nav-link {{ request()->routeIs('admin.templates.*') ? 'active' : '' }}">
-                                <i class="nav-icon fas fa-file-image"></i>
-                                <p>Templates</p>
-                            </a>
-                        </li>
+                        <li class="nav-header">DESIGN MANAGEMENT</li>
                         <li class="nav-item">
                             <a href="{{ route('admin.categories.index') }}" class="nav-link {{ request()->routeIs('admin.categories.*') ? 'active' : '' }}">
                                 <i class="nav-icon fas fa-folder"></i>
@@ -122,8 +116,6 @@
                                 <p>Tags</p>
                             </a>
                         </li>
-                        
-                        <li class="nav-header">DESIGN MANAGEMENT</li>
                         <li class="nav-item">
                             <a href="{{ route('admin.designs.index') }}" class="nav-link {{ request()->routeIs('admin.designs.*') ? 'active' : '' }}">
                                 <i class="nav-icon fas fa-paint-brush"></i>
@@ -150,12 +142,6 @@
                         </li>
                         
                         <li class="nav-header">BUSINESS OPERATIONS</li>
-                        <li class="nav-item">
-                            <a href="{{ route('admin.subscriptions.index') }}" class="nav-link {{ request()->routeIs('admin.subscriptions.*') ? 'active' : '' }}">
-                                <i class="nav-icon fas fa-subscript"></i>
-                                <p>Subscriptions</p>
-                            </a>
-                        </li>
                         <li class="nav-item">
                             <a href="{{ route('admin.payments.index') }}" class="nav-link {{ request()->routeIs('admin.payments.*') ? 'active' : '' }}">
                                 <i class="nav-icon fas fa-credit-card"></i>

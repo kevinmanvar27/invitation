@@ -2,8 +2,8 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Template;
 use App\Models\UserDesign;
+use App\Models\TemplateCategory;
 use App\Models\RsvpResponse;
 use App\Models\PrintOrder;
 use Illuminate\Http\Request;
@@ -16,8 +16,7 @@ class DashboardController extends Controller
      */
     public function index()
     {
-        $recentTemplates = Template::where('is_active', true)
-            ->orderBy('created_at', 'desc')
+        $recentCategories = TemplateCategory::orderBy('created_at', 'desc')
             ->limit(6)
             ->get();
 
@@ -36,6 +35,6 @@ class DashboardController extends Controller
         $printOrderCount = PrintOrder::where('user_id', Auth::id())
             ->count();
 
-        return view('dashboard.index', compact('recentTemplates', 'recentDesigns', 'rsvpCount', 'printOrderCount'));
+        return view('dashboard.index', compact('recentCategories', 'recentDesigns', 'rsvpCount', 'printOrderCount'));
     }
 }
