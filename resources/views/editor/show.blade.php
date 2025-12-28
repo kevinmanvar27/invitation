@@ -453,13 +453,13 @@
 </style>
 <script>
 function switchToDesignMode() {
-    document.getElementById('templatePreview').style.display = 'none';
+    document.getElementById('designPreview').style.display = 'none';
     document.getElementById('designCanvas').style.display = 'flex';
 }
 
-function switchToTemplatePreview() {
+function switchToDesignPreview() {
     document.getElementById('designCanvas').style.display = 'none';
-    document.getElementById('templatePreview').style.display = 'flex';
+    document.getElementById('designPreview').style.display = 'flex';
 }
 
 function toggleToolCategory(element) {
@@ -574,14 +574,14 @@ function saveDesign() {
     ];
     
     // Send AJAX request to save design
-    fetch('{{ route("editor.save", $template->id) }}', {
+    fetch('{{ route("editor.save", $design->id) }}', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
             'X-CSRF-TOKEN': '{{ csrf_token() }}'
         },
         body: JSON.stringify({
-            design_name: '{{ $template->name }} Custom Design',
+            design_name: '{{ $design->design_name }}',
             elements: elements
         })
     })
@@ -599,9 +599,9 @@ function saveDesign() {
     });
 }
 
-// When the page loads, show the template preview first
+// When the page loads, show the design preview first
 document.addEventListener('DOMContentLoaded', function() {
-    // The template preview is shown by default
+    // The design preview is shown by default
     // Users can click "Start Editing" to switch to design mode
     
     // Set up collapsible tool categories
@@ -638,7 +638,7 @@ document.addEventListener('DOMContentLoaded', function() {
 <!-- Canvas Editor -->
 <div class="editor-container">
     <div class="editor-header">
-        <h1 class="editor-title">{{ $template->name }} - Customization</h1>
+        <h1 class="editor-title">{{ $design->design_name }} - Editor</h1>
         <div class="editor-toolbar">
             <button id="save-btn" class="editor-toolbar-button" onclick="saveDesign()">
                 <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
@@ -650,7 +650,7 @@ document.addEventListener('DOMContentLoaded', function() {
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
                 </svg>
             </button>
-            <button id="template-preview-btn" class="editor-toolbar-button" onclick="switchToTemplatePreview()">
+            <button id="design-preview-btn" class="editor-toolbar-button" onclick="switchToDesignPreview()">
                 <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
                 </svg>
@@ -757,10 +757,10 @@ document.addEventListener('DOMContentLoaded', function() {
                 <h2 class="editor-canvas-title">Design Canvas</h2>
             </div>
             <div class="editor-canvas-content">
-                <!-- Template Preview -->
-                <div class="editor-canvas-preview" id="templatePreview">
-                    @if($template->preview_path)
-                        <img src="{{ asset('previews/' . $template->preview_path) }}" alt="{{ $template->name }} Preview" class="editor-canvas-image">
+                <!-- Design Preview -->
+                <div class="editor-canvas-preview" id="designPreview">
+                    @if($design->thumbnail_path)
+                        <img src="{{ asset('storage/' . $design->thumbnail_path) }}" alt="{{ $design->design_name }} Preview" class="editor-canvas-image">
                     @else
                         <div class="editor-canvas-placeholder">
                             <div class="editor-canvas-icon">
@@ -768,8 +768,8 @@ document.addEventListener('DOMContentLoaded', function() {
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 21a4 4 0 01-4-4V5a2 2 0 012-2h4a2 2 0 012 2v12a4 4 0 01-4 4zm0 0h12a2 2 0 002-2v-4a2 2 0 00-2-2h-2.343M11 7.343l1.657-1.657a2 2 0 012.828 0l2.829 2.829a2 2 0 010 2.828l-8.486 8.485M7 17h.01"></path>
                                 </svg>
                             </div>
-                            <h3 class="editor-canvas-text">{{ $template->name }}</h3>
-                            <p class="editor-canvas-subtext">Template Preview</p>
+                            <h3 class="editor-canvas-text">{{ $design->design_name }}</h3>
+                            <p class="editor-canvas-subtext">Design Preview</p>
                         </div>
                     @endif
                 </div>

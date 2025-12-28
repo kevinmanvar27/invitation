@@ -87,7 +87,6 @@
                         <tr>
                             <th width="60">ID</th>
                             <th>User</th>
-                            <th>Template</th>
                             <th>Design Name</th>
                             <th>Completed</th>
                             <th>Status</th>
@@ -115,15 +114,6 @@
                                         @endif
                                     </div>
                                 </div>
-                            </td>
-                            <td>
-                                @if($design->category)
-                                    <a href="{{ route('admin.categories.show', $design->category->id) }}" class="text-primary">
-                                        {{ $design->category->name }}
-                                    </a>
-                                @else
-                                    <span class="text-muted">N/A</span>
-                                @endif
                             </td>
                             <td>
                                 <span class="fw-medium">{{ $design->design_name ?? 'Untitled' }}</span>

@@ -59,7 +59,6 @@
                             <th width="80">Preview</th>
                             <th>Design Name</th>
                             <th>User</th>
-                            <th>Category</th>
                             <th width="100">Status</th>
                             <th width="120">Created</th>
                             <th width="150" class="text-end">Actions</th>
@@ -93,15 +92,6 @@
                                                  alt="{{ $design->user->name }}">
                                             <span>{{ $design->user->name }}</span>
                                         </div>
-                                    @else
-                                        <span class="text-muted">—</span>
-                                    @endif
-                                </td>
-                                <td>
-                                    @if($design->category)
-                                        <a href="{{ route('admin.categories.show', $design->category->id) }}" class="text-decoration-none">
-                                            {{ $design->category->name }}
-                                        </a>
                                     @else
                                         <span class="text-muted">—</span>
                                     @endif

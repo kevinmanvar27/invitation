@@ -22,8 +22,8 @@
         </p>
         
         <div class="hero-buttons">
-            <a href="{{ route('templates.index') }}" class="btn btn-primary btn-lg">
-                Browse Templates
+            <a href="{{ route('editor.create') }}" class="btn btn-primary btn-lg">
+                Start Designing
             </a>
             <a href="{{ route('register') }}" class="btn btn-outline btn-lg">
                 Create Account
@@ -189,8 +189,8 @@
         </div>
         
         <div class="text-center mt-12">
-            <a href="{{ route('templates.index') }}" class="btn btn-primary btn-lg">
-                Browse All Templates
+            <a href="{{ route('editor.create') }}" class="btn btn-primary btn-lg">
+                Start Designing
             </a>
         </div>
     </div>

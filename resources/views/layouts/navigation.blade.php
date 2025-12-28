@@ -11,9 +11,6 @@
                     <a href="{{ route('home') }}" class="text-gray-900 hover:text-blue-600 font-medium transition-colors duration-300 inline-flex items-center px-1 pt-1 text-sm">
                         Home
                     </a>
-                    <a href="{{ route('templates.index') }}" class="text-gray-900 hover:text-blue-600 font-medium transition-colors duration-300 inline-flex items-center px-1 pt-1 text-sm">
-                        Templates
-                    </a>
                     <a href="{{ route('services') }}" class="text-gray-900 hover:text-blue-600 font-medium transition-colors duration-300 inline-flex items-center px-1 pt-1 text-sm">
                         Services
                     </a>
@@ -61,9 +58,6 @@
         <div class="pt-2 pb-3 space-y-1">
             <a href="{{ route('home') }}" class="block px-3 py-2 rounded-md text-base font-medium text-gray-900 hover:bg-blue-100">
                 Home
-            </a>
-            <a href="{{ route('templates.index') }}" class="block px-3 py-2 rounded-md text-base font-medium text-gray-900 hover:bg-blue-100">
-                Templates
             </a>
             <a href="{{ route('services') }}" class="block px-3 py-2 rounded-md text-base font-medium text-gray-900 hover:bg-blue-100">
                 Services

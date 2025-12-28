@@ -105,18 +105,6 @@
                         
                         <li class="nav-header">DESIGN MANAGEMENT</li>
                         <li class="nav-item">
-                            <a href="{{ route('admin.categories.index') }}" class="nav-link {{ request()->routeIs('admin.categories.*') ? 'active' : '' }}">
-                                <i class="nav-icon fas fa-folder"></i>
-                                <p>Categories</p>
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a href="{{ route('admin.tags.index') }}" class="nav-link {{ request()->routeIs('admin.tags.*') ? 'active' : '' }}">
-                                <i class="nav-icon fas fa-tags"></i>
-                                <p>Tags</p>
-                            </a>
-                        </li>
-                        <li class="nav-item">
                             <a href="{{ route('admin.designs.index') }}" class="nav-link {{ request()->routeIs('admin.designs.*') ? 'active' : '' }}">
                                 <i class="nav-icon fas fa-paint-brush"></i>
                                 <p>User Designs</p>

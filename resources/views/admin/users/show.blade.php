@@ -227,7 +227,6 @@
                                 <thead>
                                     <tr>
                                         <th>Design</th>
-                                        <th>Template</th>
                                         <th>Created</th>
                                         <th class="text-end">Actions</th>
                                     </tr>
@@ -236,9 +235,8 @@
                                     @foreach($user->designs->take(5) as $design)
                                         <tr>
                                             <td>
-                                                <strong>{{ $design->name ?? 'Untitled Design' }}</strong>
+                                                <strong>{{ $design->design_name ?? 'Untitled Design' }}</strong>
                                             </td>
-                                            <td>{{ $design->category->name ?? 'N/A' }}</td>
                                             <td class="text-muted">{{ $design->created_at->diffForHumans() }}</td>
                                             <td class="text-end">
                                                 <a href="{{ route('admin.designs.show', $design->id) }}" class="btn btn-icon btn-outline-secondary btn-sm">

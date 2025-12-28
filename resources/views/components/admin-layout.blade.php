@@ -79,20 +79,6 @@
                     </li>
                     
                     <!-- Design Management Section -->
-                    <li class="nav-item">
-                        <a href="{{ route('admin.categories.index') }}" class="nav-link {{ request()->routeIs('admin.categories.*') ? 'active' : '' }}">
-                            <i class="fas fa-folder"></i>
-                            <span>Categories</span>
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a href="{{ route('admin.tags.index') }}" class="nav-link {{ request()->routeIs('admin.tags.*') ? 'active' : '' }}">
-                            <i class="fas fa-tags"></i>
-                            <span>Tags</span>
-                        </a>
-                    </li>
-                    
-                    <!-- Design Management Section -->
                     <li class="nav-section">Design Management</li>
                     <li class="nav-item">
                         <a href="{{ route('admin.designs.index') }}" class="nav-link {{ request()->routeIs('admin.designs.*') ? 'active' : '' }}">

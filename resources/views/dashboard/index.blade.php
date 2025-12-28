@@ -84,62 +84,11 @@
     </div>
     
     <div class="dashboard-grid mt-10">
-        <!-- Recent Templates -->
-        <div class="card dashboard-card">
-            <div class="card-header">
-                <h2 class="card-title">Recent Templates</h2>
-                <a href="{{ route('templates.index') }}" class="btn btn-outline btn-sm">View All</a>
-            </div>
-            
-            <div class="card-body">
-                <div class="template-list">
-                    @forelse ($recentTemplates as $template)
-                        <div class="template-item">
-                            <div class="template-icon">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                    <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
-                                    <polyline points="14 2 14 8 20 8"></polyline>
-                                    <line x1="16" y1="13" x2="8" y2="13"></line>
-                                    <line x1="16" y1="17" x2="8" y2="17"></line>
-                                    <polyline points="10 9 9 9 8 9"></polyline>
-                                </svg>
-                            </div>
-                            <div class="template-info">
-                                <h3 class="template-name">{{ $template->name }}</h3>
-                                <p class="template-meta">{{ $template->theme }} - {{ $template->style }}</p>
-                            </div>
-                            <div class="template-status">
-                                @if ($template->is_premium)
-                                    <span class="badge badge-premium">Premium</span>
-                                @else
-                                    <span class="badge badge-free">Free</span>
-                                @endif
-                            </div>
-                        </div>
-                    @empty
-                        <div class="empty-state">
-                            <div class="empty-icon">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                    <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
-                                    <polyline points="14 2 14 8 20 8"></polyline>
-                                    <line x1="16" y1="13" x2="8" y2="13"></line>
-                                    <line x1="16" y1="17" x2="8" y2="17"></line>
-                                    <polyline points="10 9 9 9 8 9"></polyline>
-                                </svg>
-                            </div>
-                            <h3 class="empty-title">No templates available</h3>
-                            <p class="empty-description">Check back later for new templates.</p>
-                        </div>
-                    @endforelse
-                </div>
-            </div>
-        </div>
-        
         <!-- Recent Designs -->
         <div class="card dashboard-card">
             <div class="card-header">
                 <h2 class="card-title">Your Recent Designs</h2>
-                <a href="#" class="btn btn-outline btn-sm">View All</a>
+                <a href="{{ route('editor.create') }}" class="btn btn-primary btn-sm">Create New</a>
             </div>
             
             <div class="card-body">
@@ -167,6 +116,7 @@
                                         <span class="badge badge-draft">Draft</span>
                                     @endif
                                 </div>
+                                <a href="{{ route('editor.show', $design) }}" class="btn btn-outline btn-sm">Edit</a>
                             </div>
                         @endforeach
                     </div>
@@ -184,7 +134,7 @@
                         <h3 class="empty-title">No designs yet</h3>
                         <p class="empty-description">Get started by creating your first wedding invitation design.</p>
                         <div class="empty-actions">
-                            <a href="{{ route('templates.index') }}" class="btn btn-primary btn-md">
+                            <a href="{{ route('editor.create') }}" class="btn btn-primary btn-md">
                                 Create Your First Design
                             </a>
                         </div>
@@ -192,10 +142,8 @@
                 @endif
             </div>
         </div>
-    </div>
-    
-    <!-- RSVP Management Section -->
-    <div class="dashboard-grid mt-10">
+        
+        <!-- RSVP Management Section -->
         <div class="card dashboard-card">
             <div class="card-header">
                 <h2 class="card-title">RSVP Management</h2>
@@ -230,8 +178,10 @@
                 </div>
             </div>
         </div>
-        
-        <!-- Print Orders Section -->
+    </div>
+    
+    <!-- Print Orders Section -->
+    <div class="dashboard-grid mt-10">
         <div class="card dashboard-card">
             <div class="card-header">
                 <h2 class="card-title">Print Orders</h2>
@@ -274,16 +224,15 @@
     <div class="quick-actions mt-12 pt-12">
         <h2 class="section-title">Quick Actions</h2>
         <div class="actions-grid mt-8">
-            <a href="{{ route('templates.index') }}" class="action-card">
+            <a href="{{ route('editor.create') }}" class="action-card">
                 <div class="action-icon">
                     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                        <polygon points="12 2 2 7 12 12 22 7 12 2"></polygon>
-                        <polyline points="2 17 12 22 22 17"></polyline>
-                        <polyline points="2 12 12 17 22 12"></polyline>
+                        <line x1="12" y1="5" x2="12" y2="19"></line>
+                        <line x1="5" y1="12" x2="19" y2="12"></line>
                     </svg>
                 </div>
-                <h3 class="action-title">Browse Categories</h3>
-                <p class="action-description">Find the perfect design category for your wedding</p>
+                <h3 class="action-title">Create New Design</h3>
+                <p class="action-description">Start a new wedding invitation design</p>
             </a>
             
             <a href="#" class="action-card">

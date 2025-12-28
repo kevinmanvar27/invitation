@@ -15,8 +15,6 @@ use App\Http\Controllers\Admin\ShippingAddressController;
 use App\Http\Controllers\Admin\ReferralController;
 use App\Http\Controllers\Admin\UserController;
 
-use App\Http\Controllers\Admin\TemplateCategoryController;
-use App\Http\Controllers\Admin\TemplateTagController;
 use App\Http\Controllers\Admin\UserDesignController;
 use App\Http\Controllers\Admin\UserCustomizationController;
 use App\Http\Controllers\Admin\DesignElementController;
@@ -30,8 +28,14 @@ use App\Http\Controllers\Admin\RsvpSettingController;
 use App\Http\Controllers\Admin\PrintOrderController;
 use App\Http\Controllers\Admin\UserProfileController;
 use App\Http\Controllers\HomeController;
+use App\Http\Controllers\DesignController;
 
 Route::get('/', [HomeController::class, 'index'])->name('home');
+
+// Frontend Designs Gallery Routes
+Route::get('/designs', [DesignController::class, 'index'])->name('designs.index');
+Route::get('/designs/{design}', [DesignController::class, 'show'])->name('designs.show');
+Route::post('/designs/{design}/use', [DesignController::class, 'useTemplate'])->middleware('auth')->name('designs.use');
 
 // Static pages routes
 Route::get('/about', function () {
@@ -108,10 +112,6 @@ Route::prefix('admin')->name('admin.')->middleware(['auth', 'admin'])->group(fun
     Route::resource('users', UserController::class);
     Route::get('/users-export', [UserController::class, 'export'])->name('users.export');
     
-    // Categories & Tags
-    Route::resource('categories', TemplateCategoryController::class);
-    Route::resource('tags', TemplateTagController::class);
-    
     // Design Management
     Route::resource('designs', UserDesignController::class);
     Route::get('/designs-export', [UserDesignController::class, 'export'])->name('designs.export');
@@ -131,7 +131,6 @@ Route::prefix('admin')->name('admin.')->middleware(['auth', 'admin'])->group(fun
     ]);
     
     // Business Operations
-
     Route::resource('payments', PaymentController::class);
     Route::resource('downloads', DownloadController::class);
     Route::resource('shared-invitations', SharedInvitationController::class);
@@ -146,6 +145,10 @@ Route::prefix('admin')->name('admin.')->middleware(['auth', 'admin'])->group(fun
     Route::resource('referrals', ReferralController::class);
 });
 
-Route::get('/editor/{template}', [EditorController::class, 'show'])->name('editor.show');
-Route::post('/editor/{template}/save', [EditorController::class, 'saveDesign'])->name('editor.save');
-Route::post('/editor/upload-image', [EditorController::class, 'uploadImage'])->name('editor.upload-image');
+// Editor routes (protected by auth middleware)
+Route::middleware('auth')->group(function () {
+    Route::get('/editor/create', [EditorController::class, 'create'])->name('editor.create');
+    Route::get('/editor/{design}', [EditorController::class, 'show'])->name('editor.show');
+    Route::post('/editor/{design}/save', [EditorController::class, 'saveDesign'])->name('editor.save');
+    Route::post('/editor/upload-image', [EditorController::class, 'uploadImage'])->name('editor.upload-image');
+});

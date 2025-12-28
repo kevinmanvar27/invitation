@@ -88,29 +88,6 @@
             </div>
             @endif
 
-            <!-- Associated Category Card -->
-            @if($design->category)
-            <div class="card mt-4">
-                <div class="card-header">
-                    <h6 class="mb-0"><i class="fas fa-folder me-2"></i>Category</h6>
-                </div>
-                <div class="card-body">
-                    <div class="d-flex align-items-center">
-                        <div class="avatar me-3" style="width: 50px; height: 50px; background: linear-gradient(135deg, #5eaa6a, #4a9a5a);">
-                            <i class="fas fa-folder text-white"></i>
-                        </div>
-                        <div class="flex-grow-1">
-                            <h6 class="mb-0">{{ $design->category->name ?? 'Unnamed Category' }}</h6>
-                            <small class="text-muted">Category #{{ $design->category->id }}</small>
-                        </div>
-                        <a href="{{ route('admin.categories.show', $design->category->id) }}" class="btn btn-outline-primary btn-sm">
-                            <i class="fas fa-external-link-alt"></i>
-                        </a>
-                    </div>
-                </div>
-            </div>
-            @endif
-
             <!-- Quick Actions Card -->
             <div class="card mt-4">
                 <div class="card-header">
@@ -121,11 +98,6 @@
                         @if($design->user)
                         <a href="{{ route('admin.users.show', $design->user->id) }}" class="list-group-item list-group-item-action">
                             <i class="fas fa-user me-2 text-info"></i>View User
-                        </a>
-                        @endif
-                        @if($design->category)
-                        <a href="{{ route('admin.categories.show', $design->category->id) }}" class="list-group-item list-group-item-action">
-                            <i class="fas fa-folder me-2 text-success"></i>View Category
                         </a>
                         @endif
                         <a href="{{ route('admin.user-designs.index') }}" class="list-group-item list-group-item-action">
@@ -196,10 +168,6 @@
                         <div class="detail-item">
                             <span class="detail-label">User</span>
                             <span class="detail-value">{{ $design->user->name ?? 'N/A' }}</span>
-                        </div>
-                        <div class="detail-item">
-                            <span class="detail-label">Category</span>
-                            <span class="detail-value">{{ $design->category->name ?? 'N/A' }}</span>
                         </div>
                         <div class="detail-item">
                             <span class="detail-label">Status</span>

@@ -23,8 +23,8 @@
         
         <div class="hero-buttons">
             @auth
-                <a href="{{ route('templates.index') }}" class="btn btn-primary btn-lg">
-                    Get Started
+                <a href="{{ route('dashboard') }}" class="btn btn-primary btn-lg">
+                    Go to Dashboard
                 </a>
             @else
                 <a href="{{ route('register') }}" class="btn btn-primary btn-lg">
@@ -44,7 +44,7 @@
         <div class="stats-grid">
             <div class="stat-card">
                 <div class="stat-number">500+</div>
-                <div class="stat-label">Beautiful Templates</div>
+                <div class="stat-label">Beautiful Designs</div>
             </div>
             
             <div class="stat-card">
@@ -84,9 +84,9 @@
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 21a4 4 0 01-4-4V5a2 2 0 012-2h4a2 2 0 012 2v12a4 4 0 01-4 4zm0 0h12a2 2 0 002-2v-4a2 2 0 00-2-2h-2.343M11 7.343l1.657-1.657a2 2 0 012.828 0l2.829 2.829a2 2 0 010 2.828l-8.486 8.485M7 17h.01"></path>
                     </svg>
                 </div>
-                <h3 class="feature-title">Beautiful Templates</h3>
+                <h3 class="feature-title">Beautiful Designs</h3>
                 <p class="feature-description">
-                    Choose from hundreds of professionally designed templates that match your wedding style and personality.
+                    Choose from hundreds of professionally designed options that match your wedding style and personality.
                 </p>
             </div>
 
@@ -114,85 +114,6 @@
                 <p class="feature-description">
                     Send digital invitations via email or social media, or order premium printed versions delivered to your door.
                 </p>
-            </div>
-        </div>
-        
-        <!-- Template Preview Carousel -->
-        <div class="carousel-container mt-12 pt-12">
-            <div class="text-center mb-12">
-                <h3>Popular Templates</h3>
-                <p class="text-neutral">Get inspired by our most popular wedding invitation designs</p>
-            </div>
-            
-            <div class="carousel-wrapper">
-                <!-- Carousel Item 1 -->
-                <div class="carousel-item active" data-carousel-item="0">
-                    <div class="carousel-content">
-                        <div class="carousel-image">
-                            <span class="text-neutral font-medium">Elegant Floral Design</span>
-                        </div>
-                        <div class="carousel-text">
-                            <h4 class="carousel-title">Elegant Floral Design</h4>
-                            <p class="carousel-description">A beautiful floral theme with elegant typography and customizable color schemes.</p>
-                            <div class="carousel-tags">
-                                <span class="carousel-tag">Floral</span>
-                                <span class="carousel-tag">Elegant</span>
-                                <span class="carousel-tag">Romantic</span>
-                            </div>
-                            <a href="{{ route('templates.index') }}" class="btn btn-primary">
-                                Use This Template
-                            </a>
-                        </div>
-                    </div>
-                </div>
-                
-                <!-- Carousel Item 2 -->
-                <div class="carousel-item" data-carousel-item="1">
-                    <div class="carousel-content">
-                        <div class="carousel-image">
-                            <span class="text-neutral font-medium">Minimalist Modern</span>
-                        </div>
-                        <div class="carousel-text">
-                            <h4 class="carousel-title">Minimalist Modern</h4>
-                            <p class="carousel-description">Clean lines and modern typography for couples who prefer a sleek aesthetic.</p>
-                            <div class="carousel-tags">
-                                <span class="carousel-tag">Minimalist</span>
-                                <span class="carousel-tag">Modern</span>
-                                <span class="carousel-tag">Clean</span>
-                            </div>
-                            <a href="{{ route('templates.index') }}" class="btn btn-primary">
-                                Use This Template
-                            </a>
-                        </div>
-                    </div>
-                </div>
-                
-                <!-- Carousel Item 3 -->
-                <div class="carousel-item" data-carousel-item="2">
-                    <div class="carousel-content">
-                        <div class="carousel-image">
-                            <span class="text-neutral font-medium">Vintage Romance</span>
-                        </div>
-                        <div class="carousel-text">
-                            <h4 class="carousel-title">Vintage Romance</h4>
-                            <p class="carousel-description">Classic vintage design with ornate details and romantic flourishes.</p>
-                            <div class="carousel-tags">
-                                <span class="carousel-tag">Vintage</span>
-                                <span class="carousel-tag">Romantic</span>
-                                <span class="carousel-tag">Classic</span>
-                            </div>
-                            <a href="{{ route('templates.index') }}" class="btn btn-primary">
-                                Use This Template
-                            </a>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            
-            <div class="carousel-indicators mt-8">
-                <button class="carousel-indicator active" data-carousel-target="0"></button>
-                <button class="carousel-indicator" data-carousel-target="1"></button>
-                <button class="carousel-indicator" data-carousel-target="2"></button>
             </div>
         </div>
     </div>

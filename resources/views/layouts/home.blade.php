@@ -50,7 +50,7 @@
             <!-- Navigation Menu -->
             <nav class="nav-links">
                 <a href="{{ route('home') }}" class="nav-link {{ request()->routeIs('home') ? 'active' : '' }}">Home</a>
-                <a href="{{ route('templates.index') }}" class="nav-link {{ request()->routeIs('templates.*') ? 'active' : '' }}">Templates</a>
+                <a href="{{ route('designs.index') }}" class="nav-link {{ request()->routeIs('designs.*') ? 'active' : '' }}">Designs</a>
                 <a href="{{ route('services') }}" class="nav-link {{ request()->routeIs('services') ? 'active' : '' }}">Services</a>
                 <a href="{{ route('pricing') }}" class="nav-link {{ request()->routeIs('pricing') ? 'active' : '' }}">Pricing</a>
                 <a href="{{ route('contact') }}" class="nav-link {{ request()->routeIs('contact') ? 'active' : '' }}">Contact</a>
@@ -137,7 +137,7 @@
             
             <div class="mobile-nav-links">
                 <a href="{{ route('home') }}" class="mobile-nav-link {{ request()->routeIs('home') ? 'active' : '' }}">Home</a>
-                <a href="{{ route('templates.index') }}" class="mobile-nav-link {{ request()->routeIs('templates.*') ? 'active' : '' }}">Templates</a>
+                <a href="{{ route('designs.index') }}" class="mobile-nav-link {{ request()->routeIs('designs.*') ? 'active' : '' }}">Designs</a>
                 <a href="{{ route('services') }}" class="mobile-nav-link {{ request()->routeIs('services') ? 'active' : '' }}">Services</a>
                 <a href="{{ route('pricing') }}" class="mobile-nav-link {{ request()->routeIs('pricing') ? 'active' : '' }}">Pricing</a>
                 <a href="{{ route('contact') }}" class="mobile-nav-link {{ request()->routeIs('contact') ? 'active' : '' }}">Contact</a>

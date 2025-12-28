@@ -64,21 +64,6 @@
                     <hr>
                     <div class="row mb-3">
                         <div class="col-md-4">
-                            <label class="form-label text-muted">Category</label>
-                        </div>
-                        <div class="col-md-8">
-                            <p class="mb-0">
-                                @if($design->category)
-                                    <a href="{{ route('admin.categories.show', $design->category->id) }}">{{ $design->category->name }}</a>
-                                @else
-                                    <span class="text-muted">N/A</span>
-                                @endif
-                            </p>
-                        </div>
-                    </div>
-                    <hr>
-                    <div class="row mb-3">
-                        <div class="col-md-4">
                             <label class="form-label text-muted">Status</label>
                         </div>
                         <div class="col-md-8">

@@ -1845,7 +1845,6 @@
         @csrf
         <input type="text" name="design_name" id="design_name" value="">
         <input type="hidden" name="user_id" id="user_id" value="{{ auth()->user()->id }}">
-        <input type="hidden" name="category_id" id="category_id" value="">
         <input type="hidden" name="status" id="status" value="draft">
         <input type="hidden" name="is_completed" id="is_completed" value="0">
         <input type="hidden" name="canvas_data" id="canvas_data">
@@ -2500,16 +2499,23 @@
         }
         
         function applyBackgroundToSelectedPages() {
+            console.log('applyBackgroundToSelectedPages called');
+            console.log('Current canvasBackground:', canvasBackground);
+            console.log('Pages before apply:', JSON.parse(JSON.stringify(pages)));
+            
             // First save current page to ensure canvasBackground is up to date
             saveCurrentPage();
             
             const selectedPages = [];
             pages.forEach((_, idx) => {
                 const checkbox = document.getElementById('bgPage_' + idx);
+                console.log('Checkbox bgPage_' + idx + ':', checkbox, 'checked:', checkbox?.checked);
                 if (checkbox && checkbox.checked) {
                     selectedPages.push(idx);
                 }
             });
+            
+            console.log('Selected pages:', selectedPages);
             
             if (selectedPages.length === 0) {
                 alert('Please select at least one page');
@@ -2518,9 +2524,14 @@
             
             // Apply current background to selected pages (deep copy to avoid reference issues)
             const bgToApply = JSON.parse(JSON.stringify(canvasBackground));
+            console.log('Background to apply:', bgToApply);
+            
             selectedPages.forEach(idx => {
                 pages[idx].background = JSON.parse(JSON.stringify(bgToApply));
+                console.log('Applied to page', idx, ':', pages[idx].background);
             });
+            
+            console.log('Pages after apply:', JSON.parse(JSON.stringify(pages)));
             
             // Show success feedback
             const statusEl = document.createElement('div');
@@ -2635,12 +2646,14 @@
         
         function saveCurrentPage() {
             if (pages[currentPageIndex]) {
-                pages[currentPageIndex].elements = [...elements];
-                pages[currentPageIndex].background = { ...canvasBackground };
+                pages[currentPageIndex].elements = JSON.parse(JSON.stringify(elements));
+                pages[currentPageIndex].background = JSON.parse(JSON.stringify(canvasBackground));
+                console.log('Saved page', currentPageIndex, 'background:', pages[currentPageIndex].background);
             }
         }
         
         function switchToPage(index) {
+            console.log('switchToPage called with index:', index);
             if (index < 0 || index >= pages.length) return;
             
             // Save current page
@@ -2651,8 +2664,10 @@
             
             // Switch to new page
             currentPageIndex = index;
-            elements = pages[index].elements || [];
-            canvasBackground = pages[index].background || { type: 'color', color: '#ffffff', image: null, opacity: 1, size: 'cover' };
+            elements = pages[index].elements ? JSON.parse(JSON.stringify(pages[index].elements)) : [];
+            canvasBackground = pages[index].background ? JSON.parse(JSON.stringify(pages[index].background)) : { type: 'color', color: '#ffffff', image: null, opacity: 1, size: 'cover' };
+            
+            console.log('Switched to page', index, 'background:', canvasBackground);
             
             // Re-render
             renderAllElements();
@@ -2830,16 +2845,6 @@
                             
                             {{-- User is auto-populated with logged-in user --}}
                             <input type="hidden" id="settingsUserId" value="{{ auth()->user()->id }}">
-                            
-                            <div class="form-group">
-                                <label class="form-label">Category <span style="color: var(--danger);">*</span></label>
-                                <select id="settingsCategoryId" class="form-select">
-                                    <option value="">Select Category</option>
-                                    @foreach($categories as $category)
-                                        <option value="{{ $category->id }}">{{ $category->name }}</option>
-                                    @endforeach
-                                </select>
-                            </div>
                         </div>
                         
                         <div class="panel-section">
@@ -2904,8 +2909,7 @@
             `;
             panel.classList.add('visible');
             
-            // Set current values (user is auto-populated, category replaces template)
-            document.getElementById('settingsCategoryId').value = document.getElementById('category_id').value;
+            // Set current values
             document.getElementById('settingsStatus').value = document.getElementById('status').value;
         }
 
@@ -4935,12 +4939,10 @@
         // ==========================================
         function applySettings() {
             const designName = document.getElementById('settingsDesignName').value;
-            const categoryId = document.getElementById('settingsCategoryId').value;
             const status = document.getElementById('settingsStatus').value;
             
             document.getElementById('design_name').value = designName;
             // user_id is auto-populated with logged-in user
-            document.getElementById('category_id').value = categoryId;
             document.getElementById('status').value = status;
             
             updateDesignTitle();
@@ -5003,10 +5005,9 @@
         function saveDesign() {
             const designName = document.getElementById('design_name').value;
             const userId = document.getElementById('user_id').value;
-            const categoryId = document.getElementById('category_id').value;
             
-            if (!designName || !categoryId) {
-                alert('Please fill in all required fields (Design Name and Category) in Settings');
+            if (!designName) {
+                alert('Please fill in Design Name in Settings');
                 setActiveTool('settings');
                 showToolPanel('settings');
                 return;

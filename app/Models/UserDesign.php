@@ -18,6 +18,7 @@ class UserDesign extends Model
         'user_id',
         'category_id',
         'design_name',
+        'category',
         'canvas_data',
         'thumbnail_path',
         'is_completed',
@@ -40,14 +41,6 @@ class UserDesign extends Model
     public function user(): BelongsTo
     {
         return $this->belongsTo(User::class);
-    }
-
-    /**
-     * Get the category for the design.
-     */
-    public function category(): BelongsTo
-    {
-        return $this->belongsTo(TemplateCategory::class, 'category_id');
     }
 
     /**
