@@ -32,6 +32,24 @@ use App\Http\Controllers\DesignController;
 
 Route::get('/', [HomeController::class, 'index'])->name('home');
 
+// Debug route for canvas data inspection
+Route::get('/debug/design/{id}', function($id) {
+    $design = \App\Models\UserDesign::findOrFail($id);
+    
+    return response()->json([
+        'id' => $design->id,
+        'design_name' => $design->design_name,
+        'canvas_data' => $design->canvas_data,
+        'canvas_data_type' => gettype($design->canvas_data),
+        'canvas_data_keys' => is_array($design->canvas_data) ? array_keys($design->canvas_data) : 'N/A',
+        'has_pages' => isset($design->canvas_data['pages']),
+        'has_elements' => isset($design->canvas_data['elements']),
+        'page_count' => isset($design->canvas_data['pages']) ? count($design->canvas_data['pages']) : 0,
+        'element_count_direct' => isset($design->canvas_data['elements']) ? count($design->canvas_data['elements']) : 0,
+        'first_page_elements' => isset($design->canvas_data['pages'][0]['elements']) ? count($design->canvas_data['pages'][0]['elements']) : 0,
+    ], JSON_PRETTY_PRINT);
+})->name('debug.design');
+
 // Frontend Designs Gallery Routes
 Route::get('/designs', [DesignController::class, 'index'])->name('designs.index');
 Route::get('/designs/{design}', [DesignController::class, 'show'])->name('designs.show');
@@ -115,6 +133,7 @@ Route::prefix('admin')->name('admin.')->middleware(['auth', 'admin'])->group(fun
     // Design Management
     Route::resource('designs', UserDesignController::class);
     Route::get('/designs-export', [UserDesignController::class, 'export'])->name('designs.export');
+    Route::post('/designs/upload-image', [UserDesignController::class, 'uploadImage'])->name('designs.upload-image');
     Route::resource('customizations', UserCustomizationController::class);
     
     // Design Elements - support both 'elements' and 'design-elements' route names
@@ -152,3 +171,21 @@ Route::middleware('auth')->group(function () {
     Route::post('/editor/{design}/save', [EditorController::class, 'saveDesign'])->name('editor.save');
     Route::post('/editor/upload-image', [EditorController::class, 'uploadImage'])->name('editor.upload-image');
 });
+
+// Add this route for debugging canvas data
+Route::get('/debug/design/{id}', function($id) {
+    $design = \App\Models\UserDesign::findOrFail($id);
+    
+    return response()->json([
+        'id' => $design->id,
+        'design_name' => $design->design_name,
+        'canvas_data' => $design->canvas_data,
+        'canvas_data_type' => gettype($design->canvas_data),
+        'canvas_data_keys' => is_array($design->canvas_data) ? array_keys($design->canvas_data) : 'N/A',
+        'has_pages' => isset($design->canvas_data['pages']),
+        'has_elements' => isset($design->canvas_data['elements']),
+        'page_count' => isset($design->canvas_data['pages']) ? count($design->canvas_data['pages']) : 0,
+        'element_count_direct' => isset($design->canvas_data['elements']) ? count($design->canvas_data['elements']) : 0,
+        'first_page_elements' => isset($design->canvas_data['pages'][0]['elements']) ? count($design->canvas_data['pages'][0]['elements']) : 0,
+    ], JSON_PRETTY_PRINT);
+})->name('debug.design');

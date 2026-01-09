@@ -1,5 +1,9 @@
 @extends('layouts.home')
 
+@push('styles')
+<link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@400;500;600;700&family=Great+Vibes&family=Playfair+Display:wght@400;500;600;700&family=Montserrat:wght@300;400;500;600;700&family=Roboto:wght@300;400;500;700&family=Open+Sans:wght@300;400;500;600;700&family=Lato:wght@300;400;700&family=Poppins:wght@300;400;500;600;700&family=Raleway:wght@300;400;500;600;700&family=Oswald:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+@endpush
+
 @section('content')
 <div class="design-show-page">
     <!-- Back Navigation -->
@@ -24,6 +28,9 @@
                     <div class="design-preview-card">
                         @if($design->thumbnail_path)
                             <img src="{{ asset('storage/' . $design->thumbnail_path) }}" alt="{{ $design->design_name }}" class="design-preview-image">
+                        @elseif($design->canvas_data)
+                            <!-- Design Preview Container -->
+                            <div class="design-preview-container" data-design-id="{{ $design->id }}" data-canvas-data="{{ base64_encode(json_encode($design->canvas_data)) }}"></div>
                         @else
                             <div class="design-preview-placeholder">
                                 <svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
@@ -154,6 +161,7 @@
     </div>
 </div>
 
+<script src="{{ asset('js/design-preview-renderer.js') }}"></script>
 <script>
 function shareDesign() {
     if (navigator.share) {
@@ -171,6 +179,45 @@ function shareDesign() {
         });
     }
 }
+
+// Render design preview using DesignPreviewRenderer
+@if($design->canvas_data && !$design->thumbnail_path)
+document.addEventListener('DOMContentLoaded', function() {
+    const container = document.querySelector('.design-preview-container');
+    if (!container) {
+        console.error('❌ Preview container not found');
+        return;
+    }
+    
+    try {
+        const canvasDataEncoded = container.getAttribute('data-canvas-data');
+        if (!canvasDataEncoded) {
+            console.warn('⚠️ No canvas data found');
+            return;
+        }
+        
+        const canvasData = JSON.parse(atob(canvasDataEncoded));
+        console.log('🎨 Rendering design preview:', canvasData);
+        
+        // Get the preview card container dimensions
+        const previewCard = container.closest('.design-preview-card');
+        const maxWidth = previewCard ? previewCard.clientWidth : 700;
+        const maxHeight = 900;
+        
+        // Initialize renderer with container-based dimensions
+        const renderer = new DesignPreviewRenderer(container, canvasData, {
+            maxWidth: maxWidth,
+            maxHeight: maxHeight,
+            interactive: false
+        });
+        
+        renderer.render();
+        console.log('✅ Design preview rendered successfully');
+    } catch (error) {
+        console.error('❌ Error rendering design preview:', error);
+    }
+});
+@endif
 </script>
 
 <style>
@@ -237,6 +284,15 @@ function shareDesign() {
     width: 100%;
     height: auto;
     display: block;
+}
+
+.design-preview-container {
+    width: 100%;
+    min-height: 400px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #f5f5f5;
 }
 
 .design-preview-placeholder {

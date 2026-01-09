@@ -1,0 +1,562 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Canvas Editor - Standalone Test</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            background: #f5f5f5;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            padding: 20px;
+        }
+
+        h1 {
+            margin-bottom: 20px;
+            color: #333;
+        }
+
+        .controls {
+            margin-bottom: 20px;
+            padding: 15px;
+            background: #f9f9f9;
+            border-radius: 4px;
+        }
+
+        .control-group {
+            margin-bottom: 10px;
+        }
+
+        label {
+            display: inline-block;
+            width: 120px;
+            font-weight: 500;
+        }
+
+        input[type="number"],
+        input[type="color"] {
+            padding: 5px 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+
+        button {
+            padding: 8px 16px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-weight: 500;
+            margin-right: 10px;
+        }
+
+        button:hover {
+            opacity: 0.9;
+        }
+
+        button.add-sticker {
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+        }
+
+        .canvas-wrapper {
+            position: relative;
+            margin: 20px auto;
+            background: white;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+            display: inline-block;
+        }
+
+        .canvas {
+            position: relative;
+            background: white;
+            overflow: hidden;
+        }
+
+        .sticker {
+            position: absolute;
+            cursor: move;
+            border: 2px solid transparent;
+        }
+
+        .sticker.selected {
+            border: 2px solid #667eea;
+        }
+
+        .sticker img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+            pointer-events: none;
+        }
+
+        .resize-handle {
+            position: absolute;
+            width: 12px;
+            height: 12px;
+            background: #f5576c;
+            border: 2px solid white;
+            border-radius: 50%;
+            cursor: nwse-resize;
+        }
+
+        .resize-handle.tl { top: -6px; left: -6px; }
+        .resize-handle.tr { top: -6px; right: -6px; cursor: nesw-resize; }
+        .resize-handle.bl { bottom: -6px; left: -6px; cursor: nesw-resize; }
+        .resize-handle.br { bottom: -6px; right: -6px; }
+
+        .delete-btn {
+            position: absolute;
+            top: -10px;
+            right: -10px;
+            width: 24px;
+            height: 24px;
+            background: #ff4444;
+            border: 2px solid white;
+            border-radius: 50%;
+            color: white;
+            font-size: 14px;
+            line-height: 20px;
+            text-align: center;
+            cursor: pointer;
+            font-weight: bold;
+        }
+
+        .delete-btn:hover {
+            background: #cc0000;
+        }
+
+        .status {
+            margin-top: 20px;
+            padding: 10px;
+            background: #e8f5e9;
+            border-left: 4px solid #4caf50;
+            border-radius: 4px;
+        }
+
+        .error {
+            background: #ffebee;
+            border-left-color: #f44336;
+        }
+
+        .info {
+            background: #e3f2fd;
+            border-left-color: #2196f3;
+        }
+
+        #console {
+            margin-top: 20px;
+            padding: 15px;
+            background: #1e1e1e;
+            color: #d4d4d4;
+            border-radius: 4px;
+            font-family: 'Courier New', monospace;
+            font-size: 12px;
+            max-height: 300px;
+            overflow-y: auto;
+        }
+
+        .console-line {
+            margin-bottom: 5px;
+        }
+
+        .console-line.success { color: #4caf50; }
+        .console-line.error { color: #f44336; }
+        .console-line.info { color: #2196f3; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🎨 Canvas Editor - Standalone Test</h1>
+        
+        <div class="status info">
+            <strong>Test Mode:</strong> This is a simplified standalone version to test core functionality.
+        </div>
+
+        <div class="controls">
+            <div class="control-group">
+                <label>Canvas Width:</label>
+                <input type="number" id="canvasWidth" value="800" min="200" max="2000">
+                <label style="width: auto; margin-left: 20px;">Height:</label>
+                <input type="number" id="canvasHeight" value="600" min="200" max="2000">
+                <button onclick="updateCanvasSize()">Apply Size</button>
+            </div>
+
+            <div class="control-group">
+                <label>Background:</label>
+                <input type="color" id="bgColor" value="#ffffff">
+                <button onclick="updateBackground()">Apply Color</button>
+            </div>
+
+            <div class="control-group">
+                <label>Stickers:</label>
+                <button class="add-sticker" onclick="document.getElementById('stickerInput').click()">
+                    Add Sticker
+                </button>
+                <input type="file" id="stickerInput" accept="image/*" style="display: none;" onchange="addSticker(this)">
+                <button onclick="clearAllStickers()">Clear All</button>
+            </div>
+
+            <div class="control-group">
+                <label>Actions:</label>
+                <button onclick="logCanvasState()">Log State</button>
+                <button onclick="clearConsole()">Clear Console</button>
+            </div>
+        </div>
+
+        <div style="text-align: center;">
+            <div class="canvas-wrapper">
+                <div class="canvas" id="canvas"></div>
+            </div>
+        </div>
+
+        <div id="console"></div>
+    </div>
+
+    <script>
+        // State management
+        let canvasData = {
+            width: 800,
+            height: 600,
+            background: '#ffffff',
+            stickers: []
+        };
+
+        let selectedStickerId = null;
+        let dragState = { isDragging: false, startX: 0, startY: 0 };
+        let resizeState = { isResizing: false, startX: 0, startY: 0, startWidth: 0, startHeight: 0, direction: null };
+
+        // Console logging
+        function log(message, type = 'info') {
+            const console = document.getElementById('console');
+            const line = document.createElement('div');
+            line.className = `console-line ${type}`;
+            line.textContent = `[${new Date().toLocaleTimeString()}] ${message}`;
+            console.appendChild(line);
+            console.scrollTop = console.scrollHeight;
+            
+            // Also log to browser console
+            if (type === 'error') {
+                window.console.error(message);
+            } else {
+                window.console.log(message);
+            }
+        }
+
+        function clearConsole() {
+            document.getElementById('console').innerHTML = '';
+        }
+
+        // Initialize canvas
+        function initCanvas() {
+            log('Initializing canvas...', 'info');
+            const canvas = document.getElementById('canvas');
+            canvas.style.width = canvasData.width + 'px';
+            canvas.style.height = canvasData.height + 'px';
+            canvas.style.background = canvasData.background;
+            log('Canvas initialized: ' + canvasData.width + 'x' + canvasData.height, 'success');
+        }
+
+        // Update canvas size
+        function updateCanvasSize() {
+            const width = parseInt(document.getElementById('canvasWidth').value);
+            const height = parseInt(document.getElementById('canvasHeight').value);
+            
+            if (width < 200 || width > 2000 || height < 200 || height > 2000) {
+                log('Invalid dimensions. Must be between 200-2000px', 'error');
+                return;
+            }
+            
+            canvasData.width = width;
+            canvasData.height = height;
+            initCanvas();
+            log('Canvas resized to: ' + width + 'x' + height, 'success');
+        }
+
+        // Update background
+        function updateBackground() {
+            const color = document.getElementById('bgColor').value;
+            canvasData.background = color;
+            document.getElementById('canvas').style.background = color;
+            log('Background changed to: ' + color, 'success');
+        }
+
+        // Add sticker
+        function addSticker(input) {
+            const file = input.files[0];
+            if (!file) return;
+            
+            log('Loading sticker: ' + file.name + ' (' + (file.size / 1024).toFixed(2) + ' KB)', 'info');
+            
+            if (!file.type.startsWith('image/')) {
+                log('Error: Not an image file', 'error');
+                return;
+            }
+            
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                const sticker = {
+                    id: 'sticker_' + Date.now(),
+                    src: e.target.result,
+                    x: 100,
+                    y: 100,
+                    width: 150,
+                    height: 150
+                };
+                
+                canvasData.stickers.push(sticker);
+                renderStickers();
+                log('Sticker added: ' + sticker.id, 'success');
+            };
+            
+            reader.onerror = function() {
+                log('Error reading file', 'error');
+            };
+            
+            reader.readAsDataURL(file);
+            input.value = '';
+        }
+
+        // Render stickers
+        function renderStickers() {
+            const canvas = document.getElementById('canvas');
+            
+            // Remove old stickers
+            const oldStickers = canvas.querySelectorAll('.sticker');
+            oldStickers.forEach(s => s.remove());
+            
+            // Render new stickers
+            canvasData.stickers.forEach(sticker => {
+                const el = document.createElement('div');
+                el.className = 'sticker' + (selectedStickerId === sticker.id ? ' selected' : '');
+                el.dataset.id = sticker.id;
+                el.style.left = sticker.x + 'px';
+                el.style.top = sticker.y + 'px';
+                el.style.width = sticker.width + 'px';
+                el.style.height = sticker.height + 'px';
+                
+                const img = document.createElement('img');
+                img.src = sticker.src;
+                el.appendChild(img);
+                
+                // Add controls if selected
+                if (selectedStickerId === sticker.id) {
+                    // Resize handles
+                    ['tl', 'tr', 'bl', 'br'].forEach(dir => {
+                        const handle = document.createElement('div');
+                        handle.className = 'resize-handle ' + dir;
+                        handle.onmousedown = (e) => startResize(sticker.id, dir, e);
+                        el.appendChild(handle);
+                    });
+                    
+                    // Delete button
+                    const deleteBtn = document.createElement('div');
+                    deleteBtn.className = 'delete-btn';
+                    deleteBtn.textContent = '×';
+                    deleteBtn.onclick = () => deleteSticker(sticker.id);
+                    el.appendChild(deleteBtn);
+                }
+                
+                el.onmousedown = (e) => {
+                    if (e.target === el || e.target === img) {
+                        startDrag(sticker.id, e);
+                    }
+                };
+                
+                el.onclick = (e) => {
+                    if (e.target === el || e.target === img) {
+                        selectSticker(sticker.id);
+                    }
+                };
+                
+                canvas.appendChild(el);
+            });
+        }
+
+        // Select sticker
+        function selectSticker(id) {
+            selectedStickerId = id;
+            renderStickers();
+            log('Selected sticker: ' + id, 'info');
+        }
+
+        // Delete sticker
+        function deleteSticker(id) {
+            canvasData.stickers = canvasData.stickers.filter(s => s.id !== id);
+            selectedStickerId = null;
+            renderStickers();
+            log('Deleted sticker: ' + id, 'success');
+        }
+
+        // Clear all stickers
+        function clearAllStickers() {
+            const count = canvasData.stickers.length;
+            canvasData.stickers = [];
+            selectedStickerId = null;
+            renderStickers();
+            log('Cleared ' + count + ' sticker(s)', 'success');
+        }
+
+        // Start drag
+        function startDrag(id, e) {
+            e.preventDefault();
+            const sticker = canvasData.stickers.find(s => s.id === id);
+            if (!sticker) return;
+            
+            dragState = {
+                isDragging: true,
+                stickerId: id,
+                startX: e.clientX - sticker.x,
+                startY: e.clientY - sticker.y
+            };
+            
+            log('Started dragging: ' + id, 'info');
+        }
+
+        // Start resize
+        function startResize(id, direction, e) {
+            e.preventDefault();
+            e.stopPropagation();
+            
+            const sticker = canvasData.stickers.find(s => s.id === id);
+            if (!sticker) return;
+            
+            resizeState = {
+                isResizing: true,
+                stickerId: id,
+                startX: e.clientX,
+                startY: e.clientY,
+                startWidth: sticker.width,
+                startHeight: sticker.height,
+                startPosX: sticker.x,
+                startPosY: sticker.y,
+                direction: direction
+            };
+            
+            log('Started resizing: ' + id + ' (' + direction + ')', 'info');
+        }
+
+        // Mouse move handler
+        document.addEventListener('mousemove', (e) => {
+            if (dragState.isDragging) {
+                const sticker = canvasData.stickers.find(s => s.id === dragState.stickerId);
+                if (!sticker) return;
+                
+                let newX = e.clientX - dragState.startX;
+                let newY = e.clientY - dragState.startY;
+                
+                // Boundary constraints
+                newX = Math.max(0, Math.min(newX, canvasData.width - sticker.width));
+                newY = Math.max(0, Math.min(newY, canvasData.height - sticker.height));
+                
+                sticker.x = newX;
+                sticker.y = newY;
+                
+                renderStickers();
+            }
+            
+            if (resizeState.isResizing) {
+                const sticker = canvasData.stickers.find(s => s.id === resizeState.stickerId);
+                if (!sticker) return;
+                
+                const deltaX = e.clientX - resizeState.startX;
+                const deltaY = e.clientY - resizeState.startY;
+                
+                const aspectRatio = resizeState.startWidth / resizeState.startHeight;
+                
+                let newWidth, newHeight, newX, newY;
+                
+                switch (resizeState.direction) {
+                    case 'br': // Bottom-right
+                        newWidth = resizeState.startWidth + deltaX;
+                        newHeight = newWidth / aspectRatio;
+                        newX = resizeState.startPosX;
+                        newY = resizeState.startPosY;
+                        break;
+                    case 'bl': // Bottom-left
+                        newWidth = resizeState.startWidth - deltaX;
+                        newHeight = newWidth / aspectRatio;
+                        newX = resizeState.startPosX + deltaX;
+                        newY = resizeState.startPosY;
+                        break;
+                    case 'tr': // Top-right
+                        newWidth = resizeState.startWidth + deltaX;
+                        newHeight = newWidth / aspectRatio;
+                        newX = resizeState.startPosX;
+                        newY = resizeState.startPosY + resizeState.startHeight - newHeight;
+                        break;
+                    case 'tl': // Top-left
+                        newWidth = resizeState.startWidth - deltaX;
+                        newHeight = newWidth / aspectRatio;
+                        newX = resizeState.startPosX + deltaX;
+                        newY = resizeState.startPosY + resizeState.startHeight - newHeight;
+                        break;
+                }
+                
+                // Minimum size
+                if (newWidth < 30 || newHeight < 30) return;
+                
+                // Boundary constraints
+                if (newX < 0 || newY < 0 || newX + newWidth > canvasData.width || newY + newHeight > canvasData.height) {
+                    return;
+                }
+                
+                sticker.width = newWidth;
+                sticker.height = newHeight;
+                sticker.x = newX;
+                sticker.y = newY;
+                
+                renderStickers();
+            }
+        });
+
+        // Mouse up handler
+        document.addEventListener('mouseup', () => {
+            if (dragState.isDragging) {
+                log('Stopped dragging', 'info');
+                dragState.isDragging = false;
+            }
+            if (resizeState.isResizing) {
+                log('Stopped resizing', 'info');
+                resizeState.isResizing = false;
+            }
+        });
+
+        // Log canvas state
+        function logCanvasState() {
+            log('=== CANVAS STATE ===', 'info');
+            log('Dimensions: ' + canvasData.width + 'x' + canvasData.height, 'info');
+            log('Background: ' + canvasData.background, 'info');
+            log('Stickers: ' + canvasData.stickers.length, 'info');
+            canvasData.stickers.forEach((s, i) => {
+                log(`  [${i}] ${s.id}: pos(${s.x}, ${s.y}) size(${s.width}x${s.height})`, 'info');
+            });
+            log('===================', 'info');
+        }
+
+        // Initialize on load
+        window.onload = function() {
+            log('=== CANVAS EDITOR TEST ===', 'success');
+            log('Standalone test page loaded', 'success');
+            initCanvas();
+            log('Ready for testing!', 'success');
+            log('Try adding a sticker by clicking "Add Sticker"', 'info');
+        };
+    </script>
+</body>
+</html>

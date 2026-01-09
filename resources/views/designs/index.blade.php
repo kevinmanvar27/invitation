@@ -1,5 +1,9 @@
 @extends('layouts.home')
 
+@push('styles')
+<link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@400;500;600;700&family=Great+Vibes&family=Playfair+Display:wght@400;500;600;700&family=Montserrat:wght@300;400;500;600;700&family=Roboto:wght@300;400;500;700&family=Open+Sans:wght@300;400;500;600;700&family=Lato:wght@300;400;700&family=Poppins:wght@300;400;500;600;700&family=Raleway:wght@300;400;500;600;700&family=Oswald:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+@endpush
+
 @section('content')
 <!-- Hero Section -->
 <div class="designs-hero">
@@ -69,39 +73,17 @@
                             <div class="design-card-image">
                                 @if($design->thumbnail_path)
                                     <img src="{{ asset('storage/' . $design->thumbnail_path) }}" alt="{{ $design->design_name }}">
+                                @elseif($design->canvas_data)
+                                    <div class="design-preview-container" data-design-id="{{ $design->id }}" data-canvas-data="{{ base64_encode(json_encode($design->canvas_data)) }}"></div>
                                 @else
-                                    @php
-                                        $canvasData = $design->canvas_data;
-                                        $bgColor = '#f8f4f0';
-                                        $bgImage = null;
-                                        
-                                        if (is_array($canvasData)) {
-                                            if (isset($canvasData['background'])) {
-                                                if (isset($canvasData['background']['color'])) {
-                                                    $bgColor = $canvasData['background']['color'];
-                                                }
-                                                if (isset($canvasData['background']['image'])) {
-                                                    $bgImage = $canvasData['background']['image'];
-                                                }
-                                            }
-                                            if (isset($canvasData['pages'][0]['background'])) {
-                                                if (isset($canvasData['pages'][0]['background']['color'])) {
-                                                    $bgColor = $canvasData['pages'][0]['background']['color'];
-                                                }
-                                                if (isset($canvasData['pages'][0]['background']['image'])) {
-                                                    $bgImage = $canvasData['pages'][0]['background']['image'];
-                                                }
-                                            }
-                                        }
-                                    @endphp
-                                    <div class="design-card-preview" style="background-color: {{ $bgColor }}; {{ $bgImage ? 'background-image: url(' . $bgImage . '); background-size: cover; background-position: center;' : '' }}">
+                                    <div class="design-card-preview" style="background-color: #f8f4f0;">
                                         <div class="preview-content">
                                             <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
                                                 <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
                                                 <circle cx="8.5" cy="8.5" r="1.5"></circle>
                                                 <polyline points="21 15 16 10 5 21"></polyline>
                                             </svg>
-                                            <span>{{ $design->design_name }}</span>
+                                            <span>No Preview</span>
                                         </div>
                                     </div>
                                 @endif
@@ -378,6 +360,9 @@
     aspect-ratio: 4/3;
     background: #f5f5f5;
     overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
 .design-card-image img {
@@ -400,7 +385,21 @@
     transition: transform 0.3s ease;
 }
 
+.design-preview-container {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #f5f5f5;
+    transition: transform 0.3s ease;
+}
+
 .design-card:hover .design-card-preview {
+    transform: scale(1.02);
+}
+
+.design-card:hover .design-preview-container {
     transform: scale(1.02);
 }
 
@@ -650,5 +649,55 @@
         grid-template-columns: repeat(2, 1fr);
     }
 }
+
+/* Canvas card styling */
+.design-card-canvas {
+    max-width: 100%;
+    max-height: 100%;
+    width: auto;
+    height: auto;
+    object-fit: contain;
+    background: #fff;
+    display: block;
+}
 </style>
+
+<script src="{{ asset('js/design-preview-renderer.js') }}"></script>
+<script>
+// Render all design previews on page load
+document.addEventListener('DOMContentLoaded', function() {
+    const containers = document.querySelectorAll('.design-preview-container');
+    console.log('🎨 Found', containers.length, 'designs to render');
+    
+    containers.forEach((container, index) => {
+        try {
+            const canvasDataEncoded = container.getAttribute('data-canvas-data');
+            if (!canvasDataEncoded) {
+                console.warn(`⚠️ Design ${index}: No canvas data`);
+                return;
+            }
+            
+            const canvasData = JSON.parse(atob(canvasDataEncoded));
+            console.log(`🎨 Rendering design ${index}:`, canvasData);
+            
+            // Get the card image container dimensions
+            const cardImage = container.closest('.design-card-image');
+            const maxWidth = cardImage ? cardImage.clientWidth : 400;
+            const maxHeight = cardImage ? cardImage.clientHeight : 300;
+            
+            // Initialize renderer with container-based dimensions for card preview
+            const renderer = new DesignPreviewRenderer(container, canvasData, {
+                maxWidth: maxWidth,
+                maxHeight: maxHeight,
+                interactive: false
+            });
+            
+            renderer.render();
+            console.log(`✅ Design ${index} rendered successfully`);
+        } catch (error) {
+            console.error(`❌ Error rendering design ${index}:`, error);
+        }
+    });
+});
+</script>
 @endsection

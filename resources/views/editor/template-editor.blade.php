@@ -1,5 +1,4 @@
 @extends('layouts.app')
-@extends('layouts.app')
 
 @section('title', 'Customize Template - ' . $design->design_name)
 
@@ -688,10 +687,43 @@
     border-radius: 4px;
 }
 
+.canvas-wrapper.resizing {
+    outline: 2px dashed #667eea;
+}
+
 .design-canvas {
     position: relative;
     overflow: hidden;
 }
+
+/* Canvas Resize Handles */
+.resize-handle {
+    position: absolute;
+    background: #667eea;
+    z-index: 1000;
+}
+
+.resize-handle.corner {
+    width: 12px;
+    height: 12px;
+    border: 2px solid #fff;
+    border-radius: 50%;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+}
+
+.resize-handle.edge {
+    background: rgba(102, 126, 234, 0.5);
+}
+
+.resize-handle.top-left { top: -6px; left: -6px; cursor: nw-resize; }
+.resize-handle.top-right { top: -6px; right: -6px; cursor: ne-resize; }
+.resize-handle.bottom-left { bottom: -6px; left: -6px; cursor: sw-resize; }
+.resize-handle.bottom-right { bottom: -6px; right: -6px; cursor: se-resize; }
+
+.resize-handle.top { top: -3px; left: 10px; right: 10px; height: 6px; cursor: n-resize; }
+.resize-handle.bottom { bottom: -3px; left: 10px; right: 10px; height: 6px; cursor: s-resize; }
+.resize-handle.left { left: -3px; top: 10px; bottom: 10px; width: 6px; cursor: w-resize; }
+.resize-handle.right { right: -3px; top: 10px; bottom: 10px; width: 6px; cursor: e-resize; }
 
 /* Canvas Elements */
 .canvas-element {
@@ -709,10 +741,78 @@
     outline-offset: 2px;
 }
 
+/* Sticker Elements */
+.canvas-sticker {
+    cursor: move;
+    user-select: none;
+}
+
+.canvas-sticker img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    pointer-events: none;
+}
+
+.canvas-sticker:hover {
+    outline: 2px dashed #f59e0b;
+    outline-offset: 2px;
+}
+
+.canvas-sticker.selected {
+    outline: 2px solid #f59e0b;
+    outline-offset: 2px;
+}
+
+.sticker-resize-handle {
+    position: absolute;
+    width: 10px;
+    height: 10px;
+    background: #f59e0b;
+    border: 2px solid #fff;
+    border-radius: 50%;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+    z-index: 10;
+    display: none;
+}
+
+.canvas-sticker.selected .sticker-resize-handle {
+    display: block;
+}
+
+.sticker-resize-handle.tl { top: -5px; left: -5px; cursor: nw-resize; }
+.sticker-resize-handle.tr { top: -5px; right: -5px; cursor: ne-resize; }
+.sticker-resize-handle.bl { bottom: -5px; left: -5px; cursor: sw-resize; }
+.sticker-resize-handle.br { bottom: -5px; right: -5px; cursor: se-resize; }
+
+.sticker-delete-btn {
+    position: absolute;
+    top: -12px;
+    right: -12px;
+    width: 24px;
+    height: 24px;
+    background: #ef4444;
+    border: 2px solid #fff;
+    border-radius: 50%;
+    color: #fff;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    z-index: 11;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+}
+
+.canvas-sticker.selected .sticker-delete-btn {
+    display: flex;
+}
+
 .canvas-text {
     cursor: text;
     white-space: pre-wrap;
     word-wrap: break-word;
+    overflow: visible;
+    display: block;
 }
 
 .canvas-text:hover {
@@ -830,6 +930,106 @@
     opacity: 0.5;
 }
 
+/* Canvas Settings Panel */
+.canvas-settings {
+    padding: 16px;
+    background: #f8fafc;
+    border-bottom: 1px solid #e2e8f0;
+}
+
+.settings-row {
+    display: flex;
+    gap: 12px;
+    align-items: center;
+    flex-wrap: wrap;
+}
+
+.settings-group {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.settings-label {
+    font-size: 13px;
+    font-weight: 500;
+    color: #64748b;
+}
+
+.settings-input {
+    padding: 6px 12px;
+    border: 1px solid #e2e8f0;
+    border-radius: 6px;
+    font-size: 13px;
+    width: 80px;
+}
+
+.color-picker-wrapper {
+    position: relative;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.color-preview {
+    width: 32px;
+    height: 32px;
+    border: 2px solid #e2e8f0;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.color-preview:hover {
+    border-color: #667eea;
+    transform: scale(1.05);
+}
+
+.color-input {
+    position: absolute;
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+
+.upload-bg-btn {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 6px 12px;
+    background: #fff;
+    border: 1px solid #e2e8f0;
+    border-radius: 6px;
+    font-size: 13px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.upload-bg-btn:hover {
+    border-color: #667eea;
+    background: #f8fafc;
+}
+
+.sticker-upload-btn {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 8px 16px;
+    background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+    color: #fff;
+    border: none;
+    border-radius: 6px;
+    font-size: 13px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.sticker-upload-btn:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(245, 158, 11, 0.4);
+}
+
 /* Responsive */
 @media (max-width: 768px) {
     .template-editor {
@@ -898,11 +1098,67 @@
             </div>
         </div>
         
+        <!-- Canvas Settings Panel -->
+        <div class="canvas-settings">
+            <div class="settings-row">
+                <div class="settings-group">
+                    <span class="settings-label">Canvas Size:</span>
+                    <input type="number" id="canvasWidth" class="settings-input" value="800" min="200" max="2000" onchange="updateCanvasSize()">
+                    <span class="settings-label">×</span>
+                    <input type="number" id="canvasHeight" class="settings-input" value="600" min="200" max="2000" onchange="updateCanvasSize()">
+                    <span class="settings-label">px</span>
+                </div>
+                
+                <div class="settings-group">
+                    <span class="settings-label">Background:</span>
+                    <div class="color-picker-wrapper">
+                        <div class="color-preview" id="bgColorPreview" onclick="document.getElementById('bgColorInput').click()"></div>
+                        <input type="color" id="bgColorInput" class="color-input" value="#ffffff" onchange="updateCanvasBackground('color', this.value)">
+                    </div>
+                    <label class="upload-bg-btn">
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <rect x="3" y="3" width="18" height="18" rx="2" ry="2"/>
+                            <circle cx="8.5" cy="8.5" r="1.5"/>
+                            <polyline points="21 15 16 10 5 21"/>
+                        </svg>
+                        Upload Image
+                        <input type="file" id="bgImageInput" accept="image/*" style="display: none;" onchange="uploadBackgroundImage(this)">
+                    </label>
+                    <button class="upload-bg-btn" onclick="clearBackground()">
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <line x1="18" y1="6" x2="6" y2="18"/>
+                            <line x1="6" y1="6" x2="18" y2="18"/>
+                        </svg>
+                        Clear
+                    </button>
+                </div>
+                
+                <div class="settings-group">
+                    <label class="sticker-upload-btn">
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M12 5v14M5 12h14"/>
+                        </svg>
+                        Add Sticker
+                        <input type="file" id="stickerInput" accept="image/*" style="display: none;" onchange="addSticker(this)">
+                    </label>
+                </div>
+            </div>
+        </div>
+        
         <div class="canvas-container">
             <div class="canvas-wrapper" id="canvasWrapper">
                 <div class="design-canvas" id="designCanvas">
                     <!-- Canvas elements will be rendered here -->
                 </div>
+                <!-- Canvas Resize Handles -->
+                <div class="resize-handle corner top-left" data-direction="nw"></div>
+                <div class="resize-handle corner top-right" data-direction="ne"></div>
+                <div class="resize-handle corner bottom-left" data-direction="sw"></div>
+                <div class="resize-handle corner bottom-right" data-direction="se"></div>
+                <div class="resize-handle edge top" data-direction="n"></div>
+                <div class="resize-handle edge bottom" data-direction="s"></div>
+                <div class="resize-handle edge left" data-direction="w"></div>
+                <div class="resize-handle edge right" data-direction="e"></div>
             </div>
         </div>
     </div>
@@ -975,14 +1231,360 @@
     </div>
 </div>
 
+<!-- Test script to verify scripts are loading -->
 <script>
+console.log('='.repeat(80));
+console.log('TEST SCRIPT BEFORE MAIN SCRIPT - If you see this, scripts are loading!');
+console.log('='.repeat(80));
+
+// Global error handler
+window.onerror = function(message, source, lineno, colno, error) {
+    console.error('🚨 GLOBAL ERROR CAUGHT:');
+    console.error('Message:', message);
+    console.error('Source:', source);
+    console.error('Line:', lineno, 'Column:', colno);
+    console.error('Error object:', error);
+    return false; // Let default error handling continue
+};
+
+// Unhandled promise rejection handler
+window.onunhandledrejection = function(event) {
+    console.error('🚨 UNHANDLED PROMISE REJECTION:');
+    console.error('Reason:', event.reason);
+    console.error('Promise:', event.promise);
+};
+
+console.log('✓ Global error handlers installed');
+</script>
+
+<script>
+/*
+ * ============================================================================
+ * TEMPLATE EDITOR - MAIN SCRIPT
+ * ============================================================================
+ * This script initializes and manages the template editor functionality.
+ * 
+ * DEBUG FEATURES ENABLED:
+ * - Comprehensive console logging at each initialization step
+ * - Global error handlers for catching runtime errors
+ * - Fallback initialization if DOMContentLoaded doesn't fire
+ * - Safe parsing of canvas data with error handling
+ * 
+ * If you don't see ANY console output, check:
+ * 1. Browser console is open and not filtered
+ * 2. JavaScript is enabled in your browser
+ * 3. No browser extensions blocking scripts
+ * 4. Check browser's Network tab for script loading errors
+ * ============================================================================
+ */
+
+// Test console output
+console.log('🚀 Script loaded successfully!');
+console.log('Current time:', new Date().toLocaleTimeString());
+
 // Design data from server
 const designId = {{ $design->id }};
-const originalCanvasData = @json($design->canvas_data);
-let canvasData = JSON.parse(JSON.stringify(originalCanvasData)); // Deep copy
+let originalCanvasData = @json($design->canvas_data);
+
+console.log('Raw originalCanvasData:', originalCanvasData);
+console.log('Type of originalCanvasData:', typeof originalCanvasData);
+
+// Initialize canvasData with defaults if null
+let canvasData;
+try {
+    if (originalCanvasData && typeof originalCanvasData === 'object') {
+        // Deep clone the object
+        canvasData = JSON.parse(JSON.stringify(originalCanvasData));
+        console.log('✓ Canvas data cloned from original');
+        console.log('Canvas data structure:', canvasData);
+        
+        // Check if this is a pages-based structure (from template preview)
+        if (canvasData.pages && Array.isArray(canvasData.pages) && canvasData.pages.length > 0) {
+            console.log('🔄 Converting pages-based structure to editor format...');
+            console.log('📄 Pages count:', canvasData.pages.length);
+            const firstPage = canvasData.pages[0];
+            console.log('📄 First page:', firstPage);
+            console.log('📄 First page elements:', firstPage.elements);
+            console.log('📄 DETAILED FIRST PAGE ELEMENTS:', JSON.stringify(firstPage.elements, null, 2));
+            
+            // Convert elements to editor format
+            const convertedElements = (firstPage.elements || []).map(element => {
+                console.log('  → Converting element:', element.type, element.id);
+                
+                const converted = {
+                    id: element.id || 'el_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9),
+                    type: element.type,
+                    x: parseFloat(element.x) || 0,
+                    y: parseFloat(element.y) || 0,
+                    width: element.width === 'auto' ? 'auto' : (parseFloat(element.width) || 100),
+                    height: element.height === 'auto' ? 'auto' : (parseFloat(element.height) || 100),
+                    rotation: parseFloat(element.rotation) || 0,
+                    zIndex: parseInt(element.zIndex) || 1,
+                    opacity: parseFloat(element.opacity) || 1,
+                    locked: element.locked || false
+                };
+                
+                // Convert text elements - preserve ALL text properties
+                if (element.type === 'text') {
+                    converted.content = element.text || element.content || '';
+                    converted.text = converted.content; // Ensure both properties exist
+                    
+                    // Extract styles from MULTIPLE possible locations
+                    const styles = element.styles || {};
+                    
+                    // Priority order: element.styles > top-level properties > defaults
+                    let fontFamily = styles.fontFamily || element.fontFamily;
+                    let fontSize = styles.fontSize || element.fontSize;
+                    let fontWeight = styles.fontWeight || element.fontWeight;
+                    let fontStyle = styles.fontStyle || element.fontStyle;
+                    let textAlign = styles.textAlign || element.textAlign;
+                    let textDecoration = styles.textDecoration || element.textDecoration;
+                    let color = styles.color || element.fill || element.color;
+                    
+                    // Apply defaults if still undefined
+                    fontFamily = fontFamily || 'Arial';
+                    fontSize = fontSize || '24px';
+                    fontWeight = fontWeight || 'normal';
+                    fontStyle = fontStyle || 'normal';
+                    textAlign = textAlign || 'left';
+                    textDecoration = textDecoration || 'none';
+                    color = color || '#000000';
+                    
+                    // Normalize fontSize to always include 'px' if it's a number
+                    if (typeof fontSize === 'number') {
+                        fontSize = fontSize + 'px';
+                    } else if (typeof fontSize === 'string' && !fontSize.includes('px')) {
+                        // If it's a string number without px, add px
+                        const numValue = parseInt(fontSize);
+                        if (!isNaN(numValue)) {
+                            fontSize = numValue + 'px';
+                        }
+                    }
+                    
+                    converted.styles = {
+                        fontFamily: fontFamily,
+                        fontSize: fontSize,
+                        fontWeight: fontWeight,
+                        fontStyle: fontStyle,
+                        textAlign: textAlign,
+                        textDecoration: textDecoration,
+                        color: color
+                    };
+                    
+                    console.log('    ✓ Text element converted with styles:', converted.styles);
+                }
+                
+                // Convert image elements - preserve ALL image properties
+                else if (element.type === 'image') {
+                    converted.src = element.src || element.imageSrc || '';
+                    converted.imageSrc = converted.src; // Store in both fields
+                    
+                    // Preserve crop settings
+                    if (element.cropSettings) {
+                        converted.cropSettings = element.cropSettings;
+                    }
+                    
+                    // Preserve filters or effects
+                    if (element.filters) {
+                        converted.filters = element.filters;
+                    }
+                    
+                    console.log('    ✓ Image element converted:', converted);
+                }
+                
+                // Convert shape elements - preserve ALL shape properties
+                else if (element.type === 'shape') {
+                    const styles = element.styles || {};
+                    converted.shape = element.shape || element.shapeType || 'rectangle';
+                    converted.shapeType = converted.shape; // Store in both fields
+                    converted.fill = element.fill || styles.backgroundColor || styles.fill || '#000000';
+                    converted.stroke = element.stroke || styles.borderColor || styles.stroke || 'none';
+                    converted.strokeWidth = element.strokeWidth || styles.borderWidth || styles.strokeWidth || 0;
+                    
+                    // Normalize strokeWidth to number
+                    if (typeof converted.strokeWidth === 'string') {
+                        converted.strokeWidth = parseInt(converted.strokeWidth) || 0;
+                    }
+                    
+                    // Store complete styles object
+                    converted.styles = {
+                        backgroundColor: converted.fill,
+                        fill: converted.fill,
+                        borderColor: converted.stroke,
+                        stroke: converted.stroke,
+                        borderWidth: converted.strokeWidth + 'px',
+                        strokeWidth: converted.strokeWidth
+                    };
+                    
+                    console.log('    ✓ Shape element converted:', converted);
+                }
+                
+                // Convert frame elements - preserve ALL frame properties
+                else if (element.type === 'frame') {
+                    const styles = element.styles || {};
+                    converted.frameType = element.frameType || 'square';
+                    converted.src = element.src || element.imageSrc || '';
+                    converted.imageSrc = converted.src; // Store in both fields
+                    
+                    const borderColor = styles.borderColor || element.borderColor || '#000000';
+                    const borderWidth = styles.borderWidth || element.borderWidth || '2px';
+                    
+                    // Normalize borderWidth to include 'px' if it's a number
+                    let normalizedBorderWidth = borderWidth;
+                    if (typeof normalizedBorderWidth === 'number') {
+                        normalizedBorderWidth = normalizedBorderWidth + 'px';
+                    }
+                    
+                    converted.styles = {
+                        borderColor: borderColor,
+                        borderWidth: normalizedBorderWidth
+                    };
+                    
+                    // Also store at top level for compatibility
+                    converted.borderColor = borderColor;
+                    converted.borderWidth = normalizedBorderWidth;
+                    
+                    console.log('    ✓ Frame element converted:', converted);
+                }
+                
+                // Convert line elements - preserve ALL line properties
+                else if (element.type === 'line') {
+                    converted.lineType = element.lineType || 'solid';
+                    converted.stroke = element.stroke || element.fill || '#000000';
+                    converted.fill = converted.stroke; // Store in both fields
+                    converted.strokeWidth = element.strokeWidth || 2;
+                    
+                    // Normalize strokeWidth
+                    if (typeof converted.strokeWidth === 'string') {
+                        converted.strokeWidth = parseInt(converted.strokeWidth) || 2;
+                    }
+                    
+                    console.log('    ✓ Line element converted:', converted);
+                }
+                
+                // Convert icon elements - preserve ALL icon properties
+                else if (element.type === 'icon') {
+                    converted.iconName = element.iconName || element.iconClass || '';
+                    converted.iconClass = converted.iconName; // Store in both fields
+                    converted.fill = element.fill || element.color || styles.color || '#000000';
+                    converted.color = converted.fill; // Store in both fields
+                    
+                    converted.styles = {
+                        color: converted.fill
+                    };
+                    
+                    console.log('    ✓ Icon element converted:', converted);
+                }
+                
+                else {
+                    console.warn('    ⚠️ Unknown element type:', element.type);
+                }
+                
+                return converted;
+            }).filter(el => el !== null); // Remove null elements
+            
+            // Convert to flat structure expected by editor
+            const convertedData = {
+                width: canvasData.width || 800,
+                height: canvasData.height || 600,
+                background: '#ffffff',
+                elements: convertedElements,
+                stickers: []
+            };
+            
+            // Handle background from page
+            if (firstPage.background) {
+                if (firstPage.background.type === 'color') {
+                    convertedData.background = firstPage.background.color || '#ffffff';
+                    convertedData.backgroundType = 'color';
+                } else if (firstPage.background.type === 'image' && firstPage.background.image) {
+                    convertedData.background = `url(${firstPage.background.image})`;
+                    convertedData.backgroundType = 'image';
+                    convertedData.backgroundOpacity = firstPage.background.opacity || 1;
+                    convertedData.backgroundColor = firstPage.background.color || '#ffffff';
+                    console.log('  → Background image with opacity:', convertedData.backgroundOpacity);
+                    console.log('  → Background color:', convertedData.backgroundColor);
+                }
+            }
+            
+            canvasData = convertedData;
+            console.log('✓ Converted to editor format:', canvasData);
+            console.log('✓ Converted elements count:', convertedElements.length);
+            console.log('✓ First element sample:', convertedElements[0]);
+        }
+    } else {
+        // Use defaults
+        canvasData = {
+            width: 800,
+            height: 600,
+            background: '#ffffff',
+            elements: [],
+            stickers: []
+        };
+        console.log('✓ Using default canvas data');
+    }
+} catch (error) {
+    console.error('Error parsing canvas data:', error);
+    // Fallback to defaults
+    canvasData = {
+        width: 800,
+        height: 600,
+        background: '#ffffff',
+        elements: [],
+        stickers: []
+    };
+    console.log('✓ Using fallback canvas data due to error');
+}
 
 // Element visibility state
 let elementStates = {};
+
+// Ensure stickers array exists
+if (!canvasData.stickers) {
+    canvasData.stickers = [];
+}
+
+// Ensure elements array exists
+if (!canvasData.elements) {
+    canvasData.elements = [];
+}
+
+// Ensure dimensions exist
+if (!canvasData.width) canvasData.width = 800;
+if (!canvasData.height) canvasData.height = 600;
+if (!canvasData.background) canvasData.background = '#ffffff';
+
+console.log('📊 Final canvas data:', {
+    width: canvasData.width,
+    height: canvasData.height,
+    background: canvasData.background,
+    elementsCount: canvasData.elements ? canvasData.elements.length : 0,
+    stickersCount: canvasData.stickers ? canvasData.stickers.length : 0
+});
+
+// Canvas resize state
+let canvasResizeState = {
+    isResizing: false,
+    direction: null,
+    startX: 0,
+    startY: 0,
+    startWidth: 0,
+    startHeight: 0
+};
+
+// Sticker interaction state
+let stickerState = {
+    selectedId: null,
+    isDragging: false,
+    isResizing: false,
+    resizeDirection: null,
+    startX: 0,
+    startY: 0,
+    startWidth: 0,
+    startHeight: 0,
+    startLeft: 0,
+    startTop: 0
+};
 
 // Global crop state
 let cropState = {
@@ -1000,25 +1602,150 @@ let cropState = {
     originalSrc: null
 };
 
+// Check if DOM is already loaded
+if (document.readyState === 'loading') {
+    console.log('📄 DOM is still loading, waiting for DOMContentLoaded...');
+} else {
+    console.log('📄 DOM already loaded, readyState:', document.readyState);
+}
+
 // Initialize the editor
-document.addEventListener('DOMContentLoaded', function() {
-    initializeCanvas();
-    renderElementsList();
-    renderCanvas();
+// Load all Google Fonts before rendering
+async function loadFonts() {
+    console.log('🔤 Loading Google Fonts...');
+    const fonts = [
+        'Great Vibes',
+        'Dancing Script',
+        'Playfair Display',
+        'Pacifico',
+        'Lobster',
+        'Satisfy',
+        'Sacramento',
+        'Alex Brush',
+        'Allura',
+        'Tangerine',
+        'Montserrat',
+        'Roboto',
+        'Open Sans',
+        'Lato',
+        'Poppins',
+        'Raleway',
+        'Oswald'
+    ];
     
-    // Show success message if redirected from template use
-    @if(session('success'))
-        showToast('{{ session('success') }}', 'success');
-    @endif
+    try {
+        // Wait for document.fonts to be ready
+        await document.fonts.ready;
+        console.log('✓ Document fonts ready');
+        
+        // Load each font
+        for (const font of fonts) {
+            try {
+                await document.fonts.load(`16px "${font}"`);
+                console.log(`  ✓ Loaded: ${font}`);
+            } catch (err) {
+                console.warn(`  ⚠ Failed to load ${font}:`, err.message);
+            }
+        }
+        
+        console.log('✓ All fonts loaded successfully');
+    } catch (error) {
+        console.error('❌ Error loading fonts:', error);
+    }
+}
+
+document.addEventListener('DOMContentLoaded', async function() {
+    console.log('🎯 DOMContentLoaded event fired!');
+    try {
+        console.log('=== EDITOR INITIALIZATION START ===');
+        console.log('Canvas Data:', canvasData);
+        console.log('Design ID:', designId);
+        
+        console.log('Step 0: Loading fonts...');
+        await loadFonts();
+        console.log('✓ Fonts loaded');
+        
+        console.log('Step 1: Initializing canvas...');
+        initializeCanvas();
+        console.log('✓ Canvas initialized');
+        
+        console.log('Step 2: Rendering elements list...');
+        renderElementsList();
+        console.log('✓ Elements list rendered');
+        
+        console.log('Step 3: Rendering canvas...');
+        renderCanvas();
+        console.log('✓ Canvas rendered');
+        
+        console.log('Step 4: Initializing canvas resize...');
+        initializeCanvasResize();
+        console.log('✓ Canvas resize initialized');
+        
+        console.log('Step 5: Initializing canvas interactions...');
+        initializeCanvasInteractions();
+        console.log('✓ Canvas interactions initialized');
+        
+        console.log('=== EDITOR INITIALIZATION COMPLETE ===');
+        
+        // Show success message if redirected from template use
+        @if(session('success'))
+            showToast('{{ session('success') }}', 'success');
+        @endif
+    } catch (error) {
+        console.error('❌ Error initializing editor:', error);
+        console.error('Error stack:', error.stack);
+        showToast('Error loading editor. Please refresh the page.', 'error');
+    }
 });
+
+// Fallback: If DOM is already loaded when script runs, initialize immediately
+if (document.readyState === 'interactive' || document.readyState === 'complete') {
+    console.log('⚡ DOM already ready, initializing immediately...');
+    setTimeout(async function() {
+        try {
+            console.log('=== FALLBACK INITIALIZATION START ===');
+            await loadFonts();
+            initializeCanvas();
+            renderElementsList();
+            renderCanvas();
+            initializeCanvasResize();
+            initializeCanvasInteractions();
+            console.log('=== FALLBACK INITIALIZATION COMPLETE ===');
+        } catch (error) {
+            console.error('❌ Error in fallback initialization:', error);
+            console.error('Error stack:', error.stack);
+        }
+    }, 100);
+}
 
 // Initialize canvas dimensions
 function initializeCanvas() {
+    console.log('  → Looking for canvas elements...');
     const canvas = document.getElementById('designCanvas');
     const wrapper = document.getElementById('canvasWrapper');
     
+    console.log('  → Canvas element:', canvas ? 'FOUND' : 'NOT FOUND');
+    console.log('  → Wrapper element:', wrapper ? 'FOUND' : 'NOT FOUND');
+    
+    if (!canvas || !wrapper) {
+        console.error('❌ Canvas or wrapper not found!');
+        return;
+    }
+    
     const width = canvasData.width || 800;
     const height = canvasData.height || 600;
+    
+    console.log('  → Canvas dimensions:', width, 'x', height);
+    
+    // Update size inputs
+    const widthInput = document.getElementById('canvasWidth');
+    const heightInput = document.getElementById('canvasHeight');
+    
+    console.log('  → Width input:', widthInput ? 'FOUND' : 'NOT FOUND');
+    console.log('  → Height input:', heightInput ? 'FOUND' : 'NOT FOUND');
+    
+    if (widthInput) widthInput.value = width;
+    if (heightInput) heightInput.value = height;
     
     // Scale canvas to fit viewport
     const container = document.querySelector('.canvas-container');
@@ -1032,16 +1759,67 @@ function initializeCanvas() {
     wrapper.style.transform = `scale(${scale})`;
     wrapper.style.transformOrigin = 'center center';
     
+    console.log('  → Canvas styled:', width + 'px x ' + height + 'px');
+    console.log('  → Scale applied:', scale);
+    
     // Set background
+    const bgPreview = document.getElementById('bgColorPreview');
+    const bgInput = document.getElementById('bgColorInput');
+    
+    console.log('  → Setting background:', canvasData.background);
+    console.log('  → Background type:', canvasData.backgroundType);
+    console.log('  → Background opacity:', canvasData.backgroundOpacity);
+    console.log('  → Background color:', canvasData.backgroundColor);
+    
     if (canvasData.background) {
         if (canvasData.background.startsWith('#') || canvasData.background.startsWith('rgb')) {
+            // Solid color background
             canvas.style.backgroundColor = canvasData.background;
+            canvas.style.backgroundImage = 'none';
+            if (bgPreview) bgPreview.style.background = canvasData.background;
+            if (bgInput) bgInput.value = canvasData.background;
         } else if (canvasData.background.startsWith('linear-gradient') || canvasData.background.startsWith('url')) {
-            canvas.style.background = canvasData.background;
+            // Image or gradient background
+            
+            // If we have opacity and background color, create a layered effect
+            if (canvasData.backgroundType === 'image' && canvasData.backgroundOpacity !== undefined && canvasData.backgroundOpacity < 1) {
+                console.log('  → Applying background with opacity:', canvasData.backgroundOpacity);
+                
+                // Set background color first
+                canvas.style.backgroundColor = canvasData.backgroundColor || '#ffffff';
+                
+                // Create a pseudo-element effect using linear-gradient overlay
+                const opacity = canvasData.backgroundOpacity;
+                const imageUrl = canvasData.background.match(/url\((.*?)\)/)[1];
+                
+                // Apply background with opacity using multiple backgrounds
+                canvas.style.backgroundImage = `
+                    linear-gradient(rgba(255, 255, 255, ${1 - opacity}), rgba(255, 255, 255, ${1 - opacity})),
+                    ${canvasData.background}
+                `.trim();
+                canvas.style.backgroundSize = 'cover, cover';
+                canvas.style.backgroundPosition = 'center, center';
+                canvas.style.backgroundRepeat = 'no-repeat, no-repeat';
+                
+                console.log('  → Background image applied with opacity overlay');
+            } else {
+                // Normal background without opacity
+                canvas.style.background = canvasData.background;
+                canvas.style.backgroundSize = 'cover';
+                canvas.style.backgroundPosition = 'center';
+                canvas.style.backgroundRepeat = 'no-repeat';
+            }
+            
+            if (bgPreview) bgPreview.style.background = canvasData.background;
         }
     } else {
         canvas.style.backgroundColor = '#ffffff';
+        canvas.style.backgroundImage = 'none';
+        if (bgPreview) bgPreview.style.background = '#ffffff';
+        if (bgInput) bgInput.value = '#ffffff';
     }
+    
+    console.log('  → Background applied');
     
     // Initialize element states
     if (canvasData.elements) {
@@ -1592,50 +2370,161 @@ document.addEventListener('keydown', function(e) {
 
 // Render canvas
 function renderCanvas() {
+    console.log('🎨 renderCanvas() called');
     const canvas = document.getElementById('designCanvas');
     const elements = canvasData.elements || [];
+    const stickers = canvasData.stickers || [];
+    
+    console.log('  → Canvas element:', canvas ? 'FOUND' : 'NOT FOUND');
+    console.log('  → Elements to render:', elements.length);
+    console.log('  → Stickers to render:', stickers.length);
+    console.log('  → Canvas data:', canvasData);
+    console.log('  → Full elements array:', elements);
+    
+    if (!canvas) {
+        console.error('❌ Canvas element not found!');
+        return;
+    }
     
     let html = '';
     
-    elements.forEach(element => {
+    // Render template elements
+    elements.forEach((element, index) => {
+        console.log(`  → Rendering element ${index}:`, element.type, element);
+        console.log(`     - Position: (${element.x}, ${element.y})`);
+        console.log(`     - Size: ${element.width} x ${element.height}`);
+        console.log(`     - Styles:`, element.styles);
+        console.log(`     - Content/Text:`, element.content || element.text);
+        
         const isEnabled = elementStates[element.id]?.enabled !== false;
-        html += renderCanvasElement(element, isEnabled);
+        const elementHtml = renderCanvasElement(element, isEnabled);
+        if (elementHtml) {
+            html += elementHtml;
+            console.log(`     ✓ HTML generated (${elementHtml.length} chars)`);
+        } else {
+            console.warn(`     ⚠️ Element ${index} (${element.type}) returned no HTML`);
+        }
     });
     
+    // Render stickers
+    stickers.forEach((sticker, index) => {
+        console.log(`  → Rendering sticker ${index}:`, sticker);
+        html += renderStickerElement(sticker);
+    });
+    
+    console.log('  → Total HTML length:', html.length);
+    console.log('  → Setting canvas innerHTML...');
     canvas.innerHTML = html;
+    console.log('✓ Canvas rendered with', elements.length, 'elements and', stickers.length, 'stickers');
+    console.log('✓ Canvas innerHTML set, checking DOM...');
+    console.log('  → Canvas children count:', canvas.children.length);
+}
+
+// Render sticker element
+function renderStickerElement(sticker) {
+    const isSelected = stickerState.selectedId === sticker.id;
+    
+    return `
+        <div class="canvas-element canvas-sticker ${isSelected ? 'selected' : ''}" 
+             data-sticker-id="${sticker.id}"
+             style="left: ${sticker.x}px; top: ${sticker.y}px; width: ${sticker.width}px; height: ${sticker.height}px; transform: rotate(${sticker.rotation || 0}deg); z-index: ${sticker.zIndex};"
+             onmousedown="startStickerDrag('${sticker.id}', event)"
+             onclick="selectSticker('${sticker.id}', event)">
+            <img src="${sticker.src}" alt="Sticker" draggable="false">
+            
+            <!-- Resize handles -->
+            <div class="sticker-resize-handle tl" onmousedown="startStickerResize('${sticker.id}', 'tl', event)"></div>
+            <div class="sticker-resize-handle tr" onmousedown="startStickerResize('${sticker.id}', 'tr', event)"></div>
+            <div class="sticker-resize-handle bl" onmousedown="startStickerResize('${sticker.id}', 'bl', event)"></div>
+            <div class="sticker-resize-handle br" onmousedown="startStickerResize('${sticker.id}', 'br', event)"></div>
+            
+            <!-- Delete button -->
+            <button class="sticker-delete-btn" onclick="deleteSticker('${sticker.id}', event)" title="Delete sticker">
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <line x1="18" y1="6" x2="6" y2="18"/>
+                    <line x1="6" y1="6" x2="18" y2="18"/>
+                </svg>
+            </button>
+        </div>
+    `;
 }
 
 // Render individual canvas element
 function renderCanvasElement(element, isEnabled) {
+    if (!element || !element.type) {
+        console.error('Invalid element:', element);
+        return '';
+    }
+    
     const hiddenClass = !isEnabled ? 'hidden' : '';
     const styles = element.styles || {};
     
+    // Handle 'auto' width/height for text elements
+    let widthValue, heightValue;
+    
+    if (element.width === 'auto' || element.width === null || element.width === undefined) {
+        widthValue = 'auto';
+    } else {
+        widthValue = `${element.width}px`;
+    }
+    
+    if (element.height === 'auto' || element.height === null || element.height === undefined) {
+        heightValue = 'auto';
+    } else {
+        heightValue = `${element.height}px`;
+    }
+    
     let style = `
-        left: ${element.x}px;
-        top: ${element.y}px;
-        width: ${element.width}px;
-        height: ${element.height}px;
+        left: ${element.x || 0}px;
+        top: ${element.y || 0}px;
+        width: ${widthValue};
+        height: ${heightValue};
         transform: rotate(${element.rotation || 0}deg);
         z-index: ${element.zIndex || 1};
+        opacity: ${element.opacity || 1};
     `;
     
     switch(element.type) {
         case 'text':
-            let textStyle = '';
-            if (styles.fontFamily) textStyle += `font-family: '${styles.fontFamily}', sans-serif;`;
-            if (styles.fontSize) textStyle += `font-size: ${styles.fontSize};`;
-            if (styles.fontWeight) textStyle += `font-weight: ${styles.fontWeight};`;
-            if (styles.fontStyle) textStyle += `font-style: ${styles.fontStyle};`;
-            if (styles.textDecoration) textStyle += `text-decoration: ${styles.textDecoration};`;
-            if (styles.textAlign) textStyle += `text-align: ${styles.textAlign};`;
-            if (styles.color) textStyle += `color: ${styles.color};`;
+            // Extract font properties with fallbacks (styles object OR element level)
+            const fontFamily = styles.fontFamily || element.fontFamily || 'Arial';
+            const fontSize = styles.fontSize || element.fontSize || '24px';
+            const fontWeight = styles.fontWeight || element.fontWeight || 'normal';
+            const fontStyle = styles.fontStyle || element.fontStyle || 'normal';
+            const textDecoration = styles.textDecoration || element.textDecoration || 'none';
+            const textAlign = styles.textAlign || element.textAlign || 'left';
+            const color = styles.color || element.fill || element.color || '#000000';
+            
+            // Normalize fontSize to string with 'px' suffix
+            const normalizedFontSize = typeof fontSize === 'number' ? `${fontSize}px` : fontSize;
+            
+            // Build inline styles
+            let textStyle = `
+                font-family: '${fontFamily}', sans-serif;
+                font-size: ${normalizedFontSize};
+                font-weight: ${fontWeight};
+                font-style: ${fontStyle};
+                text-decoration: ${textDecoration};
+                text-align: ${textAlign};
+                color: ${color};
+            `;
+            
+            const textContent = element.content || element.text || '';
+            console.log('    → Rendering text element:', element.id);
+            console.log('      Content:', textContent);
+            console.log('      Font:', fontFamily, normalizedFontSize, fontWeight);
+            console.log('      Color:', color);
+            console.log('      Full textStyle:', textStyle);
+            
+            // Escape HTML to prevent XSS
+            const escapedContent = textContent.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
             
             return `
                 <div class="canvas-element canvas-text ${hiddenClass}" 
                      data-element-id="${element.id}" 
                      style="${style} ${textStyle}"
                      onclick="focusTextInput('${element.id}')">
-                    <span class="text-content">${element.content || ''}</span>
+                    <span class="text-content">${escapedContent}</span>
                 </div>
             `;
             
@@ -1684,7 +2573,87 @@ function renderCanvasElement(element, isEnabled) {
                 </div>
             `;
             
+        case 'shape':
+            const shapeType = element.shape || 'rectangle';
+            const fill = element.fill || '#000000';
+            const stroke = element.stroke || 'none';
+            const strokeWidth = element.strokeWidth || 0;
+            
+            let shapeHtml = '';
+            if (shapeType === 'rectangle') {
+                shapeHtml = `<div style="width: 100%; height: 100%; background: ${fill}; border: ${strokeWidth}px solid ${stroke};"></div>`;
+            } else if (shapeType === 'circle') {
+                shapeHtml = `<div style="width: 100%; height: 100%; background: ${fill}; border: ${strokeWidth}px solid ${stroke}; border-radius: 50%;"></div>`;
+            } else if (shapeType === 'triangle') {
+                shapeHtml = `<svg width="100%" height="100%" viewBox="0 0 100 100"><polygon points="50,10 90,90 10,90" fill="${fill}" stroke="${stroke}" stroke-width="${strokeWidth}"/></svg>`;
+            } else if (shapeType === 'star') {
+                shapeHtml = `<svg width="100%" height="100%" viewBox="0 0 100 100"><polygon points="50,5 61,35 92,35 67,57 78,88 50,70 22,88 33,57 8,35 39,35" fill="${fill}" stroke="${stroke}" stroke-width="${strokeWidth}"/></svg>`;
+            } else if (shapeType === 'heart') {
+                shapeHtml = `<svg width="100%" height="100%" viewBox="0 0 100 100"><path d="M50,90 C50,90 10,60 10,40 C10,25 20,15 30,15 C40,15 50,25 50,25 C50,25 60,15 70,15 C80,15 90,25 90,40 C90,60 50,90 50,90 Z" fill="${fill}" stroke="${stroke}" stroke-width="${strokeWidth}"/></svg>`;
+            } else if (shapeType === 'hexagon') {
+                shapeHtml = `<svg width="100%" height="100%" viewBox="0 0 100 100"><polygon points="50,5 90,25 90,75 50,95 10,75 10,25" fill="${fill}" stroke="${stroke}" stroke-width="${strokeWidth}"/></svg>`;
+            } else if (shapeType === 'pentagon') {
+                shapeHtml = `<svg width="100%" height="100%" viewBox="0 0 100 100"><polygon points="50,5 95,40 75,95 25,95 5,40" fill="${fill}" stroke="${stroke}" stroke-width="${strokeWidth}"/></svg>`;
+            } else if (shapeType === 'diamond') {
+                shapeHtml = `<svg width="100%" height="100%" viewBox="0 0 100 100"><polygon points="50,5 95,50 50,95 5,50" fill="${fill}" stroke="${stroke}" stroke-width="${strokeWidth}"/></svg>`;
+            } else if (shapeType === 'octagon') {
+                shapeHtml = `<svg width="100%" height="100%" viewBox="0 0 100 100"><polygon points="30,5 70,5 95,30 95,70 70,95 30,95 5,70 5,30" fill="${fill}" stroke="${stroke}" stroke-width="${strokeWidth}"/></svg>`;
+            }
+            
+            return `
+                <div class="canvas-element canvas-shape ${hiddenClass}" 
+                     data-element-id="${element.id}" 
+                     style="${style}">
+                    ${shapeHtml}
+                </div>
+            `;
+            
+        case 'line':
+            const lineType = element.lineType || 'solid';
+            const lineStroke = element.stroke || '#000000';
+            const lineStrokeWidth = element.strokeWidth || 2;
+            
+            let dashArray = '';
+            if (lineType === 'dashed') dashArray = '10,5';
+            else if (lineType === 'dotted') dashArray = '2,3';
+            
+            return `
+                <div class="canvas-element canvas-line ${hiddenClass}" 
+                     data-element-id="${element.id}" 
+                     style="${style}">
+                    <svg width="100%" height="100%">
+                        <line x1="0" y1="50%" x2="100%" y2="50%" 
+                              stroke="${lineStroke}" 
+                              stroke-width="${lineStrokeWidth}" 
+                              ${dashArray ? `stroke-dasharray="${dashArray}"` : ''} />
+                    </svg>
+                </div>
+            `;
+            
+        case 'icon':
+            const iconFill = element.fill || '#000000';
+            const iconName = element.iconName || 'star';
+            
+            // Simple icon rendering (you can expand this with more icons)
+            let iconSvg = '';
+            if (iconName === 'star') {
+                iconSvg = `<svg width="100%" height="100%" viewBox="0 0 24 24" fill="${iconFill}"><polygon points="12,2 15,9 22,9 17,14 19,21 12,17 5,21 7,14 2,9 9,9"/></svg>`;
+            } else if (iconName === 'heart') {
+                iconSvg = `<svg width="100%" height="100%" viewBox="0 0 24 24" fill="${iconFill}"><path d="M12,21 C12,21 3,15 3,9 C3,6 5,4 7,4 C9,4 12,6 12,6 C12,6 15,4 17,4 C19,4 21,6 21,9 C21,15 12,21 12,21 Z"/></svg>`;
+            } else {
+                iconSvg = `<svg width="100%" height="100%" viewBox="0 0 24 24" fill="${iconFill}"><circle cx="12" cy="12" r="10"/></svg>`;
+            }
+            
+            return `
+                <div class="canvas-element canvas-icon ${hiddenClass}" 
+                     data-element-id="${element.id}" 
+                     style="${style}">
+                    ${iconSvg}
+                </div>
+            `;
+            
         default:
+            console.warn('Unknown element type:', element.type);
             return '';
     }
 }
@@ -1709,6 +2678,11 @@ function resetChanges() {
     if (confirm('Are you sure you want to reset all changes?')) {
         canvasData = JSON.parse(JSON.stringify(originalCanvasData));
         
+        // Ensure stickers array exists
+        if (!canvasData.stickers) {
+            canvasData.stickers = [];
+        }
+        
         // Reset element states
         if (canvasData.elements) {
             canvasData.elements.forEach(el => {
@@ -1716,6 +2690,10 @@ function resetChanges() {
             });
         }
         
+        // Deselect stickers
+        deselectSticker();
+        
+        initializeCanvas();
         renderElementsList();
         renderCanvas();
         showToast('Changes reset successfully');
@@ -1752,14 +2730,155 @@ function previewDesign() {
 
 // Save design
 function saveDesign() {
+    console.log('💾 Saving design...');
     const loadingOverlay = document.getElementById('loadingOverlay');
     loadingOverlay.classList.add('show');
     
     // Prepare data - filter out disabled elements
+    const filteredElements = canvasData.elements.filter(el => elementStates[el.id]?.enabled !== false);
+    
+    console.log('📦 Filtered elements:', filteredElements.length);
+    
+    // Convert elements back to template format
+    const convertedElements = filteredElements.map(element => {
+        const converted = {
+            id: element.id,
+            type: element.type,
+            x: element.x,
+            y: element.y,
+            width: element.width,
+            height: element.height,
+            rotation: element.rotation || 0,
+            zIndex: element.zIndex || 1,
+            opacity: element.opacity || 1
+        };
+        
+        // Convert text elements back - preserve ALL properties
+        if (element.type === 'text') {
+            const styles = element.styles || {};
+            converted.text = element.content || element.text || '';
+            converted.content = converted.text; // Store in both fields
+            
+            // Store styles in both formats for compatibility
+            converted.fontSize = parseInt(styles.fontSize) || element.fontSize || 24;
+            converted.fontFamily = styles.fontFamily || element.fontFamily || 'Arial';
+            converted.fontWeight = styles.fontWeight || element.fontWeight || 'normal';
+            converted.fontStyle = styles.fontStyle || element.fontStyle || 'normal';
+            converted.textAlign = styles.textAlign || element.textAlign || 'left';
+            converted.textDecoration = styles.textDecoration || element.textDecoration || 'none';
+            converted.fill = styles.color || element.fill || element.color || '#000000';
+            converted.color = converted.fill; // Ensure color is also stored
+            
+            // Also store complete styles object
+            converted.styles = {
+                fontFamily: converted.fontFamily,
+                fontSize: converted.fontSize + 'px',
+                fontWeight: converted.fontWeight,
+                fontStyle: converted.fontStyle,
+                textAlign: converted.textAlign,
+                textDecoration: converted.textDecoration,
+                color: converted.fill
+            };
+        }
+        
+        // Convert image elements - preserve ALL properties
+        if (element.type === 'image') {
+            converted.src = element.src || '';
+            converted.imageSrc = converted.src; // Store in both fields
+            
+            // Preserve crop settings
+            if (element.cropSettings) {
+                converted.cropSettings = element.cropSettings;
+            }
+            
+            // Preserve any filters or effects
+            if (element.filters) {
+                converted.filters = element.filters;
+            }
+        }
+        
+        // Convert shape elements - preserve ALL properties
+        if (element.type === 'shape') {
+            converted.shape = element.shape || element.shapeType || 'rectangle';
+            converted.shapeType = converted.shape; // Store in both fields
+            converted.fill = element.fill || '#000000';
+            converted.stroke = element.stroke || 'none';
+            converted.strokeWidth = element.strokeWidth || 0;
+            
+            // Store styles object
+            converted.styles = {
+                backgroundColor: converted.fill,
+                fill: converted.fill,
+                borderColor: converted.stroke,
+                stroke: converted.stroke,
+                borderWidth: converted.strokeWidth + 'px',
+                strokeWidth: converted.strokeWidth
+            };
+        }
+        
+        // Convert frame elements - preserve ALL properties
+        if (element.type === 'frame') {
+            converted.frameType = element.frameType || 'square';
+            converted.src = element.src || element.imageSrc || '';
+            converted.imageSrc = converted.src; // Store in both fields
+            
+            const styles = element.styles || {};
+            converted.styles = {
+                borderColor: styles.borderColor || element.borderColor || '#000000',
+                borderWidth: styles.borderWidth || element.borderWidth || '2px'
+            };
+            
+            // Also store at top level
+            converted.borderColor = converted.styles.borderColor;
+            converted.borderWidth = converted.styles.borderWidth;
+        }
+        
+        // Convert line elements - preserve ALL properties
+        if (element.type === 'line') {
+            converted.lineType = element.lineType || 'solid';
+            converted.stroke = element.stroke || '#000000';
+            converted.strokeWidth = element.strokeWidth || 2;
+            converted.fill = converted.stroke; // Some templates use fill
+        }
+        
+        // Convert icon elements - preserve ALL properties
+        if (element.type === 'icon') {
+            converted.iconName = element.iconName || element.iconClass || '';
+            converted.iconClass = converted.iconName; // Store in both fields
+            converted.fill = element.fill || element.color || '#000000';
+            converted.color = converted.fill; // Store in both fields
+            
+            converted.styles = {
+                color: converted.fill
+            };
+        }
+        
+        // Preserve locked state
+        converted.locked = element.locked || false;
+        
+        return converted;
+    });
+    
+    // Convert flat structure back to pages structure for consistency
     const saveData = {
-        ...canvasData,
-        elements: canvasData.elements.filter(el => elementStates[el.id]?.enabled !== false)
+        width: canvasData.width,
+        height: canvasData.height,
+        pages: [{
+            id: 'page_1',
+            name: 'Page 1',
+            elements: convertedElements,
+            background: {
+                type: canvasData.background && (canvasData.background.startsWith('#') || canvasData.background.startsWith('rgb')) ? 'color' : 'image',
+                color: canvasData.background && (canvasData.background.startsWith('#') || canvasData.background.startsWith('rgb')) ? canvasData.background : '#ffffff',
+                image: canvasData.background && canvasData.background.startsWith('url(') ? canvasData.background.match(/url\(['"]?([^'"]+)['"]?\)/)?.[1] : null,
+                opacity: 1,
+                size: 'cover'
+            }
+        }]
     };
+    
+    console.log('💾 Save data structure:', saveData);
+    console.log('💾 Converted elements:', convertedElements);
     
     fetch(`/editor/${designId}/save`, {
         method: 'POST',
@@ -1777,6 +2896,8 @@ function saveDesign() {
         loadingOverlay.classList.remove('show');
         if (data.success) {
             showToast('Design saved successfully!', 'success');
+            // Update original data after successful save
+            originalCanvasData = JSON.parse(JSON.stringify(canvasData));
         } else {
             showToast('Error saving design: ' + (data.message || 'Unknown error'), 'error');
         }
@@ -1800,9 +2921,355 @@ function showToast(message, type = 'success') {
     }, 3000);
 }
 
+// ========== CANVAS RESIZE FUNCTIONALITY ==========
+
+function initializeCanvasResize() {
+    const handles = document.querySelectorAll('.resize-handle');
+    
+    handles.forEach(handle => {
+        handle.addEventListener('mousedown', startCanvasResize);
+    });
+    
+    document.addEventListener('mousemove', doCanvasResize);
+    document.addEventListener('mouseup', stopCanvasResize);
+}
+
+function startCanvasResize(e) {
+    e.preventDefault();
+    e.stopPropagation();
+    
+    canvasResizeState.isResizing = true;
+    canvasResizeState.direction = e.target.dataset.direction;
+    canvasResizeState.startX = e.clientX;
+    canvasResizeState.startY = e.clientY;
+    canvasResizeState.startWidth = canvasData.width || 800;
+    canvasResizeState.startHeight = canvasData.height || 600;
+    
+    document.getElementById('canvasWrapper').classList.add('resizing');
+}
+
+function doCanvasResize(e) {
+    if (!canvasResizeState.isResizing) return;
+    
+    e.preventDefault();
+    
+    const deltaX = e.clientX - canvasResizeState.startX;
+    const deltaY = e.clientY - canvasResizeState.startY;
+    const direction = canvasResizeState.direction;
+    
+    let newWidth = canvasResizeState.startWidth;
+    let newHeight = canvasResizeState.startHeight;
+    
+    // Calculate new dimensions based on direction
+    if (direction.includes('e')) newWidth += deltaX;
+    if (direction.includes('w')) newWidth -= deltaX;
+    if (direction.includes('s')) newHeight += deltaY;
+    if (direction.includes('n')) newHeight -= deltaY;
+    
+    // Constrain to min/max
+    newWidth = Math.max(200, Math.min(2000, newWidth));
+    newHeight = Math.max(200, Math.min(2000, newHeight));
+    
+    // Update canvas
+    canvasData.width = Math.round(newWidth);
+    canvasData.height = Math.round(newHeight);
+    
+    // Update inputs
+    document.getElementById('canvasWidth').value = canvasData.width;
+    document.getElementById('canvasHeight').value = canvasData.height;
+    
+    // Apply new size
+    const canvas = document.getElementById('designCanvas');
+    canvas.style.width = canvasData.width + 'px';
+    canvas.style.height = canvasData.height + 'px';
+}
+
+function stopCanvasResize() {
+    if (canvasResizeState.isResizing) {
+        canvasResizeState.isResizing = false;
+        document.getElementById('canvasWrapper').classList.remove('resizing');
+    }
+}
+
+function updateCanvasSize() {
+    const width = parseInt(document.getElementById('canvasWidth').value);
+    const height = parseInt(document.getElementById('canvasHeight').value);
+    
+    if (width >= 200 && width <= 2000) canvasData.width = width;
+    if (height >= 200 && height <= 2000) canvasData.height = height;
+    
+    const canvas = document.getElementById('designCanvas');
+    canvas.style.width = canvasData.width + 'px';
+    canvas.style.height = canvasData.height + 'px';
+    
+    showToast('Canvas size updated');
+}
+
+// ========== CANVAS BACKGROUND FUNCTIONALITY ==========
+
+function updateCanvasBackground(type, value) {
+    const canvas = document.getElementById('designCanvas');
+    const preview = document.getElementById('bgColorPreview');
+    
+    if (type === 'color') {
+        canvasData.background = value;
+        canvas.style.background = value;
+        preview.style.background = value;
+        showToast('Background color updated');
+    }
+}
+
+function uploadBackgroundImage(input) {
+    const file = input.files[0];
+    if (!file) return;
+    
+    if (!file.type.startsWith('image/')) {
+        showToast('Please select an image file', 'error');
+        return;
+    }
+    
+    const reader = new FileReader();
+    reader.onload = function(e) {
+        const base64 = e.target.result;
+        canvasData.background = `url(${base64})`;
+        
+        const canvas = document.getElementById('designCanvas');
+        canvas.style.background = `url(${base64}) center/cover no-repeat`;
+        
+        showToast('Background image updated', 'success');
+    };
+    reader.readAsDataURL(file);
+}
+
+function clearBackground() {
+    canvasData.background = '#ffffff';
+    const canvas = document.getElementById('designCanvas');
+    canvas.style.background = '#ffffff';
+    document.getElementById('bgColorPreview').style.background = '#ffffff';
+    document.getElementById('bgColorInput').value = '#ffffff';
+    showToast('Background cleared');
+}
+
+// ========== STICKER FUNCTIONALITY ==========
+
+function addSticker(input) {
+    console.log('Adding sticker...');
+    const file = input.files[0];
+    if (!file) {
+        console.log('No file selected');
+        return;
+    }
+    
+    console.log('File selected:', file.name, file.type, file.size, 'bytes');
+    
+    if (!file.type.startsWith('image/')) {
+        console.log('Invalid file type:', file.type);
+        showToast('Please select an image file', 'error');
+        return;
+    }
+    
+    const reader = new FileReader();
+    reader.onload = function(e) {
+        const base64 = e.target.result;
+        
+        // Create new sticker object
+        const sticker = {
+            id: 'sticker_' + Date.now(),
+            src: base64,
+            x: 100,
+            y: 100,
+            width: 150,
+            height: 150,
+            rotation: 0,
+            zIndex: 1000 + canvasData.stickers.length
+        };
+        
+        canvasData.stickers.push(sticker);
+        console.log('Sticker added to canvas:', sticker);
+        console.log('Total stickers:', canvasData.stickers.length);
+        
+        renderCanvas();
+        
+        showToast('Sticker added successfully', 'success');
+    };
+    reader.readAsDataURL(file);
+    
+    // Clear input
+    input.value = '';
+}
+
+function selectSticker(stickerId, event) {
+    if (event) {
+        event.stopPropagation();
+    }
+    
+    // Deselect all stickers
+    document.querySelectorAll('.canvas-sticker').forEach(el => {
+        el.classList.remove('selected');
+    });
+    
+    // Select this sticker
+    stickerState.selectedId = stickerId;
+    const stickerEl = document.querySelector(`.canvas-sticker[data-sticker-id="${stickerId}"]`);
+    if (stickerEl) {
+        stickerEl.classList.add('selected');
+    }
+}
+
+function deselectSticker() {
+    stickerState.selectedId = null;
+    document.querySelectorAll('.canvas-sticker').forEach(el => {
+        el.classList.remove('selected');
+    });
+}
+
+function deleteSticker(stickerId, event) {
+    if (event) {
+        event.stopPropagation();
+    }
+    
+    const index = canvasData.stickers.findIndex(s => s.id === stickerId);
+    if (index !== -1) {
+        canvasData.stickers.splice(index, 1);
+        renderCanvas();
+        showToast('Sticker deleted');
+    }
+}
+
+function startStickerDrag(stickerId, event) {
+    event.preventDefault();
+    event.stopPropagation();
+    
+    selectSticker(stickerId);
+    
+    const sticker = canvasData.stickers.find(s => s.id === stickerId);
+    if (!sticker) return;
+    
+    stickerState.isDragging = true;
+    stickerState.startX = event.clientX;
+    stickerState.startY = event.clientY;
+    stickerState.startLeft = sticker.x;
+    stickerState.startTop = sticker.y;
+}
+
+function startStickerResize(stickerId, direction, event) {
+    event.preventDefault();
+    event.stopPropagation();
+    
+    selectSticker(stickerId);
+    
+    const sticker = canvasData.stickers.find(s => s.id === stickerId);
+    if (!sticker) return;
+    
+    stickerState.isResizing = true;
+    stickerState.resizeDirection = direction;
+    stickerState.startX = event.clientX;
+    stickerState.startY = event.clientY;
+    stickerState.startWidth = sticker.width;
+    stickerState.startHeight = sticker.height;
+    stickerState.startLeft = sticker.x;
+    stickerState.startTop = sticker.y;
+}
+
+function initializeCanvasInteractions() {
+    const canvas = document.getElementById('designCanvas');
+    
+    // Click on canvas to deselect stickers
+    canvas.addEventListener('click', function(e) {
+        if (e.target === canvas) {
+            deselectSticker();
+        }
+    });
+    
+    // Mouse move for sticker drag/resize
+    document.addEventListener('mousemove', function(e) {
+        if (stickerState.isDragging) {
+            const sticker = canvasData.stickers.find(s => s.id === stickerState.selectedId);
+            if (!sticker) return;
+            
+            const deltaX = e.clientX - stickerState.startX;
+            const deltaY = e.clientY - stickerState.startY;
+            
+            sticker.x = Math.max(0, Math.min(canvasData.width - sticker.width, stickerState.startLeft + deltaX));
+            sticker.y = Math.max(0, Math.min(canvasData.height - sticker.height, stickerState.startTop + deltaY));
+            
+            updateStickerPosition(sticker.id);
+        } else if (stickerState.isResizing) {
+            const sticker = canvasData.stickers.find(s => s.id === stickerState.selectedId);
+            if (!sticker) return;
+            
+            const deltaX = e.clientX - stickerState.startX;
+            const deltaY = e.clientY - stickerState.startY;
+            const direction = stickerState.resizeDirection;
+            
+            // Calculate new dimensions maintaining aspect ratio
+            let newWidth = stickerState.startWidth;
+            let newHeight = stickerState.startHeight;
+            let newX = stickerState.startLeft;
+            let newY = stickerState.startTop;
+            
+            const aspectRatio = stickerState.startWidth / stickerState.startHeight;
+            
+            // Calculate based on corner
+            if (direction === 'br') {
+                newWidth = stickerState.startWidth + deltaX;
+                newHeight = newWidth / aspectRatio;
+            } else if (direction === 'bl') {
+                newWidth = stickerState.startWidth - deltaX;
+                newHeight = newWidth / aspectRatio;
+                newX = stickerState.startLeft + deltaX;
+            } else if (direction === 'tr') {
+                newWidth = stickerState.startWidth + deltaX;
+                newHeight = newWidth / aspectRatio;
+                newY = stickerState.startTop + (stickerState.startHeight - newHeight);
+            } else if (direction === 'tl') {
+                newWidth = stickerState.startWidth - deltaX;
+                newHeight = newWidth / aspectRatio;
+                newX = stickerState.startLeft + deltaX;
+                newY = stickerState.startTop + (stickerState.startHeight - newHeight);
+            }
+            
+            // Constrain minimum size
+            if (newWidth >= 30 && newHeight >= 30) {
+                sticker.width = newWidth;
+                sticker.height = newHeight;
+                sticker.x = Math.max(0, Math.min(canvasData.width - newWidth, newX));
+                sticker.y = Math.max(0, Math.min(canvasData.height - newHeight, newY));
+                
+                updateStickerPosition(sticker.id);
+            }
+        }
+    });
+    
+    // Mouse up to stop drag/resize
+    document.addEventListener('mouseup', function() {
+        stickerState.isDragging = false;
+        stickerState.isResizing = false;
+    });
+}
+
+function updateStickerPosition(stickerId) {
+    const sticker = canvasData.stickers.find(s => s.id === stickerId);
+    if (!sticker) return;
+    
+    const stickerEl = document.querySelector(`.canvas-sticker[data-sticker-id="${stickerId}"]`);
+    if (stickerEl) {
+        stickerEl.style.left = sticker.x + 'px';
+        stickerEl.style.top = sticker.y + 'px';
+        stickerEl.style.width = sticker.width + 'px';
+        stickerEl.style.height = sticker.height + 'px';
+    }
+}
+
 // Handle window resize
 window.addEventListener('resize', function() {
     initializeCanvas();
 });
+
+// Final confirmation that script loaded completely
+console.log('✅ Script fully loaded and parsed!');
+console.log('📊 Total functions defined:', Object.keys(window).filter(key => typeof window[key] === 'function').length);
+console.log('🎨 Canvas data initialized:', canvasData ? 'YES' : 'NO');
+console.log('🔢 Design ID:', designId);
 </script>
 @endsection

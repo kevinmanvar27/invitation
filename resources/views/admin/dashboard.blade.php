@@ -246,7 +246,7 @@
                                                 </div>
                                             </td>
                                             <td>{{ $user->email }}</td>
-                                            <td>{{ $user->created_at->diffForHumans() }}</td>
+                                            <td>{{ $user->created_at ? $user->created_at->diffForHumans() : 'N/A' }}</td>
                                         </tr>
                                     @endforeach
                                 </tbody>
@@ -292,7 +292,7 @@
                                                     {{ ucfirst($order->status) }}
                                                 </span>
                                             </td>
-                                            <td>{{ $order->created_at->diffForHumans() }}</td>
+                                            <td>{{ $order->created_at ? $order->created_at->diffForHumans() : 'N/A' }}</td>
                                         </tr>
                                     @endforeach
                                 </tbody>

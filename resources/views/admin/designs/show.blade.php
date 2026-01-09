@@ -2,6 +2,9 @@
 {{-- Bootstrap 5 + custom admin theme --}}
 
 <x-admin-layout>
+    @push('styles')
+    <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@400;500;600;700&family=Great+Vibes&family=Playfair+Display:wght@400;500;600;700&family=Montserrat:wght@300;400;500;600;700&family=Roboto:wght@300;400;500;700&family=Open+Sans:wght@300;400;500;600;700&family=Lato:wght@300;400;700&family=Poppins:wght@300;400;500;600;700&family=Raleway:wght@300;400;500;600;700&family=Oswald:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    @endpush
     <x-slot name="header">
         <div class="page-header">
 
@@ -158,8 +161,7 @@
 
         <!-- Sidebar -->
         <div class="col-lg-4">
-            <!-- Thumbnail Card -->
-            @if($design->thumbnail_path)
+            <!-- Preview Card -->
             <div class="card mb-4">
                 <div class="card-header">
                     <h5 class="card-title mb-0">
@@ -167,10 +169,18 @@
                     </h5>
                 </div>
                 <div class="card-body text-center">
-                    <img src="{{ asset($design->thumbnail_path) }}" alt="{{ $design->design_name }}" class="img-fluid rounded" style="max-height: 300px;">
+                    @if($design->thumbnail_path)
+                        <img src="{{ asset($design->thumbnail_path) }}" alt="{{ $design->design_name }}" class="img-fluid rounded" style="max-height: 400px;">
+                    @elseif($design->canvas_data)
+                        <div class="design-preview-container" data-design-id="{{ $design->id }}" data-canvas-data="{{ base64_encode(json_encode($design->canvas_data)) }}" style="min-height: 300px; background: #f5f5f5;"></div>
+                    @else
+                        <div class="text-muted py-5">
+                            <i class="fas fa-image fa-3x mb-3 d-block"></i>
+                            <p>No preview available</p>
+                        </div>
+                    @endif
                 </div>
             </div>
-            @endif
 
             <!-- Stats Card -->
             <div class="card mb-4">
@@ -211,4 +221,47 @@
             </div>
         </div>
     </div>
+
+    @push('scripts')
+    <script src="{{ asset('js/design-preview-renderer.js') }}"></script>
+    @if($design->canvas_data && !$design->thumbnail_path)
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const container = document.querySelector('.design-preview-container');
+            if (!container) {
+                console.error('❌ Admin preview container not found');
+                return;
+            }
+            
+            try {
+                const canvasDataEncoded = container.getAttribute('data-canvas-data');
+                if (!canvasDataEncoded) {
+                    console.warn('⚠️ No canvas data found');
+                    return;
+                }
+                
+                const canvasData = JSON.parse(atob(canvasDataEncoded));
+                console.log('🎨 Rendering admin design preview:', canvasData);
+                
+                // Get the card body container dimensions
+                const cardBody = container.closest('.card-body');
+                const maxWidth = cardBody ? cardBody.clientWidth : 400;
+                const maxHeight = 400;
+                
+                // Initialize renderer with container-based dimensions
+                const renderer = new DesignPreviewRenderer(container, canvasData, {
+                    maxWidth: maxWidth,
+                    maxHeight: maxHeight,
+                    interactive: false
+                });
+                
+                renderer.render();
+                console.log('✅ Admin design preview rendered successfully');
+            } catch (error) {
+                console.error('❌ Error rendering admin design preview:', error);
+            }
+        });
+    </script>
+    @endif
+    @endpush
 </x-admin-layout>

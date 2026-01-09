@@ -19,9 +19,12 @@ class EditorController extends Controller
             abort(403, 'Unauthorized access to this design.');
         }
         
-        // If design has canvas_data with elements, use template editor
+        // If design has canvas_data with elements or pages, use template editor
         // This is for designs copied from templates
-        if ($design->canvas_data && isset($design->canvas_data['elements']) && count($design->canvas_data['elements']) > 0) {
+        if ($design->canvas_data && (
+            (isset($design->canvas_data['pages']) && count($design->canvas_data['pages']) > 0) ||
+            (isset($design->canvas_data['elements']) && count($design->canvas_data['elements']) > 0)
+        )) {
             return view('editor.template-editor', compact('design'));
         }
         

@@ -1,0 +1,490 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Template Rendering Diagnostic Tool</title>
+    <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@400;500;600;700&family=Great+Vibes&family=Playfair+Display:wght@400;500;600;700&family=Montserrat:wght@300;400;500;600;700&family=Roboto:wght@300;400;500;700&family=Open+Sans:wght@300;400;500;600;700&family=Lato:wght@300;400;700&family=Poppins:wght@300;400;500;600;700&family=Raleway:wght@300;400;500;600;700&family=Oswald:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Roboto', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: #fff;
+            padding: 40px;
+            min-height: 100vh;
+        }
+        
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+        
+        h1 {
+            margin-bottom: 10px;
+            font-size: 36px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+        
+        .subtitle {
+            font-size: 16px;
+            opacity: 0.9;
+            margin-bottom: 30px;
+        }
+        
+        .input-section {
+            background: rgba(255,255,255,0.95);
+            padding: 30px;
+            border-radius: 12px;
+            margin-bottom: 30px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+            color: #333;
+        }
+        
+        .input-group {
+            margin-bottom: 20px;
+        }
+        
+        label {
+            display: block;
+            font-weight: 600;
+            margin-bottom: 8px;
+            color: #555;
+        }
+        
+        input[type="number"] {
+            width: 200px;
+            padding: 12px;
+            border: 2px solid #ddd;
+            border-radius: 6px;
+            font-size: 16px;
+            transition: border-color 0.3s;
+        }
+        
+        input[type="number"]:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+        
+        button {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            padding: 14px 32px;
+            font-size: 16px;
+            font-weight: 600;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: transform 0.2s, box-shadow 0.2s;
+            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+        }
+        
+        button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(102, 126, 234, 0.6);
+        }
+        
+        button:active {
+            transform: translateY(0);
+        }
+        
+        .results-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+            margin-bottom: 30px;
+        }
+        
+        .result-card {
+            background: rgba(255,255,255,0.95);
+            padding: 25px;
+            border-radius: 12px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+            color: #333;
+        }
+        
+        .result-card h2 {
+            margin-bottom: 15px;
+            font-size: 24px;
+            color: #667eea;
+            border-bottom: 2px solid #667eea;
+            padding-bottom: 10px;
+        }
+        
+        .canvas-wrapper {
+            background: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            display: inline-block;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            margin-top: 15px;
+        }
+        
+        canvas {
+            display: block;
+            border: 2px solid #ddd;
+            border-radius: 4px;
+        }
+        
+        .json-viewer {
+            background: #1e1e1e;
+            color: #d4d4d4;
+            padding: 20px;
+            border-radius: 8px;
+            font-family: 'Courier New', monospace;
+            font-size: 12px;
+            max-height: 600px;
+            overflow: auto;
+            white-space: pre-wrap;
+            word-wrap: break-word;
+            margin-top: 15px;
+        }
+        
+        .console-output {
+            background: #000;
+            color: #0f0;
+            padding: 20px;
+            border-radius: 8px;
+            font-family: 'Courier New', monospace;
+            font-size: 12px;
+            max-height: 400px;
+            overflow-y: auto;
+            margin-top: 15px;
+        }
+        
+        .console-output div {
+            margin-bottom: 5px;
+        }
+        
+        .error { color: #ff4444; }
+        .success { color: #44ff44; }
+        .warning { color: #ffaa00; }
+        .info-log { color: #00aaff; }
+        
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin-top: 15px;
+        }
+        
+        .stat-item {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 15px;
+            border-radius: 8px;
+            text-align: center;
+        }
+        
+        .stat-value {
+            font-size: 32px;
+            font-weight: 700;
+            margin-bottom: 5px;
+        }
+        
+        .stat-label {
+            font-size: 14px;
+            opacity: 0.9;
+        }
+        
+        .loading {
+            text-align: center;
+            padding: 40px;
+            font-size: 18px;
+        }
+        
+        .hidden {
+            display: none;
+        }
+        
+        @media (max-width: 1024px) {
+            .results-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🔍 Template Rendering Diagnostic Tool</h1>
+        <p class="subtitle">Diagnose why templates aren't displaying properly on the frontend</p>
+        
+        <div class="input-section">
+            <div class="input-group">
+                <label for="designId">Enter Design ID to Diagnose:</label>
+                <input type="number" id="designId" placeholder="e.g., 11, 40, 42" min="1">
+            </div>
+            <button onclick="diagnoseDesign()">🚀 Run Diagnostic</button>
+        </div>
+        
+        <div id="loadingSection" class="result-card loading hidden">
+            <h2>⏳ Loading design data...</h2>
+        </div>
+        
+        <div id="resultsSection" class="hidden">
+            <div class="results-grid">
+                <div class="result-card">
+                    <h2>📊 Design Information</h2>
+                    <div id="designInfo"></div>
+                    <div class="stats" id="statsContainer"></div>
+                </div>
+                
+                <div class="result-card">
+                    <h2>🎨 Canvas Preview</h2>
+                    <p>This is how the Canvas2DRenderer interprets your data:</p>
+                    <div class="canvas-wrapper">
+                        <canvas id="previewCanvas"></canvas>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="result-card">
+                <h2>📝 Canvas Data Structure</h2>
+                <p>Raw canvas_data from database (check for property names):</p>
+                <div class="json-viewer" id="jsonViewer"></div>
+            </div>
+            
+            <div class="result-card">
+                <h2>🖥️ Console Output</h2>
+                <p>Rendering logs and error messages:</p>
+                <div class="console-output" id="consoleOutput">
+                    <div class="info-log">Console output will appear here...</div>
+                </div>
+            </div>
+            
+            <div class="result-card">
+                <h2>✅ Diagnostic Checklist</h2>
+                <div id="checklistContainer"></div>
+            </div>
+        </div>
+    </div>
+    
+    <script src="js/canvas-2d-renderer.js"></script>
+    <script>
+        // Capture console logs
+        const consoleOutput = document.getElementById('consoleOutput');
+        const originalLog = console.log;
+        const originalWarn = console.warn;
+        const originalError = console.error;
+        
+        function addLog(message, type = 'info-log') {
+            const div = document.createElement('div');
+            div.className = type;
+            div.textContent = typeof message === 'object' ? JSON.stringify(message, null, 2) : message;
+            consoleOutput.appendChild(div);
+            consoleOutput.scrollTop = consoleOutput.scrollHeight;
+        }
+        
+        console.log = function(...args) {
+            originalLog.apply(console, args);
+            addLog(args.join(' '), 'info-log');
+        };
+        
+        console.warn = function(...args) {
+            originalWarn.apply(console, args);
+            addLog(args.join(' '), 'warning');
+        };
+        
+        console.error = function(...args) {
+            originalError.apply(console, args);
+            addLog(args.join(' '), 'error');
+        };
+        
+        async function diagnoseDesign() {
+            const designId = document.getElementById('designId').value;
+            
+            if (!designId) {
+                alert('Please enter a design ID');
+                return;
+            }
+            
+            // Show loading
+            document.getElementById('loadingSection').classList.remove('hidden');
+            document.getElementById('resultsSection').classList.add('hidden');
+            consoleOutput.innerHTML = '<div class="info-log">Starting diagnostic...</div>';
+            
+            try {
+                // Fetch design data
+                console.log(`🔍 Fetching design data for ID: ${designId}`);
+                const response = await fetch(`/debug/design/${designId}`);
+                
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+                
+                const data = await response.json();
+                console.log('📦 Received design data:', data);
+                
+                // Hide loading, show results
+                document.getElementById('loadingSection').classList.add('hidden');
+                document.getElementById('resultsSection').classList.remove('hidden');
+                
+                // Display design info
+                displayDesignInfo(data);
+                
+                // Display stats
+                displayStats(data);
+                
+                // Display JSON
+                document.getElementById('jsonViewer').textContent = JSON.stringify(data.canvas_data, null, 2);
+                
+                // Render canvas
+                renderCanvas(data.canvas_data);
+                
+                // Run diagnostic checks
+                runDiagnosticChecks(data);
+                
+            } catch (error) {
+                console.error('❌ Error fetching design:', error);
+                document.getElementById('loadingSection').innerHTML = `
+                    <h2>❌ Error</h2>
+                    <p style="color: #ff4444;">${error.message}</p>
+                    <p>Make sure the design ID exists and the server is running.</p>
+                `;
+            }
+        }
+        
+        function displayDesignInfo(data) {
+            const infoHtml = `
+                <p><strong>ID:</strong> ${data.id}</p>
+                <p><strong>Name:</strong> ${data.design_name}</p>
+                <p><strong>Data Type:</strong> ${data.canvas_data_type}</p>
+            `;
+            document.getElementById('designInfo').innerHTML = infoHtml;
+        }
+        
+        function displayStats(data) {
+            const stats = [
+                { label: 'Pages', value: data.page_count },
+                { label: 'Has Pages Array', value: data.has_pages ? '✓' : '✗' },
+                { label: 'Has Elements Array', value: data.has_elements ? '✓' : '✗' },
+                { label: 'First Page Elements', value: data.first_page_elements }
+            ];
+            
+            const statsHtml = stats.map(stat => `
+                <div class="stat-item">
+                    <div class="stat-value">${stat.value}</div>
+                    <div class="stat-label">${stat.label}</div>
+                </div>
+            `).join('');
+            
+            document.getElementById('statsContainer').innerHTML = statsHtml;
+        }
+        
+        function renderCanvas(canvasData) {
+            console.log('🎨 Attempting to render canvas...');
+            
+            if (!canvasData) {
+                console.error('❌ No canvas data provided');
+                return;
+            }
+            
+            const canvas = document.getElementById('previewCanvas');
+            const renderer = new Canvas2DRenderer(canvas, canvasData, {
+                maxWidth: 500,
+                maxHeight: 400
+            });
+            
+            renderer.init();
+            console.log('✅ Canvas rendering complete');
+        }
+        
+        function runDiagnosticChecks(data) {
+            const checks = [];
+            
+            // Check 1: Canvas data exists
+            checks.push({
+                name: 'Canvas data exists',
+                passed: data.canvas_data !== null && data.canvas_data !== undefined,
+                message: data.canvas_data ? 'Canvas data is present' : 'Canvas data is missing!'
+            });
+            
+            // Check 2: Has pages or elements
+            checks.push({
+                name: 'Has pages or elements',
+                passed: data.has_pages || data.has_elements,
+                message: data.has_pages ? 'Using pages-based structure' : data.has_elements ? 'Using legacy elements structure' : 'No pages or elements found!'
+            });
+            
+            // Check 3: Has elements to render
+            const hasElements = data.first_page_elements > 0 || data.element_count_direct > 0;
+            checks.push({
+                name: 'Has elements to render',
+                passed: hasElements,
+                message: hasElements ? `Found ${data.first_page_elements || data.element_count_direct} elements` : 'No elements found to render!'
+            });
+            
+            // Check 4: Canvas dimensions
+            const hasDimensions = data.canvas_data && (data.canvas_data.width || data.canvas_data.height);
+            checks.push({
+                name: 'Canvas dimensions defined',
+                passed: hasDimensions,
+                message: hasDimensions ? `Canvas size: ${data.canvas_data.width}x${data.canvas_data.height}` : 'Canvas dimensions missing'
+            });
+            
+            // Check 5: Element structure validation
+            let elementStructureValid = false;
+            let elementStructureMessage = '';
+            
+            if (data.has_pages && data.canvas_data.pages && data.canvas_data.pages[0]) {
+                const firstElement = data.canvas_data.pages[0].elements?.[0];
+                if (firstElement) {
+                    elementStructureValid = firstElement.type && (firstElement.x !== undefined) && (firstElement.y !== undefined);
+                    elementStructureMessage = elementStructureValid ? 
+                        'Elements have required properties (type, x, y)' : 
+                        'Elements missing required properties!';
+                }
+            } else if (data.has_elements && data.canvas_data.elements) {
+                const firstElement = data.canvas_data.elements[0];
+                if (firstElement) {
+                    elementStructureValid = firstElement.type && (firstElement.x !== undefined) && (firstElement.y !== undefined);
+                    elementStructureMessage = elementStructureValid ? 
+                        'Elements have required properties (type, x, y)' : 
+                        'Elements missing required properties!';
+                }
+            }
+            
+            checks.push({
+                name: 'Element structure valid',
+                passed: elementStructureValid,
+                message: elementStructureMessage || 'No elements to validate'
+            });
+            
+            // Display checklist
+            const checklistHtml = checks.map(check => `
+                <div style="padding: 12px; margin-bottom: 10px; background: ${check.passed ? '#d4edda' : '#f8d7da'}; border-left: 4px solid ${check.passed ? '#28a745' : '#dc3545'}; border-radius: 4px;">
+                    <strong>${check.passed ? '✅' : '❌'} ${check.name}</strong><br>
+                    <span style="font-size: 14px; color: #666;">${check.message}</span>
+                </div>
+            `).join('');
+            
+            document.getElementById('checklistContainer').innerHTML = checklistHtml;
+            
+            // Summary
+            const passedCount = checks.filter(c => c.passed).length;
+            const totalCount = checks.length;
+            
+            if (passedCount === totalCount) {
+                console.log(`✅ All diagnostic checks passed (${passedCount}/${totalCount})`);
+            } else {
+                console.warn(`⚠️ Some diagnostic checks failed (${passedCount}/${totalCount} passed)`);
+            }
+        }
+        
+        // Auto-run if design ID is in URL
+        window.addEventListener('DOMContentLoaded', () => {
+            const urlParams = new URLSearchParams(window.location.search);
+            const designId = urlParams.get('id');
+            if (designId) {
+                document.getElementById('designId').value = designId;
+                diagnoseDesign();
+            }
+        });
+    </script>
+</body>
+</html>

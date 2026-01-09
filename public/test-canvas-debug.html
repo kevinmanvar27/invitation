@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Canvas Renderer Debug Test</title>
+    <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@400;500;600;700&family=Great+Vibes&family=Playfair+Display:wght@400;500;600;700&family=Montserrat:wght@300;400;500;600;700&family=Roboto:wght@300;400;500;700&family=Open+Sans:wght@300;400;500;600;700&family=Lato:wght@300;400;700&family=Poppins:wght@300;400;500;600;700&family=Raleway:wght@300;400;500;600;700&family=Oswald:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Roboto', sans-serif;
+            background: #1a1a2e;
+            color: #fff;
+            padding: 40px;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        h1 {
+            margin-bottom: 20px;
+            font-size: 32px;
+        }
+        
+        .info {
+            background: rgba(255,255,255,0.1);
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 30px;
+        }
+        
+        .canvas-wrapper {
+            background: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            display: inline-block;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.3);
+        }
+        
+        canvas {
+            display: block;
+            border: 1px solid #ddd;
+        }
+        
+        .console-output {
+            background: #000;
+            color: #0f0;
+            padding: 20px;
+            border-radius: 8px;
+            margin-top: 30px;
+            font-family: 'Courier New', monospace;
+            font-size: 12px;
+            max-height: 400px;
+            overflow-y: auto;
+        }
+        
+        .console-output div {
+            margin-bottom: 5px;
+        }
+        
+        .error { color: #ff4444; }
+        .success { color: #44ff44; }
+        .warning { color: #ffaa00; }
+        .info-log { color: #00aaff; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🎨 Canvas Renderer Debug Test</h1>
+        
+        <div class="info">
+            <h2>Test Canvas Data</h2>
+            <p>This page tests the Canvas2DRenderer with sample data to verify it's working correctly.</p>
+            <p>Check the console output below to see detailed rendering logs.</p>
+        </div>
+        
+        <div class="canvas-wrapper">
+            <canvas id="testCanvas"></canvas>
+        </div>
+        
+        <div class="console-output" id="consoleOutput">
+            <div class="info-log">Console output will appear here...</div>
+        </div>
+    </div>
+    
+    <script src="js/canvas-2d-renderer.js"></script>
+    <script>
+        // Capture console logs
+        const consoleOutput = document.getElementById('consoleOutput');
+        const originalLog = console.log;
+        const originalWarn = console.warn;
+        const originalError = console.error;
+        
+        function addLog(message, type = 'info-log') {
+            const div = document.createElement('div');
+            div.className = type;
+            div.textContent = typeof message === 'object' ? JSON.stringify(message, null, 2) : message;
+            consoleOutput.appendChild(div);
+            consoleOutput.scrollTop = consoleOutput.scrollHeight;
+        }
+        
+        console.log = function(...args) {
+            originalLog.apply(console, args);
+            addLog(args.join(' '), 'info-log');
+        };
+        
+        console.warn = function(...args) {
+            originalWarn.apply(console, args);
+            addLog(args.join(' '), 'warning');
+        };
+        
+        console.error = function(...args) {
+            originalError.apply(console, args);
+            addLog(args.join(' '), 'error');
+        };
+        
+        // Test canvas data - simulates what would come from the database
+        const testCanvasData = {
+            width: 800,
+            height: 600,
+            background: {
+                type: 'color',
+                color: '#f8f4f0'
+            },
+            pages: [
+                {
+                    id: 'page_1',
+                    name: 'Page 1',
+                    background: {
+                        type: 'color',
+                        color: '#f8f4f0'
+                    },
+                    elements: [
+                        // Text element 1
+                        {
+                            id: 'element_1',
+                            type: 'text',
+                            x: 100,
+                            y: 100,
+                            content: 'Wedding Invitation',
+                            styles: {
+                                fontSize: '48px',
+                                fontFamily: 'Playfair Display',
+                                fontWeight: '700',
+                                color: '#2c2c2c',
+                                textAlign: 'left'
+                            }
+                        },
+                        // Text element 2
+                        {
+                            id: 'element_2',
+                            type: 'text',
+                            x: 100,
+                            y: 180,
+                            content: 'Join us for a celebration',
+                            styles: {
+                                fontSize: '24px',
+                                fontFamily: 'Montserrat',
+                                fontWeight: '400',
+                                color: '#666666',
+                                textAlign: 'left'
+                            }
+                        },
+                        // Shape element
+                        {
+                            id: 'element_3',
+                            type: 'shape',
+                            shapeType: 'circle',
+                            x: 600,
+                            y: 100,
+                            width: 150,
+                            height: 150,
+                            styles: {
+                                backgroundColor: '#c9184a',
+                                borderColor: '#a01038',
+                                borderWidth: '4px'
+                            }
+                        },
+                        // Rectangle shape
+                        {
+                            id: 'element_4',
+                            type: 'shape',
+                            shapeType: 'rectangle',
+                            x: 100,
+                            y: 400,
+                            width: 600,
+                            height: 4,
+                            styles: {
+                                backgroundColor: '#c9184a'
+                            }
+                        },
+                        // Text with decoration
+                        {
+                            id: 'element_5',
+                            type: 'text',
+                            x: 100,
+                            y: 450,
+                            content: 'Saturday, June 15th, 2024',
+                            styles: {
+                                fontSize: '20px',
+                                fontFamily: 'Montserrat',
+                                fontWeight: '500',
+                                color: '#2c2c2c',
+                                textDecoration: 'underline'
+                            }
+                        }
+                    ]
+                }
+            ]
+        };
+        
+        // Initialize renderer
+        console.log('🚀 Starting Canvas Renderer Test...');
+        console.log('📊 Test Data:', testCanvasData);
+        
+        const canvas = document.getElementById('testCanvas');
+        const renderer = new Canvas2DRenderer(canvas, testCanvasData, {
+            maxWidth: 800,
+            maxHeight: 600
+        });
+        
+        renderer.init();
+        
+        console.log('✅ Test complete! Check the canvas above.');
+        addLog('✅ Test complete! If you see a rendered canvas above, the renderer is working correctly.', 'success');
+    </script>
+</body>
+</html>
